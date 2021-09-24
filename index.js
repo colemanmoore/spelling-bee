@@ -9,7 +9,6 @@ let letters = uniqueChars(chosenPangram)
 
 letters = shuffleChars(letters)
 
-clear()
 console.log(`Letters: ${letters}`)
 console.log(`Pangram: ${chosenPangram}`)
 
