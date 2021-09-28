@@ -8,7 +8,7 @@ const wordsList = Object.keys(wordsHash)
 const pangrams = wordsList.filter(canBePangram)
 
 const chosenPangram = choosePangram()
-const letters = uniqueChars(chosenPangram)
+const letters = _.shuffle(uniqueChars(chosenPangram))
 
 console.log(`Letters: ${letters}`)
 console.log(`Pangram: ${chosenPangram}`)
@@ -32,20 +32,8 @@ function choosePangram() {
 
 function uniqueChars(word) {
     const chars = word.split('')
-    const uniques = chars.filter((value, index, self) =>
+    return chars.filter((value, index, self) =>
         self.indexOf(value) === index)
-    return shuffleChars(uniques)
-}
-
-function shuffleChars(chars) {
-    const array = [...chars]
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        const temp = array[i]
-        array[i] = array[j]
-        array[j] = temp
-    }
-    return array
 }
 
 function getQualifyingWords(centerLetter) {

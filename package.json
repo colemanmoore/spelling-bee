@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "cli": "node cli.js",
     "test": "node test.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "inquirer": "^8.1.5",
     "underscore": "^1.13.1"
   }
 }
