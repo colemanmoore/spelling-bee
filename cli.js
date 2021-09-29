@@ -1,24 +1,20 @@
 const fs = require('fs')
 const _ = require('underscore')
 const inquirer = require('inquirer')
+const Game = require('./Game')
 
 const words_json = fs.readFileSync('dictionary.json')
 const wordsHash = JSON.parse(words_json)
 const wordsList = Object.keys(wordsHash)
-
-const pangram = choosePangram()
-const letters = _.shuffle(uniqueChars(pangram))
-const keyLetter = letters[0]
-const answers = getQualifyingWords(keyLetter)
+const game = new Game(wordsList)
 
 let done = false
 async function prompt() {
-
     while (!done) {
         let response = await inquirer.prompt([
             {
                 name: 'word',
-                message: `${letters} ~~~ key is ${keyLetter}`
+                message: `${game.letters} ~~~ key is ${game.keyLetter}`
             }
         ])
 
@@ -27,44 +23,15 @@ async function prompt() {
             return
         }
 
-        if (answers[response.word] === 1) {
-            // TODO track score!
+        if (game.submit(response.word)) {
             console.log('correct!')
         } else {
             console.log('wrong!')
         }
+        console.log(`Your score is ${game.score}`)
+
         return prompt()
     }
 }
 prompt()
 
-function choosePangram() {
-    const pangrams = wordsList.filter(canBePangram)
-    return pangrams[Math.floor(Math.random() * pangrams.length)]
-}
-
-function canBePangram(word) {
-    if (typeof word !== 'string') return false
-    const uniques = uniqueChars(word)
-    return uniques.length === 7
-}
-
-function uniqueChars(word) {
-    const chars = word.split('')
-    return chars.filter((value, index, self) =>
-        self.indexOf(value) === index)
-}
-
-function getQualifyingWords(centerLetter) {
-    let answers = {}
-    wordsList.forEach(word => {
-        const uniques = uniqueChars(word)
-        if (
-            !_.contains(uniques, centerLetter) ||
-            _.without(uniques, ...letters).length > 0
-        ) return
-
-        answers[word] = 1
-    })
-    return answers
-}
