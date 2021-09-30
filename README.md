@@ -14,8 +14,6 @@ Enter "q" to quit
 
 Enter "@" to shuffle
 
-All possible words in `dictionary.json`
-
 ## Dictionary
 
-Lots of work to be done. Please make a pull request.
+All possible words in `dictionary.json` Lots of work to be done. Please make a pull request.
