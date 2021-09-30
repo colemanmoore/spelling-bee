@@ -2,10 +2,9 @@
   "name": "spelling-bee",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "cli": "node cli.js",
-    "test": "node test.js"
+    "cli": "node src/cli.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,0 +1,9 @@
+9/29
+words 43
+genius 146
+maximum 209
+
+9/30
+words 41
+genius 120 (15-37 words)
+maximum 172
