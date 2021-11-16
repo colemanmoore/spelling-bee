@@ -1,0 +1,21 @@
+.letterContainer {
+    font-size: 20px;
+    border: 1px solid #FFFFFF;
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.letterContainer:hover {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+.keyLetter {
+    background-color: yellow;
+    color: #000000;
+}

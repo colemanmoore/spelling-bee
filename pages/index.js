@@ -1,28 +1,32 @@
 import { Fragment } from 'react'
+import _ from 'underscore'
+import GameBoard from '../components/GameBoard'
 import Game from '../game/Game'
-const game = new Game()
+const game = new Game(true)
 
-function Home(props) {
-    const { letters } = props
-    return ( 
-        <div>
-            {
-            letters ? 
-            letters.map(l => (
-                <div key={l.text}>{l.text}</div>
-            )) : <></>
-            }
-        </div>
+function Home({ nonKeyLetters, keyLetter, answers }) {
+
+    return (
+        <Fragment>
+            <GameBoard nonKeyLetters={nonKeyLetters} keyLetter={keyLetter} />
+            <section className="answersContainer">
+                {Object.keys(answers).map(a => <li key={a}>{a}</li>)}
+            </section>
+        </Fragment>
     )
 }
 
 export function getStaticProps() {
-
+    const letters = game.getAllLetters()
+    const keyLetter = _.findWhere(letters, { isKey: true })
+    const nonKeyLetters = letters.filter(l => !l.isKey)
     return {
         props: {
-            letters: game.getAllLetters()
+            nonKeyLetters,
+            keyLetter,
+            answers: game.answers
         },
-        revalidate: 3600
+        revalidate: 1
     }
 }
 

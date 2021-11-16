@@ -66,6 +66,7 @@ function Game(doNotVet) {
     self.possibleScore = possibleScore
     self.shuffle = shuffle
     self.numberOfAnswers = numberOfAnswers
+    self.getQualifyingWords = getQualifyingWords
 
     function canBePangram(word) {
         if (typeof word !== 'string') return false
