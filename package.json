@@ -2,14 +2,22 @@
   "name": "spelling-bee",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
   "scripts": {
-    "cli": "node src/cli.js"
+    "cli": "node cli.js",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "inquirer": "^8.1.5",
+    "next": "^12.0.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "underscore": "^1.13.1"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-next": "12.0.4"
   }
 }

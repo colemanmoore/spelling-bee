@@ -1,12 +1,12 @@
 # Spelling Bee
 
+`npm install`
+
 ## Web UI
 
-Coming soon
+`npm run watch`
 
 ## Command line
-
-`npm install`
 
 `npm run cli`
 

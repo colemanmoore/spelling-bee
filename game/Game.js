@@ -1,18 +1,19 @@
 const _ = require('underscore')
+const fs = require('fs')
 
-module.exports = function Game(wordsList, doNotVet) {
+function Game(doNotVet) {
     const self = this
 
     const MIN_POINTS = 150
     const MAX_POINTS = 350
-    const text = {
+    self.messages = {
         ALREADY_FOUND: 'Already found',
         NOT_IN_LIST: 'Not in word list'
     }
 
-    self.found = {}
-    self.score = 0
-
+    console.log(`Begin finding pangram... (${(new Date()).toLocaleTimeString()})`)
+    const words_json = fs.readFileSync('./dictionary.json')
+    const wordsList = Object.keys(JSON.parse(words_json))
     const pangrams = wordsList.filter(canBePangram)
     let lowScoring = false
     let initializations = 0
@@ -28,43 +29,38 @@ module.exports = function Game(wordsList, doNotVet) {
         }
     } while (!lowScoring && !doNotVet && initializations < 100000)
 
-    if (!lowScoring && !doNotVet) console.warn('Never found good pangram')
+    if (!lowScoring && !doNotVet)
+        console.warn(`Never found good pangram (${(new Date()).toLocaleTimeString()})`)
+    else
+        console.log(`End finding pangram. (${(new Date()).toLocaleTimeString()})`)
 
     shuffle()
 
-    self.prompt = function() {
-        const letters = self.letters.map(l => l.toUpperCase())
+    self.getLetters = function() {
+        let letters = self.letters.map(l => l.toUpperCase())
         letters.splice(letters.indexOf(self.keyLetter.toUpperCase()), 1)
-        return `
-               ${letters[0]}
-            ${letters[1]}     ${letters[2]}
-               ${self.keyLetter.toUpperCase()}
-            ${letters[3]}     ${letters[4]}
-               ${letters[5]}
-        ` + '\n'
+        return letters.map(l => l.toUpperCase())
+    }
+
+    self.getKeyLetter = function() {
+        return self.keyLetter.toUpperCase()
+    }
+
+    self.getAllLetters = function() {
+        return self.letters.map(l => ({
+            text: l.toUpperCase(),
+            isKey: l === self.keyLetter
+        }))
     }
 
     self.submit = function(submission) {
         let grade = 0
-        let message
 
-        if (self.found[submission]) {
-            message = text.ALREADY_FOUND
-
-        } else if (self.answers[submission]) {
+        if (self.answers[submission]) {
             grade = submission.length < 5 ? 1 : submission.length
-            self.found[submission] = 1
-            self.score += grade
-
-        } else {
-            message = text.NOT_IN_LIST
         }
 
-        return {
-            points: grade,
-            totalScore: self.score,
-            message
-        }
+        return grade
     }
 
     self.possibleScore = possibleScore
@@ -113,3 +109,5 @@ module.exports = function Game(wordsList, doNotVet) {
         self.letters = _.shuffle(self.letters)
     }
 }
+
+module.exports = Game;
