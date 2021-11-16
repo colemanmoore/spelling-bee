@@ -6,3 +6,18 @@ body {
     background-color: #000000;
     color: #FFFFFF;
 }
+
+.scoreboard,
+.wordsFound {
+    width: 100%;
+    height: 1em;
+    padding: 0.7em;
+    margin-bottom: 0.5em;
+    line-height: 1em;
+    background-color: rgb(61, 61, 61);
+    text-align: center;
+}
+
+.answersContainer {
+    visibility: hidden;
+}

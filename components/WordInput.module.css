@@ -1,0 +1,10 @@
+.container {
+    height: 2em;
+    line-height: 2em;
+    margin: 1em 0;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    font-size: 2em;
+    border: 1px solid white;
+}

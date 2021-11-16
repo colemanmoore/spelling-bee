@@ -4,12 +4,9 @@ const fs = require('fs')
 function Game(doNotVet) {
     const self = this
 
+    // TODO move pangram computation into pangram.js, make this an on-the-fly rep of the game
     const MIN_POINTS = 150
     const MAX_POINTS = 350
-    self.messages = {
-        ALREADY_FOUND: 'Already found',
-        NOT_IN_LIST: 'Not in word list'
-    }
 
     console.log(`Begin finding pangram... (${(new Date()).toLocaleTimeString()})`)
     const words_json = fs.readFileSync('./dictionary.json')
