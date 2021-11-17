@@ -5,7 +5,8 @@ import WordInput from './WordInput'
 import useInput from '../hooks/useInput'
 import styles from './GameBoard.module.css'
 
-export default function GameBoard({ nonKeyLetters, keyLetter, handleSubmission }) {
+export default function GameBoard({ letters, handleSubmission }) {
+    const { nonKeyLetters, keyLetter } = letters
 
     const [orderedLetters, setOrderedLetters] = useState([])
 
@@ -17,9 +18,9 @@ export default function GameBoard({ nonKeyLetters, keyLetter, handleSubmission }
     }, [])
 
     const shuffle = () => {
-        const letters = _.shuffle(nonKeyLetters)
-        letters.splice(3, 0, keyLetter)
-        setOrderedLetters(letters)
+        const characters = _.shuffle(nonKeyLetters)
+        characters.splice(3, 0, keyLetter)
+        setOrderedLetters(characters)
     }
 
     const submit = () => {
