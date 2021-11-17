@@ -3,6 +3,7 @@
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
+    margin-top: 2.5em;
 }
 
 .honeycomb > * {
@@ -66,8 +67,7 @@
 }
 
 .buttonArea button {
-    border-radius: 25px;
-    padding: 10px;
-    margin: 20px;
-    cursor: pointer;
+    min-width: 3em;
+    font-size: 0.9em;
+    margin: 1em;
 }

@@ -1,4 +1,4 @@
-import { genDummy, genBrute, Game } from '../../game/Game'
+import { genBrute, Game } from '../../game/Game'
 
 const game = genBrute()
 
@@ -11,8 +11,10 @@ export default (req, res) => {
         } catch (err) {
             console.log('Error getting letters')
         }
+        const maxScore = game.possibleScore()
         res.status(200).json({
-            letters
+            letters,
+            maxScore
         })
     }
 

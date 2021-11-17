@@ -3,21 +3,13 @@ import { possibleScore } from './util'
 import { bruteForce, intelligent } from './pangram'
 
 module.exports = {
-    genDummy,
     genBrute,
     Game
 }
 
-function genDummy() {
-    return new Game({ 
-        letters: ['e','r','o','l','k','n','i'], 
-        keyLetter: 'l', 
-        answers: { lore: true, kill: true, roll: true, role: true, iller: true, roil: true }
-    })
-}
-
 function genBrute() {
-    const { letters, keyLetter, answers } = bruteForce({ doNotVet: true })
+    const { letters, keyLetter, answers, pangram } = bruteForce({ doNotVet: true })
+    console.log(pangram)
     return new Game({ letters, keyLetter, answers })
 }
 

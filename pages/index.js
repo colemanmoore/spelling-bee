@@ -1,14 +1,16 @@
 import { Fragment, useState, useEffect } from 'react'
 import _ from 'underscore'
+import useWordsFound from '../hooks/useWordsFound'
 import GameBoard from '../components/GameBoard'
 import ScoreBoard from '../components/ScoreBoard'
 import WordsFound from '../components/WordsFound'
 
-function Home({ nonKeyLetters, keyLetter }) {
+function Home() {
 
     const [letters, setLetters] = useState({ nonKeyLetters: [], keyLetter: '' })
     const [score, setScore] = useState(0)
-    const [wordsFound, setWordsFound] = useState({})
+    const [possibleScore, setPossibleScore] = useState(null)
+    const [wordsFound, addWord, wordsFoundInsertionOrder, wordsFoundAlpha] = useWordsFound()
 
     useEffect(async () => {
         const resp = await fetch('/api/current-game', { method: 'GET' })
@@ -19,10 +21,11 @@ function Home({ nonKeyLetters, keyLetter }) {
             nonKeyLetters: nonKey,
             keyLetter: key
         })
+        setPossibleScore(data.maxScore)
     }, [])
 
     const gradeSubmission = async submission => {
-        if (wordsFound[submission]) {
+        if (wordsFound.get(submission)) {
             console.log('Already found')
         } else {
             const resp = await fetch('/api/current-game', {
@@ -34,19 +37,19 @@ function Home({ nonKeyLetters, keyLetter }) {
             const data = await resp.json()
             if (data.grade > 0) {
                 setScore(score + data.grade)
-                setWordsFound({ ...wordsFound, [submission]: true })
+                addWord(submission.toLowerCase())
             }
         }
     }
 
     return (
         <Fragment>
-            <ScoreBoard score={score} />
-            <WordsFound wordsFound={wordsFound} />
-            { letters.nonKeyLetters.length > 0 ? <GameBoard letters={letters} handleSubmission={gradeSubmission} /> : null }
-            {/* <section className="answersContainer">
-                {Object.keys(answers).map(a => <li key={a}>{a}</li> )}
-            </section> */}
+            <ScoreBoard score={score} possibleScore={possibleScore} />
+            <WordsFound wordsFoundInsertionOrder={wordsFoundInsertionOrder} />
+            {letters.nonKeyLetters.length > 0 ?
+                <GameBoard letters={letters} handleSubmission={gradeSubmission} /> :
+                null
+            }
         </Fragment>
     )
 }

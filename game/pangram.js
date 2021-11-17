@@ -42,7 +42,8 @@ function bruteForce({ doNotVet }) {
     return {
         letters,
         keyLetter,
-        answers
+        answers,
+        pangram
     }
 }
 

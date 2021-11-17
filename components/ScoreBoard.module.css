@@ -1,0 +1,11 @@
+.container {
+    padding-left: 10px;
+}
+
+.currentScore {
+    float: left;
+}
+
+.possibleScore {
+    float: right;
+}
