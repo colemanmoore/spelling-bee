@@ -1,16 +1,12 @@
 import fs from 'fs'
 import _ from 'underscore'
 import { getQualifyingWords, uniqueChars, canBePangram, possibleScore } from './util'
+import Game from './Game'
 
 const MIN_POINTS = 150
 const MAX_POINTS = 350
 
-module.exports = {
-    bruteForce,
-    intelligent
-}
-
-function bruteForce({ doNotVet }) {
+export function bruteForce({ doNotVet }) {
 
     console.log(`Begin finding pangram... (${(new Date()).toLocaleTimeString()})`)
 
@@ -39,12 +35,12 @@ function bruteForce({ doNotVet }) {
     else
         console.log(`End finding pangram. (${(new Date()).toLocaleTimeString()})`)
 
-    return {
+    console.log(pangram)
+    return new Game({
         letters,
         keyLetter,
-        answers,
-        pangram
-    }
+        answers
+    })
 }
 
 function intelligent() {

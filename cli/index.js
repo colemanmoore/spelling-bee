@@ -1,8 +1,8 @@
-const inquirer = require('inquirer')
-const _ = require('underscore')
-const Game = require('./game/Game')
+import inquirer from 'inquirer'
+import _ from 'underscore'
+import pangrammer from '../game/pangram.js'
 
-const game = new Game()
+const game = pangrammer.bruteForce({ doNotVet: false })
 let score = 0
 const alreadyFound = {}
 

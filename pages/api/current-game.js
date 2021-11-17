@@ -1,6 +1,6 @@
-import { genBrute, Game } from '../../game/Game'
+import { bruteForce } from '../../game/pangram'
 
-const game = genBrute()
+const game = bruteForce({ doNotVet: false })
 
 export default (req, res) => {
 
