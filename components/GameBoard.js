@@ -3,8 +3,6 @@ import _ from 'underscore'
 import Letter from './Letter'
 import WordInput from './WordInput'
 import useInput from '../hooks/useInput'
-
-import classnames from 'classnames'
 import styles from './GameBoard.module.css'
 
 export default function GameBoard({ nonKeyLetters, keyLetter, handleSubmission }) {
@@ -34,7 +32,7 @@ export default function GameBoard({ nonKeyLetters, keyLetter, handleSubmission }
         }
 
         handleSubmission(input)
-        clearInput('')
+        clearInput()
     }
 
     return (

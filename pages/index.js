@@ -1,24 +1,29 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import _ from 'underscore'
 import GameBoard from '../components/GameBoard'
 import ScoreBoard from '../components/ScoreBoard'
 import WordsFound from '../components/WordsFound'
-import Game from '../game/Game'
-const game = new Game(true)
 
-function Home({ nonKeyLetters, keyLetter, answers }) {
+function Home({ nonKeyLetters, keyLetter }) {
 
     const [score, setScore] = useState(0)
-    const [wordsFound, setWordsFound] = useState([])
+    const [wordsFound, setWordsFound] = useState({})
 
-    const gradeSubmission = submission => {
-        let grade = 0
-        if (answers[submission.toLowerCase()]) {
-            grade = submission.length < 5 ? 1 : submission.length
-        }
-        if (grade > 0) {
-            setScore(score + grade)
-            wordsFound.push(submission)
+    const gradeSubmission = async submission => {
+        if (wordsFound[submission]) {
+            console.log('Already found')
+        } else {
+            const resp = await fetch('/api/current-game', {
+                method: 'POST',
+                body: JSON.stringify({
+                    submission: submission
+                })
+            })
+            const data = await resp.json()
+            if (data.grade > 0) {
+                setScore(score + data.grade)
+                setWordsFound({ ...wordsFound, [submission]: true })
+            }
         }
     }
 
@@ -27,24 +32,26 @@ function Home({ nonKeyLetters, keyLetter, answers }) {
             <ScoreBoard score={score} />
             <WordsFound wordsFound={wordsFound} />
             <GameBoard nonKeyLetters={nonKeyLetters} keyLetter={keyLetter} handleSubmission={gradeSubmission} />
-            <section className="answersContainer">
-                {Object.keys(answers).map(a => <li key={a}>{a}</li>)}
-            </section>
+            {/* <section className="answersContainer">
+                {Object.keys(answers).map(a => <li key={a}>{a}</li> )}
+            </section> */}
         </Fragment>
     )
 }
 
-export function getStaticProps() {
-    const letters = game.getAllLetters()
-    const keyLetter = _.findWhere(letters, { isKey: true })
-    const nonKeyLetters = letters.filter(l => !l.isKey)
+export async function getStaticProps() {
+    const resp = await fetch('http://localhost:3000/api/current-game', {
+        method: 'GET'
+    })
+    const data = await resp.json()
+    const keyLetter = _.findWhere(data.letters, { isKey: true })
+    const nonKeyLetters = data.letters.filter(l => !l.isKey)
     return {
         props: {
-            nonKeyLetters,
-            keyLetter,
-            answers: game.answers
+            nonKeyLetters: nonKeyLetters,
+            keyLetter: keyLetter
         },
-        revalidate: 1
+        revalidate: 3600
     }
 }
 

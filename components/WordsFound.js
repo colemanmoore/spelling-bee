@@ -6,6 +6,6 @@ export default function WordsFound({ wordsFound }) {
     const classes = classnames('wordsFound')
 
     return <section className={classes}>
-        {wordsFound.map(w => <span key={w} className={styles.word}>{w}</span>)}
+        {Object.keys(wordsFound).map(w => <span key={w} className={styles.word}>{w}</span>)}
     </section>
 }

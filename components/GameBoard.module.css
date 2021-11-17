@@ -61,7 +61,13 @@
     }
 }
 
-
 .buttonArea {
     text-align: center;
+}
+
+.buttonArea button {
+    border-radius: 25px;
+    padding: 10px;
+    margin: 20px;
+    cursor: pointer;
 }
