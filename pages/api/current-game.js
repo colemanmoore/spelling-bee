@@ -1,6 +1,6 @@
 import { bruteForce } from '../../game/pangram'
 
-const game = bruteForce({ doNotVet: false })
+const game = bruteForce()
 
 export default (req, res) => {
 

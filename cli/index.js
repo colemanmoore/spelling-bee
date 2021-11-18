@@ -2,7 +2,7 @@ import inquirer from 'inquirer'
 import _ from 'underscore'
 import pangrammer from '../game/pangram.js'
 
-const game = pangrammer.bruteForce({ doNotVet: false })
+const game = pangrammer.bruteForce()
 let score = 0
 const alreadyFound = {}
 

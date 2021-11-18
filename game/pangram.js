@@ -3,10 +3,10 @@ import _ from 'underscore'
 import { getQualifyingWords, uniqueChars, canBePangram, possibleScore } from './util'
 import Game from './Game'
 
-const MIN_POINTS = 150
-const MAX_POINTS = 350
+const MIN_POINTS = 100
+const MAX_POINTS = 500
 
-export function bruteForce({ doNotVet }) {
+export function bruteForce(filteringForLowScore = false) {
 
     console.log(`Begin finding pangram... (${(new Date()).toLocaleTimeString()})`)
 
@@ -28,9 +28,9 @@ export function bruteForce({ doNotVet }) {
             lowScoring = true
         }
 
-    } while (!lowScoring && !doNotVet && initializations < 100000)
+    } while (!lowScoring && filteringForLowScore && initializations < 100000)
 
-    if (!lowScoring && !doNotVet)
+    if (!lowScoring && filteringForLowScore)
         console.warn(`Never found good pangram (${(new Date()).toLocaleTimeString()})`)
     else
         console.log(`End finding pangram. (${(new Date()).toLocaleTimeString()})`)
