@@ -27,8 +27,7 @@ button {
     }
   }
 
-.scoreboard,
-.wordsFound {
+.topSection {
     height: 3em;
     line-height: 1.5em;
     padding: 0.7em;

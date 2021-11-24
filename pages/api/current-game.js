@@ -24,6 +24,8 @@ export default (req, res) => {
         response.grade = game.submit(body.submission)
         if (response.grade < 1) {
             response.message = 'Not in word list'
+        } else if (game.pangrams.includes(body.submission.toLowerCase())) {
+            response.message = 'Pangram!'
         }
         res.status(200).json(response)
     }

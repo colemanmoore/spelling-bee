@@ -16,18 +16,17 @@ const MESSAGE = {
 export default function Home() {
 
     const game = useGame()
-    const [score, setScore] = useState(0)
     const wordsFound = useWordsFound()
-    const messageFlash = useMessageFlash()
+    const messageFlash = useMessageFlash(1500)
+    const [score, setScore] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(async () => {
+        setIsLoading(true)
         const resp = await fetch('/api/current-game', { method: 'GET' })
         const data = await resp.json()
-
-        if (data.letters) {
-            game.initialize(data.letters)
-        }
-        game.setPossibleScore(data.maxScore)
+        game.initialize(data.letters, data.maxScore)
+        setIsLoading(false)
     }, [])
 
     const gradeSubmission = useCallback(async submissionText => {
@@ -70,11 +69,8 @@ export default function Home() {
     return (
         <Fragment>
             <ScoreBoard score={score} possibleScore={game.possibleScore} />
-            <WordsFound words={wordsFound.stack} />
-            {game.letters.nonKeyLetters.length > 0 ?
-                <GameBoard handleSubmission={gradeSubmission} />
-                : null
-            }
+            <WordsFound words={wordsFound.stack} alphabetical={wordsFound.alpha} />
+            <GameBoard loading={isLoading} handleSubmission={gradeSubmission} />
             <MessageBoard message={messageFlash.currentMessage} />
         </Fragment>
     )

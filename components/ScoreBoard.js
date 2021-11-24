@@ -3,7 +3,7 @@ import styles from './ScoreBoard.module.css'
 
 export default function ScoreBoard({ score, possibleScore }) {
 
-    const classes = classnames('scoreboard')
+    const classes = classnames('topSection')
 
     return <section className={classes}>
         <div className={styles.container}>

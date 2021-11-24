@@ -12,12 +12,13 @@ export function ProvideGame({ children }) {
 
 function useProvideGame() {
 
-    const [letters, setLetters] = useState({ nonKeyLetters: [], keyLetter: '' })
+    const [letters, setLetters] = useState({ nonKeyLetters: [], keyLetter: null })
     const [possibleScore, setPossibleScore] = useState(null)
     const [hasLetter, setHasLetter] = useState({})
 
-    function initialize(letters) {
+    function initialize(letters = [], possibleScore = 0) {
         let key, nonKey = [], has = {}
+        
         letters.forEach(l => {
             if (l.isKey) {
                 key = l
@@ -33,14 +34,14 @@ function useProvideGame() {
         })
 
         setHasLetter(has)
+
+        setPossibleScore(possibleScore || 0)
     }
 
     return {
         initialize,
         letters,
-        setLetters,
         possibleScore,
-        setPossibleScore,
         hasLetter
     }
 }

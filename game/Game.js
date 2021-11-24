@@ -1,5 +1,5 @@
 import _ from 'underscore'
-import { possibleScore } from './util.js'
+import { possibleScore, canBePangram } from './util.js'
 
 export default class Game {
 
@@ -7,6 +7,7 @@ export default class Game {
         this.letters = letters.map(l => l.toLowerCase())
         this.keyLetter = keyLetter.toLowerCase()
         this.answers = answers
+        this.pangrams = this.getAllPangrams()
     }
 
     getLetters() {
@@ -24,6 +25,12 @@ export default class Game {
             text: l,
             isKey: l === this.keyLetter
         }))
+    }
+
+    getAllPangrams() {
+        return Object.keys(this.answers).filter(word => {
+            return canBePangram(word)
+        })
     }
 
     submit(submission) {

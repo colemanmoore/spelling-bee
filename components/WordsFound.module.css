@@ -1,3 +1,13 @@
+.wordsFound {
+    transition: height 0.5s;
+}
+
+.wordsFound.opened {
+    height: 300px;
+    background-color: rgb(153, 153, 153);
+    color: black;
+}
+
 .container {
     display: flex;
     flex-direction: row-reverse;
@@ -8,4 +18,15 @@
 .word {
     margin: auto 10px;
     text-transform: capitalize;
+}
+
+.allWordsContainer {
+    display: flex;
+    flex-flow: column wrap;
+    align-content: flex-start;
+    height: 100%;
+}
+
+.flexWord {
+    height: 12%
 }

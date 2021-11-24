@@ -1,28 +1,30 @@
-import { Fragment, useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import _ from 'underscore'
 import useInput from '../hooks/useInput'
 import { useGame } from '../hooks/useGame'
 import Letter from './Letter'
 import WordInput from './WordInput'
+import Loading from './Loading'
 import styles from './GameBoard.module.css'
 
-export default function GameBoard({ handleSubmission }) {
+export default function GameBoard({ handleSubmission, loading }) {
 
     const game = useGame()
     const input = useInput({ submitCallback: handleSubmission })
-
-    const { nonKeyLetters, keyLetter } = game.letters
     const [orderedLetters, setOrderedLetters] = useState([])
 
     useEffect(() => {
         shuffle()
-    }, [])
+    }, [game.letters])
 
-    const shuffle = useCallback(() => {
-        const characters = _.shuffle(nonKeyLetters)
-        characters.splice(3, 0, keyLetter)
-        setOrderedLetters(characters)
-    }, [nonKeyLetters, keyLetter, setOrderedLetters])
+    const shuffle = () => {
+        const { nonKeyLetters, keyLetter } = game.letters
+        if (nonKeyLetters.length && keyLetter) {
+            const characters = _.shuffle(nonKeyLetters)
+            characters.splice(3, 0, keyLetter)
+            setOrderedLetters(characters)
+        }
+    }
 
     const submit = useCallback(() => {
         handleSubmission(input.content)
@@ -30,23 +32,28 @@ export default function GameBoard({ handleSubmission }) {
     }, [input.content, input.clearInput, handleSubmission])
 
     return (
-        <Fragment>
-            <section className={styles.honeycomb}>
-                {orderedLetters.map(l => (
-                    <Letter
-                        key={l.text}
-                        letter={l}
-                        isKeyPressed={input.keyPressed === l.text}
-                        handlePress={input.addLetterToInput}
-                    />
-                ))}
-            </section>
+        <div className={styles.container}>
+            <div className={styles.wordPad}>
+                {loading ?
+                    <Loading /> :
+                    <section className={styles.honeycomb}>
+                        {orderedLetters.map(l => (
+                            <Letter
+                                key={l.text}
+                                letter={l}
+                                isKeyPressed={input.keyPressed === l.text}
+                                handlePress={input.addLetterToInput}
+                            />
+                        ))}
+                    </section>
+                }
+            </div>
             <WordInput word={input.content} />
             <section className={styles.buttonArea}>
                 <button onClick={input.deleteLetterFromInput}>Delete</button>
                 <button onClick={shuffle}>@</button>
                 <button onClick={submit}>Enter</button>
             </section>
-        </Fragment>
+        </div>
     )
 }
