@@ -1,28 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export default function useWordsFound() {
 
-    const [wordsFound, setWordsFound] = useState(new Map())
-    const [wordsFoundInsertionOrder, setWordsFoundInsertionOrder] = useState([])
-    const [wordsFoundAlpha, setWordsFoundAlpha] = useState([])
-
-    useEffect(() => {
-        setWordsFoundAlpha(listWordsAlpha())
-        setWordsFoundInsertionOrder(listWordsInsertionOrder())
-    }, [wordsFound])
+    const [wordsFound, setWordsFound] = useState({})
+    const [wordsStack, setWordsStack] = useState([])
 
     function addWord(word) {
-        setWordsFound(map => new Map(map.set(word, true)))
+        const lowercase = word.toLowerCase()
+        if (wordsFound[lowercase]) return
+        setWordsFound({
+            ...wordsFound,
+            [lowercase]: true
+        })
+        const stack = [...wordsStack, lowercase]
+        setWordsStack(stack)
     }
 
-    function listWordsInsertionOrder() {
-        const list = []
-        wordsFound.forEach((val, word) => list.push(word))
-        return list
+    function hasWord(word) {
+        return wordsFound[word.toLowerCase()]
     }
 
-    function listWordsAlpha() {
-        const list = listWordsInsertionOrder()
+    function inAlphabeticalOrder() {
+        const list = [].concat(wordsStack)
         return list.sort((a,b) => {
             if (a < b) return -1
             if (b < a) return 1
@@ -30,5 +29,11 @@ export default function useWordsFound() {
         })
     }
 
-    return [wordsFound, addWord, wordsFoundInsertionOrder, wordsFoundAlpha]
+    return {
+        hashMap: wordsFound,
+        stack: wordsStack,
+        alpha: inAlphabeticalOrder(),
+        addWord,
+        hasWord
+    }
 }

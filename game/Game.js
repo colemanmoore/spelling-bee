@@ -4,24 +4,24 @@ import { possibleScore } from './util.js'
 export default class Game {
 
     constructor({ letters, keyLetter, answers }) {
-        this.letters = letters
-        this.keyLetter = keyLetter
+        this.letters = letters.map(l => l.toLowerCase())
+        this.keyLetter = keyLetter.toLowerCase()
         this.answers = answers
     }
 
     getLetters() {
-        let letters = this.letters.map(l => l.toUpperCase())
-        letters.splice(letters.indexOf(this.keyLetter.toUpperCase()), 1)
-        return letters.map(l => l.toUpperCase())
+        let letters = this.letters
+        letters.splice(letters.indexOf(this.keyLetter), 1)
+        return letters
     }
 
     getKeyLetter() {
-        return this.keyLetter.toUpperCase()
+        return this.keyLetter
     }
 
     getAllLetters() {
         return this.letters.map(l => ({
-            text: l.toUpperCase(),
+            text: l,
             isKey: l === this.keyLetter
         }))
     }

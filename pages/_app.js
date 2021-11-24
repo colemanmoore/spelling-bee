@@ -1,7 +1,12 @@
+import { ProvideGame } from '../hooks/useGame'
 import '../styles/styles.css'
 
 function App({ Component, pageProps }) {
-    return <Component {...pageProps} />
-  }
-  
-  export default App
+  return (
+    <ProvideGame>
+      <Component {...pageProps} />
+    </ProvideGame>
+  )
+}
+
+export default App

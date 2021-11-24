@@ -1,20 +1,21 @@
 import { Fragment, useState, useEffect, useCallback } from 'react'
 import _ from 'underscore'
+import useInput from '../hooks/useInput'
+import { useGame } from '../hooks/useGame'
 import Letter from './Letter'
 import WordInput from './WordInput'
-import useInput from '../hooks/useInput'
 import styles from './GameBoard.module.css'
 
-export default function GameBoard({ letters, handleSubmission }) {
+export default function GameBoard({ handleSubmission }) {
 
-    const { nonKeyLetters, keyLetter } = letters
-
+    const game = useGame()
+    const input = useInput()
+    
+    const { nonKeyLetters, keyLetter } = game.letters
     const [orderedLetters, setOrderedLetters] = useState([])
 
-    const allTargetKeys = [].concat(nonKeyLetters.map(l => l.text)).concat([keyLetter.text])
-    const [input, addLetterToInput, deleteLetterFromInput, clearInput] = useInput(allTargetKeys)
-
     useEffect(() => {
+        input.createKeyMap(nonKeyLetters, keyLetter)
         shuffle()
     }, [])
 
@@ -25,33 +26,26 @@ export default function GameBoard({ letters, handleSubmission }) {
     }, [nonKeyLetters, keyLetter, setOrderedLetters])
 
     const submit = useCallback(() => {
-        if (input.length < 4) {
-            return
-        }
+        handleSubmission(input.content)
+        input.clearInput()
 
-        if (input.indexOf(keyLetter.text) < 0) {
-            return
-        }
-
-        handleSubmission(input)
-        clearInput()
-
-    }, [input, handleSubmission, clearInput])
-
-    const handleDelete = useCallback(() => {
-        deleteLetterFromInput()
-    }, [deleteLetterFromInput])
+    }, [input.content, input.clearInput, handleSubmission])
 
     return (
         <Fragment>
-            <section className={styles.honeycomb}>            
+            <section className={styles.honeycomb}>
                 {orderedLetters.map(l => (
-                    <Letter key={l.text} letter={l} handleLetterClick={addLetterToInput} />
+                    <Letter
+                        key={l.text}
+                        letter={l}
+                        isKeyPressed={input.keyPressed === l.text}
+                        handlePress={input.addLetterToInput}
+                    />
                 ))}
             </section>
-            <WordInput word={input} />
+            <WordInput word={input.content} />
             <section className={styles.buttonArea}>
-                <button onClick={handleDelete}>Delete</button>
+                <button onClick={input.deleteLetterFromInput}>Delete</button>
                 <button onClick={shuffle}>@</button>
                 <button onClick={submit}>Enter</button>
             </section>

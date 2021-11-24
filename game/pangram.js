@@ -22,6 +22,7 @@ export function bruteForce(filteringForLowScore = false) {
         pangram = pangrams[Math.floor(Math.random() * pangrams.length)]
         letters = uniqueChars(pangram)
         keyLetter = letters[Math.floor(Math.random() * letters.length)]
+        
         answers = getQualifyingWords({ wordsList, keyLetter, letters})
 
         if (MIN_POINTS < possibleScore(answers) && possibleScore(answers) < MAX_POINTS) {

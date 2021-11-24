@@ -15,6 +15,7 @@
 }
 
 .letterContent {
+    text-transform: uppercase;
     cursor: pointer;
     display: block;
     width: 100%;
