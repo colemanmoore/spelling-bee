@@ -13,7 +13,7 @@ const MESSAGE = {
     no_key_letter: 'Does not use center letter'
 }
 
-function Home() {
+export default function Home() {
 
     const game = useGame()
     const [score, setScore] = useState(0)
@@ -79,5 +79,3 @@ function Home() {
         </Fragment>
     )
 }
-
-export default Home
