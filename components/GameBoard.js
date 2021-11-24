@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useCallback } from 'react'
 import _ from 'underscore'
 import Letter from './Letter'
 import WordInput from './WordInput'
@@ -6,6 +6,7 @@ import useInput from '../hooks/useInput'
 import styles from './GameBoard.module.css'
 
 export default function GameBoard({ letters, handleSubmission }) {
+
     const { nonKeyLetters, keyLetter } = letters
 
     const [orderedLetters, setOrderedLetters] = useState([])
@@ -17,13 +18,13 @@ export default function GameBoard({ letters, handleSubmission }) {
         shuffle()
     }, [])
 
-    const shuffle = () => {
+    const shuffle = useCallback(() => {
         const characters = _.shuffle(nonKeyLetters)
         characters.splice(3, 0, keyLetter)
         setOrderedLetters(characters)
-    }
+    }, [nonKeyLetters, keyLetter, setOrderedLetters])
 
-    const submit = () => {
+    const submit = useCallback(() => {
         if (input.length < 4) {
             return
         }
@@ -34,18 +35,23 @@ export default function GameBoard({ letters, handleSubmission }) {
 
         handleSubmission(input)
         clearInput()
-    }
+        
+    }, [input, handleSubmission, clearInput])
+
+    const handleDelete = useCallback(() => {
+        deleteLetterFromInput()
+    }, [deleteLetterFromInput])
 
     return (
         <Fragment>
             <section className={styles.honeycomb}>            
                 {orderedLetters.map(l => (
-                    <Letter className="hi" key={l.text} letter={l} handleLetterClick={addLetterToInput} />
+                    <Letter key={l.text} letter={l} handleLetterClick={addLetterToInput} />
                 ))}
             </section>
             <WordInput word={input} />
             <section className={styles.buttonArea}>
-                <button onClick={deleteLetterFromInput}>Delete</button>
+                <button onClick={handleDelete}>Delete</button>
                 <button onClick={shuffle}>@</button>
                 <button onClick={submit}>Enter</button>
             </section>

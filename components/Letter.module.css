@@ -22,13 +22,12 @@
     z-index: -1;
 }
 
-.letterContent:hover {
-    background-color: #FFFFFF;
+.keyLetter {
+    background-color: yellow;
     color: #000000;
 }
 
-
-.keyLetter {
-    background-color: yellow;
+.activeLetter {
+    background-color: #FFFFFF;
     color: #000000;
 }

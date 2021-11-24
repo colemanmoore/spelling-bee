@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export default function useKeyPress(targetKeys) {
 
@@ -14,7 +14,7 @@ export default function useKeyPress(targetKeys) {
     }, {})
 
     const addLetterToInput = letter => {
-        setInput('' + input + letter)
+        setInput(input + letter)
     }
 
     const deleteLetterFromInput = () => {
@@ -23,11 +23,11 @@ export default function useKeyPress(targetKeys) {
         }
     }
 
-    const clearInput = () => {
+    const clearInput = useCallback(() => {
         setInput('')
-    }
+    }, [setInput])
 
-    function upHandler(e) {
+    const  upHandler = function(e) {
         e.preventDefault()
         if (keyMap[e.key]) {
             setKeyPressed(e.key)
