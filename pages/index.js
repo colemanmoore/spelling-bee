@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect, useCallback } from 'react'
-import _ from 'underscore'
 import { useGame } from '../hooks/useGame'
 import useWordsFound from '../hooks/useWordsFound'
 import useMessageFlash from '../hooks/useMessageFlash'
@@ -24,12 +23,10 @@ function Home() {
     useEffect(async () => {
         const resp = await fetch('/api/current-game', { method: 'GET' })
         const data = await resp.json()
-        const key = _.findWhere(data.letters, { isKey: true })
-        const nonKey = data.letters.filter(l => !l.isKey)
-        game.setLetters({
-            nonKeyLetters: nonKey,
-            keyLetter: key
-        })
+
+        if (data.letters) {
+            game.initialize(data.letters)
+        }
         game.setPossibleScore(data.maxScore)
     }, [])
 
@@ -75,7 +72,7 @@ function Home() {
             <ScoreBoard score={score} possibleScore={game.possibleScore} />
             <WordsFound words={wordsFound.stack} />
             {game.letters.nonKeyLetters.length > 0 ?
-                <GameBoard letters={game.letters} handleSubmission={gradeSubmission} />
+                <GameBoard handleSubmission={gradeSubmission} />
                 : null
             }
             <MessageBoard message={messageFlash.currentMessage} />

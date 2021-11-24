@@ -9,13 +9,12 @@ import styles from './GameBoard.module.css'
 export default function GameBoard({ handleSubmission }) {
 
     const game = useGame()
-    const input = useInput()
-    
+    const input = useInput({ submitCallback: handleSubmission })
+
     const { nonKeyLetters, keyLetter } = game.letters
     const [orderedLetters, setOrderedLetters] = useState([])
 
     useEffect(() => {
-        input.createKeyMap(nonKeyLetters, keyLetter)
         shuffle()
     }, [])
 
@@ -28,7 +27,6 @@ export default function GameBoard({ handleSubmission }) {
     const submit = useCallback(() => {
         handleSubmission(input.content)
         input.clearInput()
-
     }, [input.content, input.clearInput, handleSubmission])
 
     return (

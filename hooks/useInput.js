@@ -1,92 +1,110 @@
-import { useState , useEffect, useRef } from 'react'
+import { useEffect, useReducer } from 'react'
 import { isMobile } from 'react-device-detect'
+import { useGame } from '../hooks/useGame'
 
-// const inputContext = createContext()
-// export const useInput = () => useContext(inputContext)
+export default function useInput({ submitCallback }) {
 
-// export function ProvideInput({ children }) {
-//     const input = useProvideInput()
-//     return <inputContext.Provider value={input}>
-//         {children}
-//     </inputContext.Provider>
-// }
-
-export default function useInput() {
-
-    const [keyPressed, setKeyPressed] = useState(null)
-    const content = useRef('')
-    let keyMap
-
-    const addLetterToInput = letter => {
-        console.log('add letter to input')
-        setContent(content + letter.toLowerCase())
+    const ACTIONS = {
+        ADD: 'add',
+        DELETE: 'del',
+        CLEAR: 'clear',
+        PRESS: 'press',
+        UNPRESS: 'unpress'
     }
 
-    const deleteLetterFromInput = () => {
-        if (content.length > 0) {
-            setContent(content.slice(0, -1))
+    const EVENTS = {
+        KEYDOWN: 'keydown',
+        KEYUP: 'keyup'
+    }
+
+    const KEYS = {
+        BACKSPACE: 'Backspace',
+        ENTER: 'Enter'
+    }
+
+    const initialState = {
+        content: '',
+        keyPressed: null
+    }
+
+    const game = useGame()
+
+    const [state, dispatch] = useReducer((state, action) => {
+        switch (action.type) {
+            case ACTIONS.ADD:
+                return { ...state, content: state.content + action.payload }
+            case ACTIONS.DELETE:
+                if (state.content.length <= 0) return { ...state }
+                return { ...state, content: state.content.slice(0, -1) }
+            case ACTIONS.CLEAR:
+                return { ...state, content: '' }
+            case ACTIONS.PRESS:
+                return { ...state, keyPressed: action.payload }
+            case ACTIONS.UNPRESS:
+                return { ...state, keyPressed: null }
+            default:
+                throw new Error()
         }
-    }
+    }, initialState)
 
-    const clearInput = () => {
-        setContent('')
-    }
-
-    const createKeyMap = (nonKeyLetters, keyLetter) => {
-        const targetKeys = [].concat(nonKeyLetters.map(l => l.text)).concat([keyLetter.text])
-        keyMap = targetKeys.reduce((state, curr) => {
-            return {
-                ...state,
-                [curr]: true
+    useEffect(() => {
+        if (isMobile) {
+            return () => { }
+        } else {
+            document.addEventListener(EVENTS.KEYDOWN, handleKeyDown)
+            document.addEventListener(EVENTS.KEYUP, handleKeyUp)
+            return () => {
+                document.removeEventListener(EVENTS.KEYDOWN, handleKeyDown)
+                document.removeEventListener(EVENTS.KEYUP, handleKeyUp)
             }
-        }, {})
+        }
+    }, [state, state.content])
+
+    function addLetterToInput(letter) {
+        dispatch({ type: ACTIONS.ADD, payload: letter })
     }
 
-    const handleKeyDown = e => {
-        // e.preventDefault()
+    function deleteLetterFromInput() {
+        dispatch({ type: ACTIONS.DELETE })
+    }
+
+    function clearInput() {
+        dispatch({ type: ACTIONS.CLEAR })
+    }
+
+    function handleKeyDown(e) {
         switch (e.key) {
-            case 'Backspace':
+            case KEYS.BACKSPACE:
+                e.preventDefault()
                 deleteLetterFromInput()
                 break
-            case 'Enter':
-                handleReturn()
+            case KEYS.ENTER:
+                e.preventDefault()
+                handleEnter()
                 break
             default:
-                if (keyMap[e.key]) {
-                    setKeyPressed(e.key)
+                if (game.hasLetter[e.key]) {
+                    e.preventDefault()
+                    dispatch({ type: ACTIONS.PRESS, payload: e.key })
                     addLetterToInput(e.key.toLowerCase())
                 }
         }
     }
 
-    const handleKeyUp = e => {
-        // e.preventDefault()
-        setKeyPressed(null)
+    function handleKeyUp() {
+        dispatch({ type: ACTIONS.UNPRESS })
     }
 
-    const handleReturn = () => {
-        console.log('return', content)
+    const handleEnter = () => {
+        submitCallback(state.content)
+        clearInput()
     }
-
-    useEffect(() => {
-        if (isMobile) {
-            return () => {}
-        } else {
-            window.addEventListener('keydown', handleKeyDown)
-            window.addEventListener('keyup', handleKeyUp)
-            return () => {
-                window.removeEventListener('keydown', handleKeyDown)
-                window.removeEventListener('keyup', handleKeyUp)
-            }
-        }
-    }, [])
 
     return {
-        content,
-        keyPressed,
+        content: state.content,
+        keyPressed: state.keyPressed,
         addLetterToInput,
         deleteLetterFromInput,
-        clearInput,
-        createKeyMap
+        clearInput
     }
 }
