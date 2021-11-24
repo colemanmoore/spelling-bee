@@ -12,7 +12,7 @@ export default function GameBoard({ letters, handleSubmission }) {
     const [orderedLetters, setOrderedLetters] = useState([])
 
     const allTargetKeys = [].concat(nonKeyLetters.map(l => l.text)).concat([keyLetter.text])
-    const [input, addLetterToInput, deleteLetterFromInput, clearInput, keyPressed] = useInput(allTargetKeys)
+    const [input, addLetterToInput, deleteLetterFromInput, clearInput] = useInput(allTargetKeys)
 
     useEffect(() => {
         shuffle()
@@ -35,7 +35,7 @@ export default function GameBoard({ letters, handleSubmission }) {
 
         handleSubmission(input)
         clearInput()
-        
+
     }, [input, handleSubmission, clearInput])
 
     const handleDelete = useCallback(() => {

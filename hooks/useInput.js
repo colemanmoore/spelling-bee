@@ -27,7 +27,7 @@ export default function useKeyPress(targetKeys) {
         setInput('')
     }, [setInput])
 
-    const  upHandler = function(e) {
+    const upHandler = function(e) {
         e.preventDefault()
         if (keyMap[e.key]) {
             setKeyPressed(e.key)
@@ -47,5 +47,5 @@ export default function useKeyPress(targetKeys) {
         }
     }, [])
 
-    return [input, addLetterToInput, deleteLetterFromInput, clearInput, keyPressed]
+    return [input, addLetterToInput, deleteLetterFromInput, clearInput]
 }
