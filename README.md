@@ -1,18 +1,14 @@
 # Spelling Bee
 
+Example at https://spell-my-beeeee.herokuapp.com
+
 `npm install`
 
 ## Web UI
 
-`npm run watch`
+Development: `npm run dev`
 
-## Command line
-
-`npm run cli`
-
-Enter "q" to quit
-
-Enter "@" to shuffle
+Production: `npm run start`
 
 ## Dictionary
 

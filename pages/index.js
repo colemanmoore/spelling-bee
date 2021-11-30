@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect, useCallback } from 'react'
+import Head from 'next/head'
 import { useGame } from '../hooks/useGame'
 import useWordsFound from '../hooks/useWordsFound'
 import useMessageFlash from '../hooks/useMessageFlash'
@@ -68,6 +69,9 @@ export default function Home() {
 
     return (
         <Fragment>
+            <Head>
+                <title>Bee</title>
+            </Head>
             <ScoreBoard score={score} possibleScore={game.possibleScore} />
             <WordsFound words={wordsFound.stack} alphabetical={wordsFound.alpha} />
             <GameBoard loading={isLoading} handleSubmission={gradeSubmission} />
