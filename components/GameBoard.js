@@ -58,9 +58,9 @@ export default function GameBoard({ handleSubmission, loading }) {
             </div>
             <WordInput word={input.content} />
             <section className={styles.buttonArea}>
-                <button onClick={input.deleteLetterFromInput}>Delete</button>
+                <button onClick={input.deleteLetterFromInput}>{'<'}</button>
                 <button onClick={shuffle}>@</button>
-                <button onClick={submit}>Enter</button>
+                <button onClick={submit}>{'>'}</button>
             </section>
         </div>
     )

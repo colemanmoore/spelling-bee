@@ -4,8 +4,8 @@
 }
 
 .wordPad {
-    margin-top: 50px;
-    height: 100%;
+    margin-top: 40px;
+    height: 290px;
 }
 
 .honeycomb {
@@ -20,10 +20,10 @@
 }
 
 .buttonArea button {
-    min-width: 4em;
-    font-size: 0.95em;
+    min-width: 3em;
+    font-size: 1.2em;
     font-weight: bold;
     text-transform: uppercase;
-    line-height: 1.8em;
+    line-height: 1.5em;
     margin: 0 15px;
 }
