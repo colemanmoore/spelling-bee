@@ -7,14 +7,20 @@ export default function WordsFound({ words, alphabetical }) {
 
     const [showAllWordsFound, setShowAllWordsFound] = useState(false)
 
-    const handleTouchEnd = () => {
-        if (isMobile) {
+    const handleTouchStart = e => {
+        if (isMobile && alphabetical.length) {
+            setTouchStartCoord(e.pageX)
+        }
+    }
+
+    const handleTouchEnd = e => {
+        if (isMobile && alphabetical.length) {
             setShowAllWordsFound(prev => !prev)
         }
     }
 
     const handleMouseDown = () => {
-        if (!isMobile) {
+        if (!isMobile && alphabetical.length) {
             setShowAllWordsFound(prev => !prev)
         }
     }
@@ -30,7 +36,7 @@ export default function WordsFound({ words, alphabetical }) {
     }
 
     function allWords() {
-        const wordStyle = classnames(styles.word, styles.flexWord)
+        const wordStyle = classnames(styles.word, styles.listWord)
         return (
             <div className={styles.allWordsContainer}>
                 {alphabetical.map(w =>
@@ -47,6 +53,7 @@ export default function WordsFound({ words, alphabetical }) {
     return (
         <section
             className={outerClasses}
+            onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown}
         >

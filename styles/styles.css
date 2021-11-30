@@ -12,13 +12,13 @@ body {
 }
 
 button {
-    border: none;
+    border: 1px solid white;
+    color: white;
     font-family: inherit;
-    cursor: pointer;
-    border-radius: 25px;
+    border-radius: 50%;
     padding: 11px;
     cursor: pointer;
-    background-color: thistle;
+    background-color: black;
 }
 
 @media screen and (-ms-high-contrast: active) {
@@ -28,7 +28,7 @@ button {
   }
 
 .topSection {
-    height: 3em;
+    min-height: 3em;
     line-height: 1.5em;
     padding: 0.7em;
     margin: 0 auto 0.5em auto;
