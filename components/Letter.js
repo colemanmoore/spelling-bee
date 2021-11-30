@@ -7,12 +7,13 @@ export default function Letter({ letter, isKeyPressed, handlePress }) {
 
     const [isActive, setIsActive] = useState(false)
 
-    const classes = classnames(styles.letterShape, { 
+    const shapeClass = classnames(styles.letterShape, {
         [styles.keyLetter]: letter.isKey,
         [styles.activeLetter]: isActive || isKeyPressed
     })
 
-    const handleTouchStart = useCallback(() => {
+    const handleTouchStart = useCallback(e => {
+        e.stopPropagation()
         if (isMobile) {
             setIsActive(true)
             handlePress(letter.text)
@@ -44,14 +45,14 @@ export default function Letter({ letter, isKeyPressed, handlePress }) {
     }, [letter, handlePress])
 
     return (
-        <div className={styles.letterContainer}>
-            <div className={classes}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onMouseDown={handleClick}
-            >
+        <div className={styles.letterTouchBox}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onMouseDown={handleClick}
+        >
+            <div className={shapeClass}>
                 <span className={styles.letterContent}>{letter.text}</span>
             </div>
         </div>

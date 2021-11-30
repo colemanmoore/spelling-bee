@@ -31,20 +31,28 @@ export default function GameBoard({ handleSubmission, loading }) {
         input.clearInput()
     }, [input.content, input.clearInput, handleSubmission])
 
+    function letterColumn(range) {
+        return <div>
+            {range.map(l => (
+                <Letter
+                    key={l.text}
+                    letter={l}
+                    isKeyPressed={input.keyPressed === l.text}
+                    handlePress={input.addLetterToInput}
+                />
+            ))}
+        </div>
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.wordPad}>
-                {loading ?
+                {loading || orderedLetters.length === 0 ?
                     <Loading /> :
                     <section className={styles.honeycomb}>
-                        {orderedLetters.map(l => (
-                            <Letter
-                                key={l.text}
-                                letter={l}
-                                isKeyPressed={input.keyPressed === l.text}
-                                handlePress={input.addLetterToInput}
-                            />
-                        ))}
+                        {letterColumn(orderedLetters.slice(0, 2))}
+                        {letterColumn(orderedLetters.slice(2, 5))}
+                        {letterColumn(orderedLetters.slice(5, 7))}
                     </section>
                 }
             </div>

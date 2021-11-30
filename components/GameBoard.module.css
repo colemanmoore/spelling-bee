@@ -4,8 +4,8 @@
 }
 
 .wordPad {
-    margin-top: 2.5em;
-    height: 180px;
+    margin-top: 50px;
+    height: 100%;
 }
 
 .honeycomb {
@@ -15,68 +15,15 @@
     align-items: center;
 }
 
-.honeycomb > * {
-    height: 2.5em;
-}
-
-.honeycomb > *:nth-child(1) {
-    flex: 0 1 100%;
-}
-.honeycomb > *:nth-child(2) {
-    flex: 0 1 40%;
-}
-.honeycomb > *:nth-child(3) {
-    flex: 0 1 40%;
-}
-.honeycomb > *:nth-child(4) {
-    flex: 0 1 100%;
-}
-.honeycomb > *:nth-child(5) {
-    flex: 0 1 40%;
-}
-.honeycomb > *:nth-child(6) {
-    flex: 0 1 40%;
-}
-.honeycomb > *:nth-child(7) {
-    flex: 0 1 100%;
-}
-
-@media (min-width: 480px) {
-    .honeycomb > *:nth-child(2) {
-        flex: 0 1 30%;
-    }
-    .honeycomb > *:nth-child(3) {
-        flex: 0 1 30%;
-    }
-    .honeycomb > *:nth-child(5) {
-        flex: 0 1 30%;
-    }
-    .honeycomb > *:nth-child(6) {
-        flex: 0 1 30%;
-    }
-}
-
-@media (min-width: 660px) {
-    .honeycomb > *:nth-child(2) {
-        flex: 0 1 20%;
-    }
-    .honeycomb > *:nth-child(3) {
-        flex: 0 1 20%;
-    }
-    .honeycomb > *:nth-child(5) {
-        flex: 0 1 20%;
-    }
-    .honeycomb > *:nth-child(6) {
-        flex: 0 1 20%;
-    }
-}
-
 .buttonArea {
     text-align: center;
 }
 
 .buttonArea button {
-    min-width: 3em;
-    font-size: 0.9em;
-    margin: 1em;
+    min-width: 4em;
+    font-size: 0.95em;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.8em;
+    margin: 0 15px;
 }
