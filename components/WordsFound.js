@@ -7,12 +7,6 @@ export default function WordsFound({ words, alphabetical }) {
 
     const [showAllWordsFound, setShowAllWordsFound] = useState(false)
 
-    const handleTouchStart = e => {
-        if (isMobile && alphabetical.length) {
-            setTouchStartCoord(e.pageX)
-        }
-    }
-
     const handleTouchEnd = e => {
         if (isMobile && alphabetical.length) {
             setShowAllWordsFound(prev => !prev)
@@ -53,7 +47,6 @@ export default function WordsFound({ words, alphabetical }) {
     return (
         <section
             className={outerClasses}
-            onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown}
         >
