@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { Game, getQualifyingWords } from './game'
+import { Game, getQualifyingWords } from './game.mjs'
 
 export const DICTIONARY_PATH =  process.env.DICTIONARY_PATH || 'dictionary_long.txt'
 export const GAME_OBJECT_PATH = process.env.GAME_OBJECT_PATH || 'output'
