@@ -1,6 +1,6 @@
-import { bruteForce } from '../../game/pangram'
+import { readFromGameObjectFile } from '../../bin/io.mjs'
 
-const game = bruteForce()
+const game = readFromGameObjectFile()
 
 export default (req, res) => {
 

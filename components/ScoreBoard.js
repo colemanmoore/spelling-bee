@@ -1,7 +1,10 @@
 import classnames from 'classnames'
+import { useGame } from '../hooks/useGame'
 import styles from './ScoreBoard.module.css'
 
-export default function ScoreBoard({ score, possibleScore }) {
+export default function ScoreBoard({ score }) {
+
+    const game = useGame()
 
     const classes = classnames('topSection')
 
@@ -9,8 +12,8 @@ export default function ScoreBoard({ score, possibleScore }) {
         <div className={styles.container}>
             <span className={styles.currentScore}>{score ? `${score} pt` : ''}</span>
             <span className={styles.possibleScore}>
-                {possibleScore ? `~Genius ${Math.floor(possibleScore*0.7)} ` : ''}
-                {possibleScore ? `~Queen ${possibleScore}` : ''}
+                {game.possibleScore ? `~Genius ${Math.floor(game.possibleScore*0.7)} ` : ''}
+                {game.possibleScore ? `~Queen ${game.possibleScore}` : ''}
             </span>
         </div>
     </section>

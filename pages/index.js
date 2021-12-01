@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect, useCallback } from 'react'
 import Head from 'next/head'
 import { useGame } from '../hooks/useGame'
+import useApi from '../hooks/useApi'
 import useWordsFound from '../hooks/useWordsFound'
 import useMessageFlash from '../hooks/useMessageFlash'
 import GameBoard from '../components/GameBoard'
@@ -14,20 +15,19 @@ const MESSAGE = {
     no_key_letter: 'Does not use center letter'
 }
 
+const MESSAGE_DURATION = 1500
+
 export default function Home() {
 
     const game = useGame()
+    const api = useApi()
     const wordsFound = useWordsFound()
-    const messageFlash = useMessageFlash(1500)
+    const messageFlash = useMessageFlash(MESSAGE_DURATION)
     const [score, setScore] = useState(0)
-    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(async () => {
-        setIsLoading(true)
-        const resp = await fetch('/api/current-game', { method: 'GET' })
-        const data = await resp.json()
+        const data = await api.fetchGame()
         game.initialize(data.letters, data.maxScore)
-        setIsLoading(false)
     }, [])
 
     const gradeSubmission = useCallback(async submissionText => {
@@ -48,14 +48,7 @@ export default function Home() {
             return
         }
 
-        const resp = await fetch('/api/current-game', {
-            method: 'POST',
-            body: JSON.stringify({
-                submission: submission
-            })
-        })
-
-        const data = await resp.json()
+        const data = await api.postSubmission(submission)
         
         if (data.grade > 0) {
             setScore(score + data.grade)
@@ -72,9 +65,9 @@ export default function Home() {
             <Head>
                 <title>Bee</title>
             </Head>
-            <ScoreBoard score={score} possibleScore={game.possibleScore} />
+            <ScoreBoard score={score} />
             <WordsFound words={wordsFound.stack} alphabetical={wordsFound.alpha} />
-            <GameBoard loading={isLoading} handleSubmission={gradeSubmission} />
+            <GameBoard loading={api.isLoadingGame} handleSubmission={gradeSubmission} />
             <MessageBoard message={messageFlash.currentMessage} />
         </Fragment>
     )
