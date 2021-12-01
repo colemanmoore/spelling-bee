@@ -1,3 +1,4 @@
+import fetch from 'node-fetch'
 
 const url = `https://api.heroku.com/apps/${process.env.HEROKU_APP_ID}/dynos`
 console.log('Restarting with url', url)
