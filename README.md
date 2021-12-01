@@ -12,4 +12,4 @@ Production: `npm run start`
 
 ## Dictionary
 
-All possible words in `dictionary.json` Lots of work to be done. Please make a pull request.
+All possible words in `dictionary_long.txt` Lots of work to be done. Please make a pull request.

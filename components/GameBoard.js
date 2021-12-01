@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import _ from 'underscore'
+import { shuffle } from 'underscore'
 import useInput from '../hooks/useInput'
 import { useGame } from '../hooks/useGame'
 import Letter from './Letter'
@@ -14,13 +14,13 @@ export default function GameBoard({ handleSubmission, loading }) {
     const [orderedLetters, setOrderedLetters] = useState([])
 
     useEffect(() => {
-        shuffle()
+        handleShuffle()
     }, [game.letters])
 
-    const shuffle = () => {
+    const handleShuffle = () => {
         const { nonKeyLetters, keyLetter } = game.letters
         if (nonKeyLetters.length && keyLetter) {
-            const characters = _.shuffle(nonKeyLetters)
+            const characters = shuffle(nonKeyLetters)
             characters.splice(3, 0, keyLetter)
             setOrderedLetters(characters)
         }
@@ -59,7 +59,7 @@ export default function GameBoard({ handleSubmission, loading }) {
             <WordInput word={input.content} />
             <section className={styles.buttonArea}>
                 <button onClick={input.deleteLetterFromInput}>{'<'}</button>
-                <button onClick={shuffle}>@</button>
+                <button onClick={handleShuffle}>@</button>
                 <button onClick={submit}>{'>'}</button>
             </section>
         </div>

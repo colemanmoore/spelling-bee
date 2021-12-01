@@ -10,7 +10,4 @@ const game = createFromDictionary(wordsList)
 
 console.log(`End finding pangram. (${(new Date()).toLocaleTimeString()})`)
 
-console.log('## Writing Game ##')
-console.log(game.toString())
-
 fs.writeFileSync(process.env.OUTPUT_PATH || './output', game.toString())

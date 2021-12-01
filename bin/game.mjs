@@ -79,15 +79,15 @@ export function createFromDictionary(wordsList) {
     let keyLetter, answers
     const scores = letters.map(l => {
         answers = getQualifyingWords({ wordsList, keyLetter: l, letters })
-        return { keyLetter: l, score: possibleScore(answers), letters: Object.keys(answers).length }
+        return { keyLetter: l, maxScore: possibleScore(answers), answers: Object.keys(answers).length }
     })
 
-    scores.sort((a, b) => a.score - b.score)
-    // console.log(scores)
+    scores.sort((a, b) => a.maxScore - b.maxScore)
+    console.log(scores)
     keyLetter = scores[0].keyLetter
     answers = getQualifyingWords({ wordsList, keyLetter, letters })
 
-    console.log(pangram, `Words: ${Object.keys(answers).length} Maximum Points: ${scores[0].score}`)
+    console.log(pangram, `Words: ${Object.keys(answers).length} Maximum Points: ${scores[0].maxScore}`)
 
     return new Game({
         letters,

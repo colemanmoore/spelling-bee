@@ -1,4 +1,4 @@
-import { readFromGameObjectFile } from '../../bin/io.mjs'
+import { readFromGameObjectFile } from '../../bin/io'
 
 const game = readFromGameObjectFile()
 
