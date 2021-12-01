@@ -1,8 +1,8 @@
 import fs from 'fs'
 import { Game, getQualifyingWords } from './game'
 
-const DICTIONARY_PATH =  process.env.DICTIONARY_PATH || 'dictionary_long.txt'
-const GAME_OBJECT_PATH = process.env.GAME_OBJECT_PATH || 'output'
+export const DICTIONARY_PATH =  process.env.DICTIONARY_PATH || 'dictionary_long.txt'
+export const GAME_OBJECT_PATH = process.env.GAME_OBJECT_PATH || 'output'
 
 export function readFromDictionaryFile() {
     const wordsList = fs.readFileSync(DICTIONARY_PATH).toString().split('\n')
