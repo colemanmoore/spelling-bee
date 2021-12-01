@@ -67,7 +67,7 @@ function formatPrompt() {
 prompt().then(() => {
     console.log(`
         You scored ${score} points out of
-        ${game.possibleScore()} possible points
+        ${game.maximumScore} possible points
         There were ${game.numberOfAnswers()} answers
         Pangram was ${game.pangrams}
     `)

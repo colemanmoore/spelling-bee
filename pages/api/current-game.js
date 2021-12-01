@@ -11,10 +11,9 @@ export default (req, res) => {
         } catch (err) {
             console.log('Error getting letters')
         }
-        const maxScore = game.possibleScore()
         res.status(200).json({
             letters,
-            maxScore
+            maxScore: game.maximumScore
         })
     }
 

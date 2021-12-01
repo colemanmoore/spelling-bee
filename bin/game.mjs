@@ -11,6 +11,7 @@ export class Game {
         this.keyLetter = keyLetter.toLowerCase()
         this.answers = answers
         this.pangrams = this.getAllPangrams()
+        this.maximumScore = possibleScore(answers)
     }
 
     getLetters() {
@@ -42,10 +43,6 @@ export class Game {
         }
 
         return 0
-    }
-
-    possibleScore() {
-        return possibleScore(this.answers)
     }
 
     shuffle() {
