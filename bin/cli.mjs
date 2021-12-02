@@ -1,4 +1,5 @@
 import inquirer from 'inquirer'
+import fs from 'fs'
 import _ from 'underscore'
 import { createFromDictionary } from './game.mjs'
 
