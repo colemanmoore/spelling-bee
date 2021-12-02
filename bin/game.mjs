@@ -80,7 +80,6 @@ export function createFromDictionary(wordsList) {
     })
 
     scores.sort((a, b) => a.maxScore - b.maxScore)
-    console.log(scores)
     keyLetter = scores[0].keyLetter
     answers = getQualifyingWords({ wordsList, keyLetter, letters })
 
@@ -91,18 +90,6 @@ export function createFromDictionary(wordsList) {
         keyLetter,
         answers
     })
-}
-
-function intelligent() {
-    // for each word
-      // set of all unique letters
-      // if set size == 7
-      // sort letters alpha
-      // add as a key to map if not present
-
-    // add current word to list value of map entry
-    // sort letter sets alpha
-    // for each letter set
 }
 
 /**
