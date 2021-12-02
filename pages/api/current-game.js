@@ -1,6 +1,8 @@
 import { readFromGameObjectFile } from '../../bin/io'
 
 const game = readFromGameObjectFile()
+console.log('## Done reading Game Object ##')
+console.log(game.letters)
 
 export default (req, res) => {
 

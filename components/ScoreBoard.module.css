@@ -1,11 +1,31 @@
+.outerContainer {
+    position: relative;
+    z-index: -10;
+}
+
+.colorContainer {
+    height: 100%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: rgb(119, 111, 43);
+}
+
 .container {
     padding-left: 10px;
+    text-align: center;
 }
 
-.currentScore {
-    float: left;
+.leftSide {
+    position: absolute;
+    left: 0;
+    margin-left: 20px;
 }
 
-.possibleScore {
-    float: right;
+.rightSide {
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
 }

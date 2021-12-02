@@ -182312,6 +182312,7 @@ metacryst
 metacromial
 metacromion
 metad
+metadata
 metadiabase
 metadiazine
 metadiorite
@@ -185853,8 +185854,6 @@ mips
 miqra
 miquelet
 miquelets
-mira
-myra
 myrabalanus
 mirabel
 mirabell
@@ -274691,12 +274690,7 @@ sans
 sansar
 sansara
 sansars
-sansculot
 sansculotte
-sansculottic
-sansculottid
-sansculottish
-sansculottism
 sansei
 sanseis
 sanserif
@@ -274712,10 +274706,6 @@ sanskritize
 sant
 santa
 santal
-santalaceae
-santalaceous
-santalales
-santali
 santalic
 santalin
 santalol
