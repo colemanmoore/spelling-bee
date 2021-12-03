@@ -16,6 +16,8 @@ try {
         console.log('Restart success')
     } else {
         console.log('Restart not successful')
+        console.log(res.status)
+        console.log(res.statusText)
     }
 
 } catch (e) {
