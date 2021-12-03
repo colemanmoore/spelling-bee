@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { createFromDictionary } from './game.mjs'
-import { DICTIONARY_PATH, GAME_OBJECT_PATH } from './io.mjs'
+import { DICTIONARY_PATH } from './io.mjs'
+import { saveGame } from './database.mjs'
 
 const wordsList = fs.readFileSync(DICTIONARY_PATH).toString().split('\n')
 
@@ -10,4 +11,5 @@ const game = createFromDictionary(wordsList)
 
 console.log(`End finding pangram. (${(new Date()).toLocaleTimeString()})`)
 
-fs.writeFileSync(GAME_OBJECT_PATH, game.toString())
+await saveGame(game)
+process.exit(0)

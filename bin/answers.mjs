@@ -1,5 +1,6 @@
-import { readFromGameObjectFile, readFromDictionaryFile } from './io.mjs'
+import { readFromDictionaryFile } from './io.mjs'
 import { getQualifyingWords } from './game.mjs'
+import { getTodaysGame } from './database.mjs'
 
 const letterMax = process.argv[2]
 if (!letterMax) {
@@ -8,10 +9,11 @@ if (!letterMax) {
 }
 
 const wordsList = readFromDictionaryFile()
-const game = readFromGameObjectFile()
+const game = await getTodaysGame()
 const answers = getQualifyingWords({
     wordsList,
     ...game
 })
 
 console.log(Object.keys(answers).filter(a => a.length == letterMax))
+process.exit(0)
