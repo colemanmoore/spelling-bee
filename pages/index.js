@@ -27,7 +27,9 @@ export default function Home() {
 
     useEffect(async () => {
         const data = await api.fetchGame()
-        game.initialize(data.letters, data.maxScore)
+        if (data) {
+            game.initialize(data.letters, data.maxScore)
+        }
     }, [])
 
     const gradeSubmission = useCallback(async submissionText => {
@@ -49,7 +51,7 @@ export default function Home() {
         }
 
         const data = await api.postSubmission(submission)
-        
+
         if (data.grade > 0) {
             setScore(score + data.grade)
             wordsFound.addWord(submission)
@@ -67,7 +69,11 @@ export default function Home() {
             </Head>
             <ScoreBoard score={score} />
             <WordsFound words={wordsFound.stack} alphabetical={wordsFound.alpha} />
-            <GameBoard loading={api.isLoadingGame} handleSubmission={gradeSubmission} />
+            <GameBoard
+                loading={api.isLoadingGame}
+                handleSubmission={gradeSubmission}
+                error={api.fetchGameError}
+            />
             <MessageBoard message={messageFlash.currentMessage} />
         </Fragment>
     )

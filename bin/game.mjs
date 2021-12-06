@@ -1,4 +1,7 @@
 import _ from 'underscore'
+import { readFromDictionaryFile } from './io.mjs'
+
+const PANGRAM_LENGTH = 7
 
 /**
  * Game class
@@ -7,11 +10,12 @@ import _ from 'underscore'
 export class Game {
 
     constructor({ letters, keyLetter, answers }) {
+        const wordsList = readFromDictionaryFile()
         this.letters = letters.map(l => l.toLowerCase())
         this.keyLetter = keyLetter.toLowerCase()
-        this.answers = answers
+        this.answers = answers || getQualifyingWords({ wordsList, keyLetter, letters })
         this.pangrams = this.getAllPangrams()
-        this.maximumScore = possibleScore(answers)
+        this.maximumScore = possibleScore(this.answers)
     }
 
     getLetters() {
@@ -99,7 +103,7 @@ export function createFromDictionary(wordsList) {
 export function canBePangram(word) {
     if (typeof word !== 'string') return false
     const uniques = uniqueChars(word)
-    return uniques.length === 7
+    return uniques.length === PANGRAM_LENGTH
 }
 
 export function uniqueChars(word) {

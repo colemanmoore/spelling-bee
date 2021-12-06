@@ -7,7 +7,7 @@ import WordInput from './WordInput'
 import Loading from './Loading'
 import styles from './GameBoard.module.css'
 
-export default function GameBoard({ handleSubmission, loading }) {
+export default function GameBoard({ handleSubmission, loading, error }) {
 
     const game = useGame()
     const input = useInput({ submitCallback: handleSubmission })
@@ -47,7 +47,8 @@ export default function GameBoard({ handleSubmission, loading }) {
     return (
         <div className={styles.container}>
             <div className={styles.wordPad}>
-                {loading || orderedLetters.length === 0 ?
+                {error && <div>{error}</div>}
+                {loading ?
                     <Loading /> :
                     <section className={styles.honeycomb}>
                         {letterColumn(orderedLetters.slice(0, 2))}
