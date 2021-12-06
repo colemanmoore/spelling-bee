@@ -12,15 +12,15 @@ async function createTables() {
             max_points INT,
             PRIMARY KEY ( id )
         );
-        `), (err, result) => {
+        `, (err, result) => {
             if (err) reject(err)
             resolve(result)
-        }
+        })
     })
 }
 
 export async function saveGame(game) {
-    // await createTables()
+    await createTables()
     return new Promise((resolve, reject) => {
         connection.query(
             `INSERT INTO games(date, letters, max_points) VALUES (NOW(), '${game.toString()}', ${game.maximumScore});`,
@@ -33,7 +33,7 @@ export async function saveGame(game) {
 }
 
 export async function getTodaysGame() {
-    // await createTables()
+    await createTables()
     return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM games WHERE DATE(date) = DATE(NOW());`, (err, result) => {
             if (err) reject(err)
@@ -41,7 +41,7 @@ export async function getTodaysGame() {
             if (result.length) {
                 resolve(result[0])
             } else {
-                resolve(null)
+                reject('There is no game for today!')
             }
         })
     })

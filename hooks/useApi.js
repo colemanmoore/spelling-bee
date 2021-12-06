@@ -4,14 +4,26 @@ export default function useApi() {
 
     const [isLoadingGame, setIsLoadingGame] = useState(false)
     const [isPostingSubmission, setIsPostingSubmission] = useState(false)
+    const [fetchGameError, setFetchGameError] = useState(null)
+    const [submissionError, setSubmissionError] = useState(null)
 
     async function fetchGame() {
         setIsLoadingGame(true)
-        const resp = await fetch('/api/current-game', { 
-            method: 'GET' 
+
+        const resp = await fetch('/api/current-game', {
+            method: 'GET'
         })
-        const data = await resp.json()
         setIsLoadingGame(false)
+
+        if (!resp.ok) {
+            console.log(resp)
+            const d = await resp.json()
+            console.log(d)
+            setFetchGameError('Could not find today\'s game')
+            return
+        }
+
+        const data = await resp.json()
         return data
     }
 
@@ -23,8 +35,13 @@ export default function useApi() {
                 submission: submission
             })
         })
+
+        if (!resp.ok) {
+            setSubmissionError('Could not submit word')
+            return
+        }
+
         const data = await resp.json()
-        setIsPostingSubmission(false)
         return data
     }
 
@@ -32,6 +49,8 @@ export default function useApi() {
         fetchGame,
         postSubmission,
         isLoadingGame,
-        isPostingSubmission
+        isPostingSubmission,
+        fetchGameError,
+        submissionError
     }
 }
