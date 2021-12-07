@@ -35,11 +35,11 @@ export async function saveGame(game) {
 export async function getTodaysGame() {
     await createTables()
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM games WHERE DATE(date) = DATE(NOW());`, (err, result) => {
+        connection.query(`SELECT * FROM games g ORDER BY g.date DESC`, (err, results) => {
             if (err) reject(err)
 
-            if (result.length) {
-                resolve(result[0])
+            if (results.length) {
+                resolve(results[0])
             } else {
                 reject('There is no game for today!')
             }
