@@ -11,7 +11,13 @@ export default function ScoreBoard({ score }) {
 
     const percentToGenius = useMemo(() => Math.floor(100 * score / geniusPoints), [score, geniusPoints])
 
-    const percentWidth = useMemo(() => ({width:`${percentToGenius}%`}), [percentToGenius])
+    const percentWidth = useMemo(() => {
+        if (percentToGenius < 1) {
+            return {display:'none'}
+        } else {
+            return {width:`${percentToGenius}%`}
+        }
+    }, [percentToGenius])
 
     const classes = classnames('topSection', styles.outerContainer)
 
@@ -19,10 +25,8 @@ export default function ScoreBoard({ score }) {
         <div className={styles.colorContainer} style={percentWidth}> </div>
         <div className={styles.container}>
             <span className={styles.leftSide}>{score ? `${score}` : ''}</span>
-            {/* <span className={styles.center}>{`${percentToGenius}%`}</span> */}
             <span className={styles.rightSide}>
                 {game.possibleScore ? `${geniusPoints} genius` : ''}
-                {/* {game.possibleScore ? `~Queen ${game.possibleScore}` : ''} */}
             </span>
         </div>
     </section>

@@ -1,12 +1,3 @@
-.wordsFound {
-    transition: height 0.5s;
-}
-
-.wordsFound.opened {
-    background-color: rgb(153, 153, 153);
-    color: black;
-}
-
 .container {
     display: flex;
     flex-direction: row-reverse;
@@ -20,7 +11,12 @@
 }
 
 .allWordsContainer {
-    max-height: 250px;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
     columns: 2;
-    overflow-x: scroll;
+    background-color: rgb(153, 153, 153);
+    opacity: 0.98;
+    color: black;
+    font-size: 18px;
 }
