@@ -2,7 +2,6 @@ import { Fragment, useState, useEffect, useCallback } from 'react'
 import Head from 'next/head'
 import { useGame } from '../hooks/useGame'
 import useApi from '../hooks/useApi'
-import useWordsFound from '../hooks/useWordsFound'
 import useMessageFlash from '../hooks/useMessageFlash'
 import GameBoard from '../components/GameBoard'
 import ScoreBoard from '../components/ScoreBoard'
@@ -21,7 +20,6 @@ export default function Home() {
 
     const game = useGame()
     const api = useApi()
-    const wordsFound = useWordsFound()
     const messageFlash = useMessageFlash(MESSAGE_DURATION)
     const [score, setScore] = useState(0)
 
@@ -45,7 +43,7 @@ export default function Home() {
             return
         }
 
-        if (wordsFound.hasWord(submission)) {
+        if (game.hasWord[submission]) {
             messageFlash.setMessage(MESSAGE.already_found)
             return
         }
@@ -54,27 +52,30 @@ export default function Home() {
 
         if (data.grade > 0) {
             setScore(score + data.grade)
-            wordsFound.addWord(submission)
+            game.addWord(submission)
         }
 
         if (data.message) {
             messageFlash.setMessage(data.message)
         }
-    }, [wordsFound, messageFlash])
+        
+    }, [game, messageFlash])
 
     return (
         <Fragment>
             <Head>
                 <title>Bee</title>
             </Head>
-            <ScoreBoard score={score} />
-            <WordsFound words={wordsFound.stack} alphabetical={wordsFound.alpha} />
-            <GameBoard
-                loading={api.isLoadingGame}
-                handleSubmission={gradeSubmission}
-                error={api.fetchGameError}
-            />
-            <MessageBoard message={messageFlash.currentMessage} />
+            <div className='container'>
+                <ScoreBoard score={score} />
+                <WordsFound />
+                <GameBoard
+                    loading={api.isLoadingGame}
+                    handleSubmission={gradeSubmission}
+                    error={api.fetchGameError}
+                />
+                <MessageBoard message={messageFlash.currentMessage} />
+            </div>
         </Fragment>
     )
 }

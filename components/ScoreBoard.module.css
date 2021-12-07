@@ -1,6 +1,6 @@
 .outerContainer {
     position: relative;
-    z-index: -10;
+    z-index: -2;
 }
 
 .colorContainer {
@@ -14,6 +14,7 @@
 }
 
 .container {
+    z-index: 2;
     padding-left: 10px;
     text-align: center;
 }

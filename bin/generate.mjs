@@ -11,5 +11,11 @@ const game = createFromDictionary(wordsList)
 
 console.log(`End finding pangram. (${(new Date()).toLocaleTimeString()})`)
 
-await saveGame(game)
+try {
+    await saveGame(game)
+} catch (e) {
+    console.log(e)
+    console.log('Error saving game')
+}
+
 process.exit(0)

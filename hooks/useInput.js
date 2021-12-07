@@ -83,7 +83,7 @@ export default function useInput({ submitCallback }) {
                 handleEnter()
                 break
             default:
-                if (game.hasLetter[e.key]) {
+                if (game.hasLetter[e.key.toLowerCase()]) {
                     e.preventDefault()
                     dispatch({ type: ACTIONS.PRESS, payload: e.key })
                     addLetterToInput(e.key.toLowerCase())

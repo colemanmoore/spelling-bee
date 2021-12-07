@@ -15,15 +15,15 @@ export default function useApi() {
         })
         setIsLoadingGame(false)
 
+        let data
+        
         if (!resp.ok) {
-            console.log(resp)
-            const d = await resp.json()
-            console.log(d)
-            setFetchGameError('Could not find today\'s game')
+            data = await resp.json()
+            setFetchGameError(data.error)
             return
         }
 
-        const data = await resp.json()
+        data = await resp.json()
         return data
     }
 
