@@ -11,7 +11,9 @@ export default function ScoreBoard({ score }) {
 
     const percentToGenius = useMemo(() => Math.floor(100 * score / geniusPoints), [score, geniusPoints])
 
-    const percentWidth = useMemo(() => ({display:'block', width:`${percentToGenius}%`}), [percentToGenius])
+    const percentWidth = useMemo(() => {
+        return percentToGenius >= 1 ? {display:'block', width:`${percentToGenius}%`} : {}
+    }, [percentToGenius])
 
     const classes = classnames('topSection', styles.outerContainer)
 
