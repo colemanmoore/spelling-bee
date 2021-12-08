@@ -21,14 +21,8 @@ export default function Home() {
     const game = useGame()
     const api = useApi()
     const messageFlash = useMessageFlash(MESSAGE_DURATION)
-    const [score, setScore] = useState(0)
 
-    useEffect(async () => {
-        const data = await api.fetchGame()
-        if (data) {
-            game.initialize(data.letters, data.maxScore)
-        }
-    }, [])
+    useEffect(game.initialize, [])
 
     const gradeSubmission = useCallback(async submissionText => {
         const submission = submissionText.toLowerCase()
@@ -51,8 +45,7 @@ export default function Home() {
         const data = await api.postSubmission(submission)
 
         if (data.grade > 0) {
-            setScore(score + data.grade)
-            game.addWord(submission)
+            game.addWord(submission, data.grade)
         }
 
         if (data.message) {
@@ -67,7 +60,7 @@ export default function Home() {
                 <title>Bee</title>
             </Head>
             <div className='container'>
-                <ScoreBoard score={score} />
+                <ScoreBoard score={game.score} />
                 <WordsFound />
                 <GameBoard
                     loading={api.isLoadingGame}

@@ -1,4 +1,6 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
+import useApi from './useApi'
+import useStorage from './useStorage'
 
 const gameContext = createContext()
 export const useGame = () => useContext(gameContext)
@@ -12,38 +14,63 @@ export function ProvideGame({ children }) {
 
 function useProvideGame() {
 
+    const api = useApi()
+    const storage = useStorage()
     const [letters, setLetters] = useState({ nonKeyLetters: [], keyLetter: null })
     const [possibleScore, setPossibleScore] = useState(null)
     const [hasLetter, setHasLetter] = useState({})
     const [hasWord, setHasWord] = useState({})
     const [wordsFoundStack, setWordsFoundStack] = useState([])
     const [wordsFoundAlpha, setWordsFoundAlpha] = useState([])
+    const [score, setScore] = useState(0)
 
-    function initialize(letters = [], possibleScore = 0) {
-        let key, nonKey = [], has = {}
+    async function initialize() {
 
+        const data = await api.fetchGame()
+        const { letters = [], maxScore = 0, id } = data
+
+        let keyLetter, nonKeyLetters = [], _hasLetter = {}
         letters.forEach(l => {
             if (l.isKey) {
-                key = l
+                keyLetter = l
             } else {
-                nonKey.push(l)
+                nonKeyLetters.push(l)
             }
-            has[l.text] = true
+            _hasLetter[l.text] = true
         })
 
-        setLetters({
-            nonKeyLetters: nonKey,
-            keyLetter: key
-        })
-        setHasLetter(has)
-        setPossibleScore(possibleScore || 0)
+        setLetters({ nonKeyLetters, keyLetter })
+
+        setHasLetter(_hasLetter)
+
+        setPossibleScore(maxScore)
+
+        const sessionGameId = storage.getGame()
+        if (sessionGameId && sessionGameId === id) {
+            const words = await storage.getWords()
+            const score = storage.getScore()
+            setWordsFoundStack(words)
+            setScore(score)
+        } else {
+            storage.resetGame(id)
+        }
     }
 
-    function addWord(word) {
+    useEffect(() => {
+        const hash = wordsFoundStack.reduce((prev, curr) => ({...prev, [curr]: true}), {})
+        const alpha = [].concat(wordsFoundStack).sort(sorter)
+        setHasWord(hash)
+        setWordsFoundAlpha(alpha)
+    }, [wordsFoundStack])
+
+    function addWord(word, score) {
         if (hasWord[word]) return
-        setHasWord(prevHash => ({ ...prevHash, [word]: true }))
         setWordsFoundStack(prevList => prevList.concat([word]))
-        setWordsFoundAlpha(prevList => prevList.concat([word]).sort(sorter))
+        setScore(prev => {
+            storage.saveScore(prev + score)
+            return prev + score
+        })
+        storage.saveWord(word)
     }
 
     function sorter(a, b) {
@@ -61,6 +88,6 @@ function useProvideGame() {
         hasWord,
         wordsFoundStack,
         wordsFoundAlpha,
-        getThemWords: function() { return wordsFoundAlpha }
+        score
     }
 }
