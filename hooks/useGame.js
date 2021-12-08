@@ -17,11 +17,11 @@ function useProvideGame() {
     const [hasLetter, setHasLetter] = useState({})
     const [hasWord, setHasWord] = useState({})
     const [wordsFoundStack, setWordsFoundStack] = useState([])
-    const [wordsFoundAlpha, setWordsFoundAlph] = useState([])
+    const [wordsFoundAlpha, setWordsFoundAlpha] = useState([])
 
     function initialize(letters = [], possibleScore = 0) {
         let key, nonKey = [], has = {}
-        
+
         letters.forEach(l => {
             if (l.isKey) {
                 key = l
@@ -35,30 +35,21 @@ function useProvideGame() {
             nonKeyLetters: nonKey,
             keyLetter: key
         })
-
         setHasLetter(has)
-
         setPossibleScore(possibleScore || 0)
     }
 
     function addWord(word) {
         if (hasWord[word]) return
-        
-        setHasWord({
-            ...hasWord,
-            [word]: true
-        })
+        setHasWord(prevHash => ({ ...prevHash, [word]: true }))
+        setWordsFoundStack(prevList => prevList.concat([word]))
+        setWordsFoundAlpha(prevList => prevList.concat([word]).sort(sorter))
+    }
 
-        const stack = [...wordsFoundStack, word]
-        setWordsFoundStack(stack)
-
-        const list = [].concat(stack)
-        list.sort((a,b) => {
-            if (a < b) return -1
-            if (b < a) return 1
-            return 0
-        })
-        setWordsFoundAlph(list)
+    function sorter(a, b) {
+        if (a < b) return -1
+        if (b < a) return 1
+        return 0
     }
 
     return {
@@ -69,6 +60,7 @@ function useProvideGame() {
         addWord,
         hasWord,
         wordsFoundStack,
-        wordsFoundAlpha
+        wordsFoundAlpha,
+        getThemWords: function() { return wordsFoundAlpha }
     }
 }
