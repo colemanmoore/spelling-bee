@@ -19,8 +19,7 @@ export default function WordsFound() {
     }
 
     const handleClick = e => {
-        if ((e.target === wrapperRef.current || wrapperRef.current.contains(e.target))
-            && game.wordsFoundAlpha.length) {
+        if (e.target === wrapperRef.current || wrapperRef.current.contains(e.target)) {
             setAllWordsOpen(true)
         } else {
             setAllWordsOpen(false)
@@ -42,7 +41,7 @@ export default function WordsFound() {
         )
     }
 
-    function allWords() {
+    function alphabeticalModal() {
         const wordStyle = classnames(styles.word, styles.listWord)
         return (
             <div className={styles.allWordsContainer}>
@@ -50,11 +49,18 @@ export default function WordsFound() {
             </div>
         )
     }
+
+    function showAllWords() {
+        return allWordsOpen && game.wordsFoundAlpha.length > 2
+    }
+
     return (
         <section className='topSection'>
-            {allWordsOpen && allWords()}
+            {showAllWords() && alphabeticalModal()}
             <div className={styles.container} ref={wrapperRef}>
-                {!allWordsOpen && latestWords()}
+                {!showAllWords() && game.wordsFoundStack.map(w =>
+                    <span key={w} className={styles.word}>{w}</span>
+                )}
             </div>
         </section>
     )

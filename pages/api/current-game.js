@@ -2,7 +2,7 @@ import { createCurrentGameObject } from '../../bin/game.mjs'
 
 let game
 
-export default async (req, res, next) => {
+export default async (req, res) => {
 
     try {
         await fetchGame()
@@ -20,7 +20,7 @@ export default async (req, res, next) => {
                 maxScore: game.maximumScore
             })
 
-            return next()
+            return
 
         case 'POST':
 
@@ -39,7 +39,7 @@ export default async (req, res, next) => {
             }
 
             res.status(200).json(response)
-            return next()
+            return
     }
 }
 
