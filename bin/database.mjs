@@ -30,7 +30,7 @@ export async function saveGame(game) {
             }
         )
     })
-    connection.disconnect()
+    connection.end()
     return promise
 }
 
@@ -47,6 +47,6 @@ export async function getLatestGame() {
             }
         })
     })
-    connection.disconnect()
+    connection.end()
     return promise
 }

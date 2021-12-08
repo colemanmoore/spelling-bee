@@ -2,66 +2,53 @@ import { createCurrentGameObject } from '../../bin/game.mjs'
 
 let game
 
-export default async (req, res) => {
+export default async (req, res, next) => {
+
+    try {
+        await fetchGame()
+    } catch (e) {
+        res.status(404).send({error: e.message})
+        return
+    }
 
     switch (req.method) {
 
         case 'GET':
 
-            try {
-                await fetchGame()
-            } catch (e) {
-                res.status(404).json({error: e})
-                return
-            }
+            res.status(200).json({
+                letters: game.getAllLetters(),
+                maxScore: game.maximumScore
+            })
 
-            try {
-                res.status(200).json({
-                    letters: game.getAllLetters(),
-                    maxScore: game.maximumScore
-                })
-            } catch (e) {
-                res.status(500).json({error: 'Server error with game object'})
-                return
-            }
+            return next()
 
         case 'POST':
 
-            try {
-                await fetchGame()
-            } catch (e) {
-                res.status(404).send(e)
+            const body = JSON.parse(req.body)
+
+            const response = {
+                grade: game.submit(body.submission),
+                message: null
             }
 
-            try {
-                const body = JSON.parse(req.body)
+            if (response.grade < 1) {
+                response.message = 'Not in word list'
 
-                const response = {
-                    grade: game.submit(body.submission),
-                    message: null
-                }
-
-                if (response.grade < 1) {
-                    response.message = 'Not in word list'
-                    
-                } else if (game.pangrams.includes(body.submission.toLowerCase())) {
-                    response.message = 'Pangram!'
-                }
-
-                res.status(200).json(response)
-                return
-            } catch (e) {
-                res.status(500)
-                return
+            } else if (game.pangrams.includes(body.submission.toLowerCase())) {
+                response.message = 'Pangram!'
             }
+
+            res.status(200).json(response)
+            return next()
     }
 }
 
 async function fetchGame() {
-    if (game) return
+    if (game) return game
     try {
         game = await createCurrentGameObject()
-    } catch (error) {
-        throw error
+        return game
+    } catch (e) {
+        throw new Error(e)
     }
 }
