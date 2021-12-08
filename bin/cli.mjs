@@ -1,10 +1,9 @@
 import inquirer from 'inquirer'
-import fs from 'fs'
 import _ from 'underscore'
 import { createFromDictionary } from './game.mjs'
+import { readFromDictionaryFile } from './io.mjs'
 
-const DICTIONARY = 'dictionary_long.txt'
-const wordsList = fs.readFileSync(DICTIONARY).toString().split('\n')
+const wordsList = readFromDictionaryFile()
 const game = createFromDictionary(wordsList)
 let score = 0
 const alreadyFound = {}
