@@ -1,5 +1,4 @@
-import { getTodaysGame } from '../../bin/database'
-import { createFromDbResult } from '../../bin/game.mjs'
+import { createCurrentGameObject } from '../../bin/game.mjs'
 
 let game
 
@@ -60,10 +59,8 @@ export default async (req, res) => {
 
 async function fetchGame() {
     if (game) return
-
     try {
-        const gameData = await getTodaysGame()
-        game = await createFromDbResult(gameData)
+        game = await createCurrentGameObject()
     } catch (error) {
         throw error
     }

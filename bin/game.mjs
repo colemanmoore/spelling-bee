@@ -1,4 +1,5 @@
 import _ from 'underscore'
+import { getLatestGame } from './database.mjs'
 import { readFromDictionaryFile } from './io.mjs'
 
 const PANGRAM_LENGTH = 7
@@ -68,12 +69,12 @@ export class Game {
  * Game generation
  */
 
-export function createFromDictionary(wordsList) {
+export function createFromDictionary() {
 
+    const wordsList = readFromDictionaryFile()
     const pangrams = wordsList.filter(canBePangram)
-
+    
     const pangram = pangrams[Math.floor(Math.random() * pangrams.length)]
-
     const letters = uniqueChars(pangram)
 
     let keyLetter, answers
@@ -95,7 +96,8 @@ export function createFromDictionary(wordsList) {
     })
 }
 
-export async function createFromDbResult(gameData) {
+export async function createCurrentGameObject() {
+    const gameData = await getLatestGame()
     const letterData = await JSON.parse(gameData.letters)
     return new Game({
         letters: letterData.letters,
