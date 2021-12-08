@@ -1,5 +1,5 @@
 import { getTodaysGame } from '../../bin/database'
-import { Game } from '../../bin/game.mjs'
+import { createFromDbResult } from '../../bin/game.mjs'
 
 let game
 
@@ -12,10 +12,7 @@ export default async (req, res) => {
             try {
                 await fetchGame()
             } catch (e) {
-                console.log(e)
-                res.status(404).json({
-                    error: e
-                })
+                res.status(404).json({error: e})
                 return
             }
 
@@ -25,7 +22,7 @@ export default async (req, res) => {
                     maxScore: game.maximumScore
                 })
             } catch (e) {
-                res.status(500).send('Error with game object')
+                res.status(500).json({error: 'Server error with game object'})
                 return
             }
 
@@ -64,18 +61,10 @@ export default async (req, res) => {
 async function fetchGame() {
     if (game) return
 
-    let gameDataRaw, letterData
-
     try {
-        gameDataRaw = await getTodaysGame()
-        letterData = await JSON.parse(gameDataRaw.letters)
-
+        const gameData = await getTodaysGame()
+        game = await createFromDbResult(gameData)
     } catch (error) {
         throw error
     }
-
-    game = new Game({
-        letters: letterData.letters,
-        keyLetter: letterData.keyLetter
-    })
 }

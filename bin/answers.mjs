@@ -1,5 +1,5 @@
 import { readFromDictionaryFile } from './io.mjs'
-import { getQualifyingWords } from './game.mjs'
+import { Game, getQualifyingWords, createFromDbResult } from './game.mjs'
 import { getTodaysGame } from './database.mjs'
 
 const letterMax = process.argv[2]
@@ -8,8 +8,9 @@ if (!letterMax) {
     process.exit(0)
 }
 
-const wordsList = readFromDictionaryFile()
-const game = await getTodaysGame()
+const wordsList = await readFromDictionaryFile()
+const gameData = await getTodaysGame()
+const game = await createFromDbResult(gameData)
 const answers = getQualifyingWords({
     wordsList,
     ...game

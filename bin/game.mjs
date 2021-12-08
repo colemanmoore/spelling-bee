@@ -45,7 +45,6 @@ export class Game {
         if (this.answers[submission.toLowerCase()]) {
             return submission.length < 5 ? 1 : submission.length
         }
-
         return 0
     }
 
@@ -93,6 +92,14 @@ export function createFromDictionary(wordsList) {
         letters,
         keyLetter,
         answers
+    })
+}
+
+export async function createFromDbResult(gameData) {
+    const letterData = await JSON.parse(gameData.letters)
+    return new Game({
+        letters: letterData.letters,
+        keyLetter: letterData.keyLetter
     })
 }
 
