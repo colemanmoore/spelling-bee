@@ -10,11 +10,16 @@ const PANGRAM_LENGTH = 7
 
 export class Game {
 
-    constructor({ letters, keyLetter, answers }) {
-        const wordsList = readFromDictionaryFile()
+    constructor({ id, letters, keyLetter, answers }) {
+        this.id = id
         this.letters = letters.map(l => l.toLowerCase())
         this.keyLetter = keyLetter.toLowerCase()
-        this.answers = answers || getQualifyingWords({ wordsList, keyLetter, letters })
+        if (answers) {
+            this.answers = answers
+        } else {
+            const wordsList = readFromDictionaryFile()
+            this.answers = getQualifyingWords({ wordsList, keyLetter, letters })
+        }
         this.pangrams = this.getAllPangrams()
         this.maximumScore = possibleScore(this.answers)
     }
@@ -100,6 +105,7 @@ export async function createCurrentGameObject() {
     const gameData = await getLatestGame()
     const letterData = await JSON.parse(gameData.letters)
     return new Game({
+        id: gameData.id,
         letters: letterData.letters,
         keyLetter: letterData.keyLetter
     })

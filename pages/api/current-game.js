@@ -16,6 +16,7 @@ export default async (req, res) => {
         case 'GET':
 
             res.status(200).json({
+                id: game.id,
                 letters: game.getAllLetters(),
                 maxScore: game.maximumScore
             })

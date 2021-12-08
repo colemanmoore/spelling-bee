@@ -21,7 +21,7 @@ async function createTables() {
 
 export async function saveGame(game) {
     await createTables()
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         connection.query(
             `INSERT INTO games(date, letters, max_points) VALUES (NOW(), '${game.toString()}', ${game.maximumScore});`,
             (err, result) => {
@@ -29,14 +29,14 @@ export async function saveGame(game) {
                 resolve(result)
             }
         )
+    }).finally(() => {
+        connection.end()
     })
-    connection.end()
-    return promise
 }
 
 export async function getLatestGame() {
     await createTables()
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM games g ORDER BY g.date DESC`, (err, results) => {
             if (err) reject(err)
 
@@ -46,7 +46,7 @@ export async function getLatestGame() {
                 reject('There is no game for today!')
             }
         })
+    }).finally(() => {
+        connection.end()
     })
-    connection.end()
-    return promise
 }
