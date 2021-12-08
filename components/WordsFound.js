@@ -19,10 +19,11 @@ export default function WordsFound() {
     }
 
     const handleClick = e => {
-        if (e.target !== wrapperRef.current) {
-            setAllWordsOpen(false)
-        } else if (game.wordsFoundAlpha.length) {
+        if ((e.target === wrapperRef.current || wrapperRef.current.contains(e.target))
+            && game.wordsFoundAlpha.length) {
             setAllWordsOpen(true)
+        } else {
+            setAllWordsOpen(false)
         }
     }
 
