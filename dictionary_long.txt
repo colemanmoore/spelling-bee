@@ -33139,7 +33139,6 @@ bifluorid
 bifluoride
 bifocal
 bifocals
-bifoil
 bifold
 bifolia
 bifoliate
@@ -89717,8 +89716,6 @@ dolesome
 dolesomely
 dolesomeness
 doless
-dolf
-doli
 dolia
 dolichoblond
 dolichocephal
@@ -110992,7 +110989,6 @@ fylfot
 fylfots
 fylgja
 fylgjur
-fili
 filial
 filiality
 filially
@@ -111286,8 +111282,6 @@ findhorn
 findy
 finding
 findings
-findjan
-findon
 finds
 fine
 fineable
@@ -113204,7 +113198,6 @@ floatsmen
 floatstone
 flob
 flobby
-floc
 flocced
 flocci
 floccilation
@@ -113250,7 +113243,6 @@ flockowner
 flocks
 flockwise
 flocoon
-flocs
 flodge
 floe
 floeberg
@@ -113272,7 +113264,6 @@ floyd
 floit
 floyt
 flokite
-flon
 flong
 flongs
 flood
@@ -114394,7 +114385,6 @@ fondled
 fondler
 fondlers
 fondles
-fondlesome
 fondly
 fondlike
 fondling
@@ -114402,7 +114392,6 @@ fondlingly
 fondlings
 fondness
 fondnesses
-fondon
 fondouk
 fonds
 fondu
@@ -114413,8 +114402,6 @@ fondus
 fone
 fonly
 fonnish
-fono
-fons
 font
 fontainea
 fontal
@@ -149950,7 +149937,6 @@ infiltrator
 infiltrators
 infima
 infimum
-infin
 infinitant
 infinitary
 infinitarily
@@ -150012,7 +149998,6 @@ infixes
 infixing
 infixion
 infixions
-infl
 inflamable
 inflame
 inflamed
@@ -167149,10 +167134,6 @@ lazurite
 lazurites
 lazzarone
 lazzaroni
-lbinit
-lconvert
-lcsymbol
-ldinfo
 leach
 leachability
 leachable
@@ -169566,8 +169547,6 @@ lifeways
 lifeward
 lifework
 lifeworks
-lyfkie
-liflod
 lifo
 lift
 liftable
@@ -209166,15 +209145,6 @@ ollie
 ollock
 olluck
 olneya
-olof
-ology
-ological
-ologies
-ologist
-ologistic
-ologists
-olograph
-olographic
 ololiuqui
 olomao
 olona
