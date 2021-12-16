@@ -1,6 +1,6 @@
 import mysql from 'mysql'
 
-const connection = mysql.createConnection(process.env.JAWSDB_URL)
+const connection = mysql.createPool(process.env.JAWSDB_URL)
 
 async function createTables() {
     return new Promise((resolve, reject) => {
@@ -29,8 +29,6 @@ export async function saveGame(game) {
                 resolve(result)
             }
         )
-    }).finally(() => {
-        connection.end()
     })
 }
 
@@ -46,7 +44,5 @@ export async function getLatestGame() {
                 reject('There is no game for today!')
             }
         })
-    }).finally(() => {
-        connection.end()
     })
 }
