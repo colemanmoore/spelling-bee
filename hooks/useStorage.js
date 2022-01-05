@@ -1,5 +1,8 @@
+import { useCookies } from 'react-cookie'
+
 export default function useStorage() {
 
+    const [cookie, setCookie] = useCookies([])
     const isBrowser = (() => typeof window !== 'undefined')()
 
     const SS_GAME_ID_KEY = 'sb_gameId'
@@ -22,10 +25,12 @@ export default function useStorage() {
         return isNaN(id) ? null : id
     }
 
-    function resetGame(id) {
-        storage.setItem(SS_GAME_ID_KEY, id)
-        storage.setItem(SS_WORDS_FOUND_KEY, JSON.stringify([]))
-        storage.setItem(SS_GAME_SCORE_KEY, 0)
+    function resetGame(id) {     
+        // storage.setItem(SS_GAME_ID_KEY, id)
+        // storage.setItem(SS_WORDS_FOUND_KEY, JSON.stringify([]))
+        // storage.setItem(SS_GAME_SCORE_KEY, 0)
+        setCookie(SS_GAME_ID_KEY, id)
+        setCookie(SS_WORDS_FOUND_KEY, JSON.stringify([]))
     }
 
     async function getWords() {
