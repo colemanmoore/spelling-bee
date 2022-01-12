@@ -46,3 +46,10 @@ export async function getLatestGame() {
         })
     })
 }
+
+export async function clearOldestGame() {
+    await createTables()
+    return new Promise((resolve, reject) => {
+        // connection.query(`DELETE FROM games g WHERE g.date `)
+    })
+}
