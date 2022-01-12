@@ -50,6 +50,9 @@ export async function getLatestGame() {
 export async function clearOldestGame() {
     await createTables()
     return new Promise((resolve, reject) => {
-        // connection.query(`DELETE FROM games g WHERE g.date `)
+        connection.query(`DELETE FROM games g WHERE g.date < ADDDATE(NOW(), INTERVAL -31 DAY)`, (err, result) => {
+            if (err) reject(err)
+            resolve(result)
+        })
     })
 }
