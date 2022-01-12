@@ -1,5 +1,5 @@
 import { createFromDictionary } from './game.mjs'
-import { saveGame } from './database.mjs'
+import { saveGame, clearOldestGame } from './database.mjs'
 
 console.log(`Begin finding pangram... (${(new Date()).toLocaleTimeString()})`)
 
@@ -12,6 +12,13 @@ try {
 } catch (e) {
     console.log(e)
     console.log('Error saving game')
+}
+
+try {
+    await clearOldestGame()
+} catch (e) {
+    console.log(e)
+    console.log('Error clearing old game')
 }
 
 process.exit(0)
