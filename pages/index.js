@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useCallback } from 'react'
+import { Fragment, useEffect, useCallback } from 'react'
 import Head from 'next/head'
 import { useGame } from '../hooks/useGame'
 import useApi from '../hooks/useApi'
