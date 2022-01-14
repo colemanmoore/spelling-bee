@@ -1,4 +1,4 @@
-import { createCurrentGameObject } from '../../bin/game.mjs'
+import { Game } from '../../bin/game.mjs'
 
 let game
 
@@ -7,6 +7,7 @@ export default async (req, res) => {
     try {
         await fetchGame()
     } catch (e) {
+        console.error(e)
         res.status(404).send({error: e.message})
         return
     }
@@ -47,7 +48,7 @@ export default async (req, res) => {
 async function fetchGame() {
     if (game) return game
     try {
-        game = await createCurrentGameObject()
+        game = await Game.createCurrentGameObject()
         return game
     } catch (e) {
         throw new Error(e)

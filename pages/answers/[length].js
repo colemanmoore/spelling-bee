@@ -1,4 +1,4 @@
-import { createCurrentGameObject } from '../../bin/game.mjs'
+import { Game } from '../../bin/game.mjs'
 
 export default function({ answers }) {
     return <ul>
@@ -8,10 +8,12 @@ export default function({ answers }) {
 
 export async function getServerSideProps(context) {
     let answers = []
-    const game = await createCurrentGameObject()
+    const game = await Game.createCurrentGameObject()
+
     const wordLength = parseInt(context.params.length)
     if (wordLength && !isNaN(wordLength)) {
-        answers = Object.keys(game.answers).filter(a => a.length == wordLength)
+        answers = Object.keys(game.getQualifyingWords())
+        answers = answers.filter(a => a.length == wordLength)
     }
     
     return { props: { answers }}

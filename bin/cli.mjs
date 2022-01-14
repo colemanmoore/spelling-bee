@@ -1,8 +1,8 @@
 import inquirer from 'inquirer'
 import _ from 'underscore'
-import { createFromDictionary } from './game.mjs'
+import { Game } from './game.mjs'
 
-const game = createFromDictionary()
+const game = await Game.createNewGame()
 let score = 0
 const alreadyFound = {}
 
