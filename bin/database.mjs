@@ -58,7 +58,6 @@ export async function addWordsToDictionary(words) {
     return new Promise((resolve, reject) => {
         connection.query(stmt, [data], (err, result) => {
             if (err) reject(err)
-            console.log(`Added ${data}`)
             resolve(result)
         })
     })
