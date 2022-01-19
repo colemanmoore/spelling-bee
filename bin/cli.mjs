@@ -69,4 +69,5 @@ prompt().then(() => {
         There were ${game.numberOfAnswers()} answers
         Pangram was ${game.pangrams}
     `)
+    process.exit(0)
 })
