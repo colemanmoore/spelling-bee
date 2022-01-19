@@ -12,6 +12,7 @@
     "answers": "node -r dotenv/config ./bin/answers.mjs"
   },
   "dependencies": {
+    "axios": "^0.25.0",
     "classnames": "^2.3.1",
     "fs": "^0.0.1-security",
     "inquirer": "^8.2.0",

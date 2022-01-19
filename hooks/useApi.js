@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import http from 'axios'
 
 export default function useApi() {
 
@@ -10,30 +11,23 @@ export default function useApi() {
     async function fetchGame() {
         setIsLoadingGame(true)
 
-        const resp = await fetch('/api/current-game', {
-            method: 'GET'
-        })
+        const resp = await http.get('/api/current-game')
         setIsLoadingGame(false)
 
-        let data
+        let data = await resp.json()
         
         if (!resp.ok) {
-            data = await resp.json()
             setFetchGameError(data.error)
             return
         }
 
-        data = await resp.json()
         return data
     }
 
     async function postSubmission(submission) {
         setIsPostingSubmission(true)
-        const resp = await fetch('/api/current-game', {
-            method: 'POST',
-            body: JSON.stringify({
-                submission: submission
-            })
+        const resp = await http.post('/api/current-game', {
+            submission: submission
         })
 
         if (!resp.ok) {
