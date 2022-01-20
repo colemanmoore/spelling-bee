@@ -12,8 +12,10 @@ export default function EditPage() {
     const [checkedState, setCheckedState] = useState(initialCheckedState)
 
     const uniqRef = useRef()
-    const freqRef = useRef()
+    const freqHighRef = useRef()
+    const freqLowRef = useRef()
     const lengthRef = useRef()
+    const lengthLowerRef = useRef()
 
     const handleSearch = async () => {
         setCheckedState(initialCheckedState)
@@ -21,12 +23,26 @@ export default function EditPage() {
         const filters = {
             maxResults: MAX_RESULTS
         }
+
         if (uniqRef.current.value) {
             filters.uniqueEq = uniqRef.current.value
         }
+
         if (lengthRef.current.value) {
             filters.lengthEq = lengthRef.current.value
+
+            if (lengthLowerRef.current.value === true) {
+                filters.lengthLt = lengthRef.current.value
+            }
         }
+
+        if (!freqHighRef.current.value && !freqLowRef.current.value) {
+            filters.frequencyLt = 1
+        } else {
+            filters.frequencyLt = freqHighRef.current.value || Number.MAX_SAFE_INTEGER
+            filters.frequencyGt = freqLowRef.current.value || 0
+        }
+
         const resp = await http.post('api/dictionary', filters)
         const results = resp.data
         if (results.length) {
@@ -55,7 +71,7 @@ export default function EditPage() {
         const confirmed = confirm(`Are you sure you want to remove "${words}"?`)
         if (confirmed) {
             const ids = wordsToDelete.map(w => w.id)
-            http.delete('/api/dictionary', { data: {ids} }).then(handleSearch)
+            http.delete('/api/dictionary', { data: { ids } }).then(handleSearch)
         }
     }
 
@@ -67,12 +83,24 @@ export default function EditPage() {
     return (
         <section>
             <h2>Dictionary</h2>
-            <input ref={uniqRef} name="uniqueLetters" type="number" style={inputStyle} />
-            <label htmlFor="uniqueLetters">Unique</label>
-            <input ref={lengthRef} name="length" type="number" style={inputStyle} />
-            <label htmlFor="length">Length</label>
-            <input ref={freqRef} name="frequency" type="number" step={100} style={inputStyle} />
-            <label htmlFor="length">Frequency</label>
+
+            <div style={controlPanelStyle}>
+                <input ref={uniqRef} id="uniqueLetters" type="number" style={inputStyle} />
+                <label htmlFor="uniqueLetters">Unique</label>
+
+                <input ref={lengthRef} id="length" type="number" style={inputStyle} />
+                <label htmlFor="length">Length</label>
+
+                <input ref={lengthLowerRef} type="checkbox" id="lengthLower" />
+                <label htmlFor="lengthLower">below</label>
+
+                <input ref={freqLowRef} id="freqLow" type="number" step={100} style={inputStyle} />
+                <label htmlFor="freqLow">Freq Low</label>
+
+                <input ref={freqHighRef} id="freqHigh" type="number" step={100} style={inputStyle} />
+                <label htmlFor="freqHigh">Freq High</label>
+            </div>
+
             <button style={buttonStyle} onClick={handleSearch}>Go</button>
 
             <div style={container}>
@@ -121,9 +149,13 @@ const rightPane = {
 
 }
 
+const controlPanelStyle = {
+    fontSize: '0.7em'
+}
+
 const inputStyle = {
     width: '4em',
-    margin: '1em'
+    margin: '0 0.5em'
 }
 
 const buttonStyle = {

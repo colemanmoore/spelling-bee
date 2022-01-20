@@ -2,14 +2,14 @@ import fs from 'fs'
 import { addWordsToDictionary, addWordToDictionary } from './database.mjs'
 import { uniqueChars } from './game.mjs'
 
-const ARG1 = process.argv[2], ARG2 = process.argv[3]
+const DICT = process.argv[2], UNIG = process.argv[3]
 
-if (!ARG1) {
+if (!DICT) {
     console.log(`Usage:\n[command] [path to dictionary txt] [path to unigram frequency csv]`)
     process.exit(1)
 }
 
-let wordsList = fs.readFileSync(ARG1).toString().split('\n')
+let wordsList = fs.readFileSync(DICT).toString().split('\n')
 if (wordsList[0].indexOf(',') >= 0) {
     wordsList = wordsList.map(word => word.split(',')[0])
 }
@@ -17,8 +17,8 @@ wordsList = wordsList.filter(w => w.length !== 0)
 console.log('Done reading dictionary')
 
 const frequencies = {}
-if (ARG2) {
-    const unigramFreqList = fs.readFileSync(ARG2).toString().split('\n')
+if (UNIG) {
+    const unigramFreqList = fs.readFileSync(UNIG).toString().split('\n')
     unigramFreqList.forEach(l => {
         const [word, numb] = l.split(',')
         const freq = parseInt(numb)
