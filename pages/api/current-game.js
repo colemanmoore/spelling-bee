@@ -8,7 +8,7 @@ export default async (req, res) => {
         await fetchGame()
     } catch (e) {
         console.error(e)
-        res.status(404).send({error: e.message})
+        res.status(404).send({ error: e.message })
         return
     }
 
@@ -26,17 +26,17 @@ export default async (req, res) => {
 
         case 'POST':
 
-            const body = JSON.parse(req.body)
+            const { submission } = req.body
 
             const response = {
-                grade: game.submit(body.submission),
+                grade: game.submit(submission),
                 message: null
             }
 
             if (response.grade < 1) {
                 response.message = 'Not in word list'
 
-            } else if (game.pangrams.includes(body.submission.toLowerCase())) {
+            } else if (game.pangrams.includes(submission.toLowerCase())) {
                 response.message = 'Pangram!'
             }
 

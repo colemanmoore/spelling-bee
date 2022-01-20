@@ -11,31 +11,34 @@ export default function useApi() {
     async function fetchGame() {
         setIsLoadingGame(true)
 
-        const resp = await http.get('/api/current-game')
-        setIsLoadingGame(false)
-
-        let data = await resp.json()
-        
-        if (!resp.ok) {
-            setFetchGameError(data.error)
-            return
+        let data
+        try {
+            const resp = await http.get('/api/current-game')
+            data = resp.data
+        } catch (error) {
+            console.log(error)
+            setFetchGameError(error)
         }
 
+        setIsLoadingGame(false)
         return data
     }
 
     async function postSubmission(submission) {
         setIsPostingSubmission(true)
-        const resp = await http.post('/api/current-game', {
-            submission: submission
-        })
 
-        if (!resp.ok) {
+        let data
+        try {
+            const resp = await http.post('/api/current-game', {
+                submission
+            })
+            data = resp.data
+        } catch (error) {
+            console.error(error)
             setSubmissionError('Could not submit word')
-            return
         }
 
-        const data = await resp.json()
+        setIsPostingSubmission(false)
         return data
     }
 

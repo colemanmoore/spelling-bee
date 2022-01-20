@@ -1,5 +1,5 @@
-import { ProvideGame } from '../hooks/useGame'
-import '../styles/styles.css'
+import { ProvideGame } from 'hooks/useGame'
+import 'styles/global.css'
 
 function App({ Component, pageProps }) {
   return (

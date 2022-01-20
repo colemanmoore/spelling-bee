@@ -42,13 +42,13 @@ export default function Home() {
             return
         }
 
-        const data = await api.postSubmission(submission)
-
-        if (data.grade > 0) {
+        let data = await api.postSubmission(submission)
+        
+        if (data && data.grade > 0) {
             game.addWord(submission, data.grade)
         }
 
-        if (data.message) {
+        if (data && data.message) {
             messageFlash.setMessage(data.message)
         }
         
