@@ -1,5 +1,5 @@
 import _ from 'underscore'
-import { getLatestGame } from './database.mjs'
+import { saveGame, getLatestGame, getAllWordsFromDictionary } from './database.mjs'
 import { readFromDictionaryFile } from './io.mjs'
 
 const PANGRAM_LENGTH = 7
@@ -7,21 +7,26 @@ const PANGRAM_LENGTH = 7
 /**
  * Game class
  */
-
 export class Game {
 
-    constructor({ id, letters, keyLetter, answers }) {
+    #dictionary
+    #answers
+
+    constructor({ id, letters, keyLetter, dictionary }) {
+
+        if (!letters || !keyLetter || !dictionary) {
+            throw 'Must pass letters, keyLetter and dictionary to constructor'
+        }
+
         this.id = id
         this.letters = letters.map(l => l.toLowerCase())
         this.keyLetter = keyLetter.toLowerCase()
-        if (answers) {
-            this.answers = answers
-        } else {
-            const wordsList = readFromDictionaryFile()
-            this.answers = getQualifyingWords({ wordsList, keyLetter, letters })
-        }
+
+        this.#dictionary = dictionary
+        this.#answers = this.getQualifyingWords()
+
         this.pangrams = this.getAllPangrams()
-        this.maximumScore = possibleScore(this.answers)
+        this.maximumScore = possibleScore(this.#answers)
     }
 
     getLetters() {
@@ -42,13 +47,33 @@ export class Game {
     }
 
     getAllPangrams() {
-        return Object.keys(this.answers).filter(word => {
+        return Object.keys(this.#answers).filter(word => {
             return canBePangram(word)
         })
     }
 
+    getQualifyingWords() {
+        if (this.#answers) {
+            return this.#answers
+        }
+
+        let answers = {}
+        const keyLetter = this.keyLetter
+        const letters = this.letters
+        this.#dictionary.forEach(word => {
+            const uniques = uniqueChars(word)
+            if (
+                !_.contains(uniques, keyLetter) ||
+                _.without(uniques, ...letters).length > 0
+            ) return
+
+            answers[word] = 1
+        })
+        return answers
+    }
+
     submit(submission) {
-        if (this.answers[submission.toLowerCase()]) {
+        if (this.#answers[submission.toLowerCase()]) {
             return submission.length < 5 ? 1 : submission.length
         }
         return 0
@@ -59,7 +84,7 @@ export class Game {
     }
 
     numberOfAnswers() {
-        return Object.keys(this.answers).length
+        return Object.keys(this.#answers).length
     }
 
     toString() {
@@ -68,47 +93,40 @@ export class Game {
             keyLetter: this.keyLetter
         })
     }
-}
 
-/**
- * Game generation
- */
+    save() {
+        return saveGame(this)
+    }
 
-export function createFromDictionary() {
+    static async createNewGame() {
+        const dictionary = readFromDictionaryFile()
+        // const dictionary = await getAllWordsFromDictionary()
+        const pangrams = dictionary.filter(canBePangram)
 
-    const wordsList = readFromDictionaryFile()
-    const pangrams = wordsList.filter(canBePangram)
-    
-    const pangram = pangrams[Math.floor(Math.random() * pangrams.length)]
-    const letters = uniqueChars(pangram)
+        if (!pangrams.length) {
+            console.warn('No pangrams in the current dictionary!')
+            return // ??
+        }
 
-    let keyLetter, answers
-    const scores = letters.map(l => {
-        answers = getQualifyingWords({ wordsList, keyLetter: l, letters })
-        return { keyLetter: l, maxScore: possibleScore(answers), answers: Object.keys(answers).length }
-    })
+        const pangram = pangrams[Math.floor(Math.random() * pangrams.length)]
+        const letters = uniqueChars(pangram)
 
-    scores.sort((a, b) => a.maxScore - b.maxScore)
-    keyLetter = scores[0].keyLetter
-    answers = getQualifyingWords({ wordsList, keyLetter, letters })
+        const possibleGames = letters.map(l => new Game({ letters, keyLetter: l, dictionary }))
+        possibleGames.sort((a, b) => a.maximumScore - b.maximumScore)
+        return possibleGames[0]
+    }
 
-    console.log(pangram, `Words: ${Object.keys(answers).length} Maximum Points: ${scores[0].maxScore}`)
-
-    return new Game({
-        letters,
-        keyLetter,
-        answers
-    })
-}
-
-export async function createCurrentGameObject() {
-    const gameData = await getLatestGame()
-    const letterData = await JSON.parse(gameData.letters)
-    return new Game({
-        id: gameData.id,
-        letters: letterData.letters,
-        keyLetter: letterData.keyLetter
-    })
+    static async createCurrentGameObject() {
+        const gameData = await getLatestGame()
+        const letterData = await JSON.parse(gameData.letters)
+        const dictionary = readFromDictionaryFile()
+        return new Game({
+            id: gameData.id,
+            letters: letterData.letters,
+            keyLetter: letterData.keyLetter,
+            dictionary
+        })
+    }
 }
 
 /**
@@ -126,20 +144,6 @@ export function uniqueChars(word) {
     const chars = word.split('')
     return chars.filter((value, index, self) =>
         self.indexOf(value) === index)
-}
-
-export function getQualifyingWords({ wordsList, keyLetter, letters }) {
-    let answers = {}
-    wordsList.forEach(word => {
-        const uniques = uniqueChars(word)
-        if (
-            !_.contains(uniques, keyLetter) ||
-            _.without(uniques, ...letters).length > 0
-        ) return
-
-        answers[word] = 1
-    })
-    return answers
 }
 
 export function possibleScore(answers) {

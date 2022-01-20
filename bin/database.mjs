@@ -1,8 +1,50 @@
 import mysql from 'mysql'
 
-const connection = mysql.createPool(process.env.JAWSDB_URL)
+let connection
+if (process.env.NODE_ENV === 'development') {
+    if (!global.db) {
+        global.db = mysql.createPool(process.env.JAWSDB_URL)
+    }
+    connection = global.db
+} else {
+    connection = mysql.createPool(process.env.JAWSDB_URL)
+}
 
-async function createTables() {
+createDictionaryTable()
+createGameTable()
+
+export {
+    addWordToDictionary,
+    addWordsToDictionary,
+    getWordFromDictionary,
+    removeWordFromDictionary,
+    removeWordsFromDictionaryById,
+    getAllWordsFromDictionary,
+    saveGame,
+    getLatestGame,
+    clearOldestGame
+}
+
+async function createDictionaryTable() {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+        CREATE TABLE IF NOT EXISTS dictionary(
+            id INT NOT NULL AUTO_INCREMENT,
+            word VARCHAR(32) NOT NULL,
+            unique_letters INT,
+            length INT,
+            frequency INT,
+            PRIMARY KEY ( id ),
+            UNIQUE KEY unique_word ( word )
+        );
+        `, (err, result) => {
+            if (err) reject(err)
+            resolve(result)
+        })
+    })
+}
+
+async function createGameTable() {
     return new Promise((resolve, reject) => {
         connection.query(`
         CREATE TABLE IF NOT EXISTS games(
@@ -19,8 +61,87 @@ async function createTables() {
     })
 }
 
-export async function saveGame(game) {
-    await createTables()
+async function addWordToDictionary({ word, unique_letters, length, frequency }) {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `INSERT IGNORE INTO dictionary(word, unique_letters, length, frequency) VALUES (${word}, ${unique_letters}, ${length}, ${frequency});`,
+            (err, result) => {
+                if (err) reject(err)
+                resolve(result)
+            }
+        )
+    })
+}
+
+async function addWordsToDictionary(words) {
+    const stmt = `INSERT IGNORE INTO dictionary(word, unique_letters, length, frequency) VALUES ?`
+    const data = words.map(w => new Array(w.word, w.unique_letters, w.length, w.frequency))
+    return new Promise((resolve, reject) => {
+        connection.query(stmt, [data], (err, result) => {
+            if (err) reject(err)
+            resolve(result)
+        })
+    })
+}
+
+async function getWordFromDictionary(word) {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `SELECT * FROM dictionary d WHERE d.word = '${word}';`,
+            (err, result) => {
+                if (err) reject(err)
+                resolve(result)
+            }
+        )
+    })
+}
+
+async function removeWordFromDictionary(word) {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `DELETE FROM dictionary d WHERE d.word = '${word}';`,
+            (err, result) => {
+                if (err) reject(err)
+                resolve(result)
+            }
+        )
+    })
+}
+
+async function removeWordsFromDictionaryById(ids) {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            `DELETE FROM dictionary d WHERE d.id IN ( ${ids} );`,
+            (err, result) => {
+                if (err) reject(err)
+                resolve(result)
+            }
+        )
+    })
+}
+
+async function getAllWordsFromDictionary(filters, limit) {
+    let stmt = 'SELECT d.* FROM dictionary d'
+    if (filters && filters.length) {
+        stmt += ' WHERE'
+        filters.forEach((f, i) => {
+            stmt += `${i > 0 ? ' AND' : ' '} ${f}`
+        })
+    }
+    if (limit && !isNaN(parseInt(limit))) {
+        stmt +=` LIMIT ${limit}`
+    }
+    stmt += ';'
+    const data = await new Promise((resolve, reject) => {
+        connection.query(stmt, (err, result) => {
+            if (err) reject(err)
+            resolve(result)
+        })
+    })
+    return data.map(row => ({ ...row }))
+}
+
+async function saveGame(game) {
     return new Promise((resolve, reject) => {
         connection.query(
             `INSERT INTO games(date, letters, max_points) VALUES (NOW(), '${game.toString()}', ${game.maximumScore});`,
@@ -32,8 +153,7 @@ export async function saveGame(game) {
     })
 }
 
-export async function getLatestGame() {
-    await createTables()
+async function getLatestGame() {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM games g ORDER BY g.date DESC`, (err, results) => {
             if (err) reject(err)
@@ -47,8 +167,7 @@ export async function getLatestGame() {
     })
 }
 
-export async function clearOldestGame() {
-    await createTables()
+async function clearOldestGame() {
     return new Promise((resolve, reject) => {
         connection.query(`DELETE FROM games g WHERE g.date < ADDDATE(NOW(), INTERVAL -31 DAY)`, (err, result) => {
             if (err) reject(err)

@@ -25,34 +25,36 @@ function useProvideGame() {
     const [score, setScore] = useState(0)
 
     async function initialize() {
-
-        const data = await api.fetchGame()
-        const { letters = [], maxScore = 0, id } = data
-
         let keyLetter, nonKeyLetters = [], _hasLetter = {}
-        letters.forEach(l => {
-            if (l.isKey) {
-                keyLetter = l
+
+        try {
+            const data = await api.fetchGame()
+            data.letters.forEach(l => {
+                if (l.isKey) {
+                    keyLetter = l
+                } else {
+                    nonKeyLetters.push(l)
+                }
+                _hasLetter[l.text] = true
+            })
+
+            setLetters({ nonKeyLetters, keyLetter })
+
+            setHasLetter(_hasLetter)
+    
+            setPossibleScore(data.maxScore)
+    
+            const sessionGameId = storage.getGame()
+            if (sessionGameId && sessionGameId === data.id) {
+                const words = await storage.getWords()
+                const score = storage.getScore()
+                setWordsFoundStack(words)
+                setScore(score)
             } else {
-                nonKeyLetters.push(l)
+                storage.resetGame(data.id)
             }
-            _hasLetter[l.text] = true
-        })
-
-        setLetters({ nonKeyLetters, keyLetter })
-
-        setHasLetter(_hasLetter)
-
-        setPossibleScore(maxScore)
-
-        const sessionGameId = storage.getGame()
-        if (sessionGameId && sessionGameId === id) {
-            const words = await storage.getWords()
-            const score = storage.getScore()
-            setWordsFoundStack(words)
-            setScore(score)
-        } else {
-            storage.resetGame(id)
+        } catch(err) {
+            return
         }
     }
 
