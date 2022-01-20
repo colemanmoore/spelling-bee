@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import http from 'axios'
+import styled from 'styled-components'
 
 const MAX_RESULTS = 100
 
@@ -91,44 +92,52 @@ export default function EditPage() {
         <section>
             <h2>Dictionary</h2>
 
-            <div style={controlPanelStyle}>
-                <input ref={uniqRef} id="uniqueLetters" type="number" style={inputStyle}
-                    min="3" max="10"
-                />
-                <label htmlFor="uniqueLetters">Unique</label>
+            <ControlPanel>
+                <NumberInput>
+                    <input ref={uniqRef} id="uniqueLetters" type="number"
+                        min="3" max="10"
+                    />
+                    <label htmlFor="uniqueLetters">Unique</label>
+                </NumberInput>
 
-                <input ref={lengthRef} id="length" type="number" style={inputStyle} 
-                    min="4" max="14"
-                />
-                <label htmlFor="length">Length</label>
+                <NumberInput>
+                    <input ref={lengthRef} id="length" type="number"
+                        min="4" max="14"
+                    />
+                    <label htmlFor="length">Length</label>
 
-                <input ref={lengthLowerRef} type="checkbox" id="lengthLower" />
-                <label htmlFor="lengthLower">below</label>
+                    <input ref={lengthLowerRef} type="checkbox" id="lengthLower" />
+                    <label htmlFor="lengthLower">below</label>
+                </NumberInput>
 
-                <input ref={freqLowRef} id="freqLow" type="number" style={inputStyle} 
-                    step="500" min="0"
-                />
-                <label htmlFor="freqLow">Freq Low</label>
+                <NumberInput>
+                    <input ref={freqLowRef} id="freqLow" type="number"
+                        step="500" min="0"
+                    />
+                    <label htmlFor="freqLow">Freq Low</label>
+                </NumberInput>
+                
+                <NumberInput>
+                    <input ref={freqHighRef} id="freqHigh" type="number"
+                        step="500" min="0"
+                    />
+                    <label htmlFor="freqHigh">Freq High</label>
+                </NumberInput>
 
-                <input ref={freqHighRef} id="freqHigh" type="number" style={inputStyle} 
-                    step="500" min="0"
-                />
-                <label htmlFor="freqHigh">Freq High</label>
-            </div>
+                <Button onClick={handleSearch}>Go</Button>
+            </ControlPanel>
 
-            <button style={buttonStyle} onClick={handleSearch}>Go</button>
-
-            <div style={container}>
-                <div style={leftPane}>
-                    <textarea style={displayStyle} readOnly value={deleteDisplay}></textarea>
-                    <button style={buttonStyle} onClick={deleteSelected}>
+            <div style={{display:'flex'}}>
+                <LeftPane>
+                    <textarea readOnly value={deleteDisplay}></textarea>
+                    <Button onClick={deleteSelected}>
                         Delete words
-                    </button>
-                </div>
-                <div style={rightPane}>
-                    <ul style={wordListStyle}>
+                    </Button>
+                </LeftPane>
+                <RightPane>
+                    <ul>
                         {words.map(({ word, id }, index) => (
-                            <li key={id} style={wordRowStyle}>
+                            <li key={id}>
                                 <input
                                     type="checkbox"
                                     id={`del-chkbox-${index}`}
@@ -145,53 +154,65 @@ export default function EditPage() {
                             </li>
                         ))}
                     </ul>
-                </div>
+                </RightPane>
             </div>
         </section>
     )
 }
 
-const container = {
-    display: 'flex',
+const LeftPane = styled.div`
+width: 25%;
+flex-basis: 10em;
+textarea {
+    min-height: 40em;
+}
+`
+
+const ControlPanel = styled.div`
+font-size: 0.8em;
+display: flex;'
+`
+
+const RightPane = styled.div`
+> ul {
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    list-style-type: none;
+    grid-column-gap: 10px;
+
+    li {
+        line-height: 2em;
+    }
+}
+`
+
+const Button = styled.button`
+margin: 0.6em 1.2em;
+border-radius: 10px;
+padding: 5px;
+font-size: 0.8em;
+`
+
+const NumberInput = styled.div`
+display: flex;
+flex-direction: column;
+text-align: center;
+
+> label {
+    order: 0;
 }
 
-const leftPane = {
-    width: '25%',
-    flexBasis: '10em'
+> input {
+    order: 1;
+    width: 4em;
 }
 
-const rightPane = {
-
+label[for="lengthLower"] {
+    order: 2;
 }
 
-const controlPanelStyle = {
-    fontSize: '0.7em'
+input#freqHigh, > input#freqLow {
+    width: 10em;
 }
-
-const inputStyle = {
-    width: '4em',
-    margin: '0 0.5em'
-}
-
-const buttonStyle = {
-    margin: ' 0.6em 1.2em',
-    borderRadius: '10px',
-    padding: '5px',
-    fontSize: '0.8em'
-}
-
-const wordRowStyle = {
-    lineHeight: '2em'
-}
-
-const wordListStyle = {
-    margin: '30px auto',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 25%)',
-    listStyleType: 'none',
-    gridColumnGap: '10px'
-}
-
-const displayStyle = {
-    minHeight: '40em'
-}
+`

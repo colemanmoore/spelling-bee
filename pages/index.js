@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useCallback } from 'react'
 import Head from 'next/head'
+import styled, { css } from 'styled-components'
 import { useGame } from 'hooks/useGame'
 import useApi from 'hooks/useApi'
 import useMessageFlash from 'hooks/useMessageFlash'
@@ -51,7 +52,7 @@ export default function Home() {
         if (data && data.message) {
             messageFlash.setMessage(data.message)
         }
-        
+
     }, [game, messageFlash])
 
     return (
@@ -59,7 +60,7 @@ export default function Home() {
             <Head>
                 <title>Bee</title>
             </Head>
-            <div className='container'>
+            <Container>
                 <ScoreBoard score={game.score} />
                 <WordsFound />
                 <GameBoard
@@ -68,7 +69,25 @@ export default function Home() {
                     error={api.fetchGameError}
                 />
                 <MessageBoard message={messageFlash.currentMessage} />
-            </div>
+            </Container>
         </Fragment>
     )
 }
+
+const Container = styled.section`
+position: relative;
+width: 100%;
+
+> .topSection {
+    height: 48px;
+    margin: 0 auto 0.5em auto;
+    background-color: rgb(61, 61, 61);
+    width: 100%;
+
+    > div {
+        padding: 0.7em;
+        margin-right: 0.7em;
+        line-height: 1.5em;
+    }
+}
+`
