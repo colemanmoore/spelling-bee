@@ -24,29 +24,37 @@ export default function EditPage() {
             maxResults: MAX_RESULTS
         }
 
-        if (uniqRef.current.value) {
+        if (uniqRef.current.value > 0) {
             filters.uniqueEq = uniqRef.current.value
+        } else {
+            delete filters.uniqueEq
         }
 
-        if (lengthRef.current.value) {
+        if (lengthRef.current.value > 0) {
             filters.lengthEq = lengthRef.current.value
 
             if (lengthLowerRef.current.value === true) {
                 filters.lengthLt = lengthRef.current.value
             }
+        } else {
+            delete filters.lengthEq
         }
 
-        if (!freqHighRef.current.value && !freqLowRef.current.value) {
+        if (freqHighRef.current.value==0 && freqLowRef.current.value==0) {
             filters.frequencyLt = 1
+            delete filters.frequencyGt
         } else {
+            console.log(freqHighRef.current.value, freqLowRef.current.value)
             filters.frequencyLt = freqHighRef.current.value || Number.MAX_SAFE_INTEGER
             filters.frequencyGt = freqLowRef.current.value || 0
         }
 
-        const resp = await http.post('api/dictionary', filters)
-        const results = resp.data
-        if (results.length) {
+        try {
+            const resp = await http.post('/api/dictionary', filters)
+            const results = resp.data
             setWords(results)
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -71,7 +79,7 @@ export default function EditPage() {
         const confirmed = confirm(`Are you sure you want to remove "${words}"?`)
         if (confirmed) {
             const ids = wordsToDelete.map(w => w.id)
-            http.delete('/api/dictionary', { data: { ids } }).then(handleSearch)
+            http.delete('/api/dictionary', { data: { ids } }).then(() => handleSearch())
         }
     }
 
@@ -85,19 +93,27 @@ export default function EditPage() {
             <h2>Dictionary</h2>
 
             <div style={controlPanelStyle}>
-                <input ref={uniqRef} id="uniqueLetters" type="number" style={inputStyle} />
+                <input ref={uniqRef} id="uniqueLetters" type="number" style={inputStyle}
+                    min="3" max="10"
+                />
                 <label htmlFor="uniqueLetters">Unique</label>
 
-                <input ref={lengthRef} id="length" type="number" style={inputStyle} />
+                <input ref={lengthRef} id="length" type="number" style={inputStyle} 
+                    min="4" max="14"
+                />
                 <label htmlFor="length">Length</label>
 
                 <input ref={lengthLowerRef} type="checkbox" id="lengthLower" />
                 <label htmlFor="lengthLower">below</label>
 
-                <input ref={freqLowRef} id="freqLow" type="number" step={100} style={inputStyle} />
+                <input ref={freqLowRef} id="freqLow" type="number" style={inputStyle} 
+                    step="500" min="0"
+                />
                 <label htmlFor="freqLow">Freq Low</label>
 
-                <input ref={freqHighRef} id="freqHigh" type="number" step={100} style={inputStyle} />
+                <input ref={freqHighRef} id="freqHigh" type="number" style={inputStyle} 
+                    step="500" min="0"
+                />
                 <label htmlFor="freqHigh">Freq High</label>
             </div>
 

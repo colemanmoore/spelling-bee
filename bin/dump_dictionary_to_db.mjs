@@ -2,10 +2,13 @@ import fs from 'fs'
 import { addWordsToDictionary, addWordToDictionary } from './database.mjs'
 import { uniqueChars } from './game.mjs'
 
-const DICT = process.argv[2], UNIG = process.argv[3]
+const
+    CHUNK = process.argv[2],
+    DICT = process.argv[3],
+    UNIG = process.argv[4]
 
 if (!DICT) {
-    console.log(`Usage:\n[command] [path to dictionary txt] [path to unigram frequency csv]`)
+    console.log(`Usage:\n[command] [chunk size] [path to dictionary txt] [path to unigram frequency csv]`)
     process.exit(1)
 }
 
@@ -29,15 +32,14 @@ if (UNIG) {
     console.log('Done reading frequency data')
 }
 
-const chunk = 10
-wordsList.length < chunk ? insertSingles() : await insertInChunks()
+wordsList.length < CHUNK ? insertSingles() : await insertInChunks()
 process.exit(0)
 
 async function insertInChunks() {
     let i, j, temporary
-    console.log('Inserting in chunks of', chunk)
-    for (i = 0, j = wordsList.length; i < j; i += chunk) {
-        temporary = wordsList.slice(i, i + chunk)
+    console.log('Inserting in chunks of', CHUNK)
+    for (i = 0, j = wordsList.length; i < j; i += CHUNK) {
+        temporary = wordsList.slice(i, i + CHUNK)
         let data = temporary.map(word => ({
             word,
             unique_letters: uniqueChars(word).length,
