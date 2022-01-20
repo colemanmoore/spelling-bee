@@ -1,12 +1,8 @@
 import _ from 'underscore'
 import { saveGame, getLatestGame, getAllWordsFromDictionary } from './database.mjs'
-import { readFromDictionaryFile } from './io.mjs'
 
 const PANGRAM_LENGTH = 7
 
-/**
- * Game class
- */
 export class Game {
 
     #dictionary
@@ -60,7 +56,7 @@ export class Game {
         let answers = {}
         const keyLetter = this.keyLetter
         const letters = this.letters
-        this.#dictionary.forEach(word => {
+        this.#dictionary.forEach(({word}) => {
             const uniques = uniqueChars(word)
             if (
                 !_.contains(uniques, keyLetter) ||
@@ -99,9 +95,8 @@ export class Game {
     }
 
     static async createNewGame() {
-        const dictionary = readFromDictionaryFile()
-        // const dictionary = await getAllWordsFromDictionary()
-        const pangrams = dictionary.filter(canBePangram)
+        const dictionary = await getAllWordsFromDictionary()
+        const pangrams = dictionary.filter(d => canBePangram(d.word))
 
         if (!pangrams.length) {
             console.warn('No pangrams in the current dictionary!')
@@ -109,7 +104,7 @@ export class Game {
         }
 
         const pangram = pangrams[Math.floor(Math.random() * pangrams.length)]
-        const letters = uniqueChars(pangram)
+        const letters = uniqueChars(pangram.word)
 
         const possibleGames = letters.map(l => new Game({ letters, keyLetter: l, dictionary }))
         possibleGames.sort((a, b) => a.maximumScore - b.maximumScore)
@@ -119,7 +114,7 @@ export class Game {
     static async createCurrentGameObject() {
         const gameData = await getLatestGame()
         const letterData = await JSON.parse(gameData.letters)
-        const dictionary = readFromDictionaryFile()
+        const dictionary = await getAllWordsFromDictionary()
         return new Game({
             id: gameData.id,
             letters: letterData.letters,

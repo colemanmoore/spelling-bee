@@ -1,4 +1,4 @@
-import { Game } from '../../bin/game.mjs'
+import { Game } from 'bin/game.mjs'
 
 let game
 
@@ -16,13 +16,11 @@ export default async (req, res) => {
 
         case 'GET':
 
-            res.status(200).json({
+            return res.status(200).json({
                 id: game.id,
                 letters: game.getAllLetters(),
                 maxScore: game.maximumScore
             })
-
-            return
 
         case 'POST':
 
@@ -40,8 +38,7 @@ export default async (req, res) => {
                 response.message = 'Pangram!'
             }
 
-            res.status(200).json(response)
-            return
+            return res.status(200).json(response)
     }
 }
 

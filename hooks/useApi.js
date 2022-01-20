@@ -16,7 +16,7 @@ export default function useApi() {
             const resp = await http.get('/api/current-game')
             data = resp.data
         } catch (error) {
-            console.log(error)
+            console.error(error.toJSON().message)
             setFetchGameError(error)
         }
 
@@ -34,7 +34,7 @@ export default function useApi() {
             })
             data = resp.data
         } catch (error) {
-            console.error(error)
+            console.error(error.toJSON().message)
             setSubmissionError('Could not submit word')
         }
 

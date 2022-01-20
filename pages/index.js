@@ -1,12 +1,12 @@
 import { Fragment, useEffect, useCallback } from 'react'
 import Head from 'next/head'
-import { useGame } from '../hooks/useGame'
-import useApi from '../hooks/useApi'
-import useMessageFlash from '../hooks/useMessageFlash'
-import GameBoard from '../components/GameBoard'
-import ScoreBoard from '../components/ScoreBoard'
-import WordsFound from '../components/WordsFound'
-import MessageBoard from '../components/MessageBoard'
+import { useGame } from 'hooks/useGame'
+import useApi from 'hooks/useApi'
+import useMessageFlash from 'hooks/useMessageFlash'
+import GameBoard from 'components/GameBoard'
+import ScoreBoard from 'components/ScoreBoard'
+import WordsFound from 'components/WordsFound'
+import MessageBoard from 'components/MessageBoard'
 
 const MESSAGE = {
     already_found: 'Already found',
@@ -43,7 +43,7 @@ export default function Home() {
         }
 
         let data = await api.postSubmission(submission)
-        
+
         if (data && data.grade > 0) {
             game.addWord(submission, data.grade)
         }

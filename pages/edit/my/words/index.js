@@ -44,7 +44,6 @@ export default function EditPage() {
             filters.frequencyLt = 1
             delete filters.frequencyGt
         } else {
-            console.log(freqHighRef.current.value, freqLowRef.current.value)
             filters.frequencyLt = freqHighRef.current.value || Number.MAX_SAFE_INTEGER
             filters.frequencyGt = freqLowRef.current.value || 0
         }
@@ -53,8 +52,8 @@ export default function EditPage() {
             const resp = await http.post('/api/dictionary', filters)
             const results = resp.data
             setWords(results)
-        } catch (err) {
-            console.log(err)
+        } catch (error) {
+            console.error(error.toJSON().message)
         }
     }
 
