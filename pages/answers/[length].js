@@ -1,4 +1,4 @@
-import { Game } from '../../bin/game.mjs'
+import { Game } from 'bin/game.mjs'
 
 export default function({ answers }) {
     return <ul>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { isMobile } from 'react-device-detect'
-import { useGame } from '../hooks/useGame'
+import { useGame } from 'hooks/useGame'
 import classnames from 'classnames'
 import styles from './WordsFound.module.css'
 

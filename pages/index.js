@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useCallback } from 'react'
 import Head from 'next/head'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { useGame } from 'hooks/useGame'
 import useApi from 'hooks/useApi'
 import useMessageFlash from 'hooks/useMessageFlash'
@@ -8,12 +8,7 @@ import GameBoard from 'components/GameBoard'
 import ScoreBoard from 'components/ScoreBoard'
 import WordsFound from 'components/WordsFound'
 import MessageBoard from 'components/MessageBoard'
-
-const MESSAGE = {
-    already_found: 'Already found',
-    too_short: 'Word is too short',
-    no_key_letter: 'Does not use center letter'
-}
+import { MSG_NO_KEY_LETTER, MSG_ALREADY_FOUND, MSG_TOO_SHORT } from 'constants/constants'
 
 const MESSAGE_DURATION = 1500
 
@@ -29,17 +24,17 @@ export default function Home() {
         const submission = submissionText.toLowerCase()
 
         if (submission.length < 4) {
-            messageFlash.setMessage(MESSAGE.too_short)
+            messageFlash.setMessage(MSG_TOO_SHORT)
             return
         }
 
         if (submission.indexOf(game.letters.keyLetter.text) < 0) {
-            messageFlash.setMessage(MESSAGE.no_key_letter)
+            messageFlash.setMessage(MSG_NO_KEY_LETTER)
             return
         }
 
         if (game.hasWord[submission]) {
-            messageFlash.setMessage(MESSAGE.already_found)
+            messageFlash.setMessage(MSG_ALREADY_FOUND)
             return
         }
 

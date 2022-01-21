@@ -1,4 +1,5 @@
 import { Game } from 'bin/game.mjs'
+import { MSG_NOT_IN_LIST, MSG_PANGRAM } from 'constants/constants'
 
 let game
 
@@ -32,10 +33,10 @@ export default async (req, res) => {
             }
 
             if (response.grade < 1) {
-                response.message = 'Not in word list'
+                response.message = MSG_NOT_IN_LIST
 
             } else if (game.pangrams.includes(submission.toLowerCase())) {
-                response.message = 'Pangram!'
+                response.message = MSG_PANGRAM
             }
 
             return res.status(200).json(response)
