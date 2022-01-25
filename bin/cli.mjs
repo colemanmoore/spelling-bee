@@ -1,8 +1,8 @@
 import inquirer from 'inquirer'
-import _ from 'underscore'
-import { Game } from './game.mjs'
+import { findWhere } from 'underscore'
+import { Game } from '../lib/game.mjs'
 
-const game = await Game.createNewGame()
+const game = await Game.createNewGame(7)
 let score = 0
 const alreadyFound = {}
 
@@ -51,7 +51,7 @@ async function prompt() {
 
 function formatPrompt() {
     let letters = game.getAllLetters()
-    const keyLetter = _.findWhere(letters, { isKey: true })
+    const keyLetter = findWhere(letters, { isKey: true })
     letters = letters.filter(l => !l.isKey)
     return `
            ${letters[0].text}

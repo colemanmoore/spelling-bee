@@ -1,4 +1,4 @@
-import { getAllWordsFromDictionary, removeWordsFromDictionaryById } from 'bin/database.mjs'
+import { getAllWordsFromDictionary, removeWordsFromDictionaryById } from 'lib/database.mjs'
 import { filterType } from 'constants/constants'
 
 export default async (req, res) => {

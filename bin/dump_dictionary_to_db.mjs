@@ -1,6 +1,6 @@
 import fs from 'fs'
-import { addWordsToDictionary, addWordToDictionary } from './database.mjs'
-import { uniqueChars } from './game.mjs'
+import { addWordsToDictionary, addWordToDictionary } from '../lib/database.mjs'
+import { uniqueChars } from '../lib/util.mjs'
 
 const
     CHUNK = process.argv[2],

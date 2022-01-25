@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import http from 'axios'
 import styled from 'styled-components'
 
-const MAX_RESULTS = 100
+const MAX_RESULTS = 300
 
 const initialCheckedState = (new Array(MAX_RESULTS)).fill(false)
 
@@ -95,14 +95,14 @@ export default function EditPage() {
             <ControlPanel>
                 <NumberInput>
                     <input ref={uniqRef} id="uniqueLetters" type="number"
-                        min="3" max="10"
+                        min="3" max="14"
                     />
                     <label htmlFor="uniqueLetters">Unique</label>
                 </NumberInput>
 
                 <NumberInput>
                     <input ref={lengthRef} id="length" type="number"
-                        min="4" max="14"
+                        min="4"
                     />
                     <label htmlFor="length">Length</label>
 

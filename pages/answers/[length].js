@@ -1,6 +1,6 @@
-import { Game } from 'bin/game.mjs'
+import { Game } from 'lib/game.mjs'
 
-export default function({ answers }) {
+export default function Answers({ answers }) {
     return <ul>
         {answers.map(a => <li key={a}>{a}</li>)}
     </ul>

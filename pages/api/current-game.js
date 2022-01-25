@@ -1,4 +1,4 @@
-import { Game } from 'bin/game.mjs'
+import { Game } from 'lib/game.mjs'
 import { MSG_NOT_IN_LIST, MSG_PANGRAM } from 'constants/constants'
 
 let game

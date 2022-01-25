@@ -1,4 +1,4 @@
-import { getWordFromDictionary, removeWordFromDictionary } from 'bin/database.mjs'
+import { getWordFromDictionary, removeWordFromDictionary } from 'lib/database.mjs'
 
 export default async (req, res) => {
 
