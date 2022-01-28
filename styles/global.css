@@ -31,3 +31,21 @@ button {
         border: 2px solid currentcolor;
     }
 }
+
+.home-screen {
+    position: relative;
+    width: 100%;
+}
+
+.home-screen > .topSection {
+    height: 48px;
+    margin: 0 auto 0.5em auto;
+    background-color: rgb(61, 61, 61);
+    width: 100%;
+}
+
+.home-screen > .topSection > div {
+    padding: 0.7em;
+    margin-right: 0.7em;
+    line-height: 1.5em;
+}

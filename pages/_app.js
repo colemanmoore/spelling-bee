@@ -1,11 +1,14 @@
-import { ProvideGame } from 'hooks/useGame'
+import { PlayerProvider } from 'context/PlayerState'
+import { GameProvider } from 'context/GameState'
 import 'styles/global.css'
 
 function App({ Component, pageProps }) {
   return (
-    <ProvideGame>
-      <Component {...pageProps} />
-    </ProvideGame>
+    <PlayerProvider>
+      <GameProvider>
+        <Component {...pageProps} />
+      </GameProvider>
+    </PlayerProvider>
   )
 }
 

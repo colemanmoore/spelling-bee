@@ -22,6 +22,8 @@ export const TITLES = [
     'Savant'
 ]
 
+export const MESSAGE_DURATION = 1500
+
 export const MSG_NOT_IN_LIST = 'Not in word list'
 
 export const MSG_ALREADY_FOUND = 'Already found'

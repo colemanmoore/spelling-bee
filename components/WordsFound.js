@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { isMobile } from 'react-device-detect'
-import { useGame } from 'hooks/useGame'
+import { usePlayerContext } from 'context/PlayerState'
+import { useUiContext } from 'context/UiState'
 import classnames from 'classnames'
 import styles from './WordsFound.module.css'
 
 export default function WordsFound() {
 
-    const game = useGame()
+    const { wordsFoundAlpha, wordsFoundStack } = usePlayerContext()
+    const { isWordsListShowing, showWordsList, hideWordsList } = useUiContext()
     const wrapperRef = useRef()
     const [allWordsOpen, setAllWordsOpen] = useState(false)
 
@@ -20,9 +22,9 @@ export default function WordsFound() {
 
     const handleClick = e => {
         if (e.target === wrapperRef.current || wrapperRef.current.contains(e.target)) {
-            setAllWordsOpen(true)
+            showWordsList()
         } else {
-            setAllWordsOpen(false)
+            hideWordsList()
         }
     }
 
@@ -35,30 +37,24 @@ export default function WordsFound() {
         }
     }, [])
 
-    function latestWords() {
-        return game.wordsFoundStack.map(w =>
-            <span key={w} className={styles.word}>{w}</span>
-        )
-    }
-
     function alphabeticalModal() {
         const wordStyle = classnames(styles.word, styles.listWord)
         return (
             <div className={styles.allWordsContainer}>
-                {game.wordsFoundAlpha.map(w => <div key={w} className={wordStyle}>{w}</div>)}
+                {wordsFoundAlpha.map(w => <div key={w} className={wordStyle}>{w}</div>)}
             </div>
         )
     }
 
     function showAllWords() {
-        return allWordsOpen && game.wordsFoundAlpha.length > 2
+        return allWordsOpen && wordsFoundAlpha.length > 2
     }
 
     return (
         <section className='topSection'>
-            {showAllWords() && alphabeticalModal()}
+            {isWordsListShowing && alphabeticalModal()}
             <div className={styles.container} ref={wrapperRef}>
-                {!showAllWords() && game.wordsFoundStack.map(w =>
+                {!isWordsListShowing && wordsFoundStack.map(w =>
                     <span key={w} className={styles.word}>{w}</span>
                 )}
             </div>

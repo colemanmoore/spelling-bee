@@ -1,16 +1,18 @@
 import { useMemo } from 'react'
 import classnames from 'classnames'
-import { useGame } from 'hooks/useGame'
+import { useGameContext } from 'context/GameState'
+import { usePlayerContext } from 'context/PlayerState'
 import styles from './ScoreBoard.module.css'
 import { PERCENTAGES, TITLES } from 'constants/constants'
 
-export default function ScoreBoard({ score }) {
+export default function ScoreBoard() {
 
-    const game = useGame()
+    const { possibleScore } = useGameContext()
+    const { score } = usePlayerContext()
 
     const geniusPoints = useMemo(() =>
-        Math.floor(game.possibleScore * PERCENTAGES[PERCENTAGES.length - 1]),
-        [game.possibleScore]
+        Math.floor(possibleScore * PERCENTAGES[PERCENTAGES.length - 1]),
+        [possibleScore]
     )
 
     const percentToGenius = useMemo(() => Math.floor(100 * score / geniusPoints), [score, geniusPoints])
@@ -26,7 +28,7 @@ export default function ScoreBoard({ score }) {
         <div className={styles.container}>
             <span className={styles.leftSide}>{score ? `${score}` : ''}</span>
             <span className={styles.rightSide}>
-                {game.possibleScore ? `${geniusPoints} ${TITLES[TITLES.length - 1]}` : ''}
+                {possibleScore ? `${geniusPoints} ${TITLES[TITLES.length - 1]}` : ''}
             </span>
         </div>
     </section>
