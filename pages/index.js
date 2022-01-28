@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from 'react'
 import Head from 'next/head'
 import { useGameContext } from 'context/GameState'
-import { UiProvider } from 'context/UiState'
+import { AppProvider } from 'context/AppState'
 import GameBoard from 'components/GameBoard'
 import ScoreBoard from 'components/ScoreBoard'
 import WordsFound from 'components/WordsFound'
@@ -24,12 +24,12 @@ export default function Home() {
                 </section>
             ) : (
                 <section className="home-screen">
-                    <UiProvider>
+                    <AppProvider>
                         <ScoreBoard />
                         <WordsFound />
                         <GameBoard />
                         <MessageBoard />
-                    </UiProvider>
+                    </AppProvider>
                 </section>
             )}
         </Fragment>

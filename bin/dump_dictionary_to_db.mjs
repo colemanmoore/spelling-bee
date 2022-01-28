@@ -8,7 +8,7 @@ const
     UNIG = process.argv[4]
 
 if (!DICT) {
-    console.log(`Usage:\n[command] [chunk size] [path to dictionary txt] [path to unigram frequency csv]`)
+    console.log(`Usage:\n[command] [chunk size] [path to dictionary txt]`)
     process.exit(1)
 }
 
@@ -19,18 +19,18 @@ if (wordsList[0].indexOf(',') >= 0) {
 wordsList = wordsList.filter(w => w.length !== 0)
 console.log('Done reading dictionary')
 
-const frequencies = {}
-if (UNIG) {
-    const unigramFreqList = fs.readFileSync(UNIG).toString().split('\n')
-    unigramFreqList.forEach(l => {
-        const [word, numb] = l.split(',')
-        const freq = parseInt(numb)
-        if (!isNaN(freq) && word.length > 3) {
-            frequencies[word] = freq
-        }
-    })
-    console.log('Done reading frequency data')
-}
+// const frequencies = {}
+// if (UNIG) {
+//     const unigramFreqList = fs.readFileSync(UNIG).toString().split('\n')
+//     unigramFreqList.forEach(l => {
+//         const [word, numb] = l.split(',')
+//         const freq = parseInt(numb)
+//         if (!isNaN(freq) && word.length > 3) {
+//             frequencies[word] = freq
+//         }
+//     })
+//     console.log('Done reading frequency data')
+// }
 
 wordsList.length < CHUNK ? insertSingles() : await insertInChunks()
 process.exit(0)
@@ -43,8 +43,8 @@ async function insertInChunks() {
         let data = temporary.map(word => ({
             word,
             unique_letters: uniqueChars(word).length,
-            length: word.length,
-            frequency: frequencies[word] ? frequencies[word] : 0
+            // length: word.length,
+            // frequency: frequencies[word] ? frequencies[word] : 0
         }))
         console.log(`Adding ${data.map(d => d.word)}`)
         await addWordsToDictionary(data)
@@ -57,8 +57,8 @@ async function insertSingles() {
         addWordToDictionary({
             word,
             unique_letters: uniqueChars(word).length,
-            length: word.length,
-            frequency: frequencies[word] ? frequencies[word] : 0
+            // length: word.length,
+            // frequency: frequencies[word] ? frequencies[word] : 0
         })
     })
 }
