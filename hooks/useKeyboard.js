@@ -1,5 +1,5 @@
 import { isMobile } from 'react-device-detect'
-import { useAppContext } from 'context/UiState'
+import { useAppContext } from 'context/AppState'
 
 export default function useKeyboard(handleEnter, hasLetter) {
 

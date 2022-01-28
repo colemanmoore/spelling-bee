@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { shuffle } from 'underscore'
 import { useGameContext } from 'context/GameState'
-import { useUiContext } from 'context/UiState'
+import { useAppContext } from 'context/AppState'
 import useKeyboard from 'hooks/useKeyboard'
 import Letter from './Letter'
 import WordInput from './WordInput'
@@ -10,7 +10,7 @@ import styles from './GameBoard.module.css'
 export default function GameBoard() {
 
     const { hasLetter, keyLetter, nonKeyLetters } = useGameContext()
-    const { input, keyPressed, addLetterToInput, deleteLetterFromInput, submitWord } = useUiContext()
+    const { input, keyPressed, addLetterToInput, deleteLetterFromInput, submitWord } = useAppContext()
     
     const [orderedLetters, setOrderedLetters] = useState([])
     const { addKeyboardListeners, removeKeyboardListeners } = useKeyboard(handleSubmit, hasLetter)

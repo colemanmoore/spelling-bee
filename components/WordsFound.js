@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { usePlayerContext } from 'context/PlayerState'
-import { useUiContext } from 'context/UiState'
+import { useAppContext } from 'context/AppState'
 import classnames from 'classnames'
 import styles from './WordsFound.module.css'
 
 export default function WordsFound() {
 
     const { wordsFoundAlpha, wordsFoundStack } = usePlayerContext()
-    const { isWordsListShowing, showWordsList, hideWordsList } = useUiContext()
+    const { isWordsListShowing, showWordsList, hideWordsList } = useAppContext()
     const wrapperRef = useRef()
     const [allWordsOpen, setAllWordsOpen] = useState(false)
 
