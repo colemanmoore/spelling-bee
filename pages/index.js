@@ -26,9 +26,9 @@ export default function Home() {
                 <section className="home-screen">
                     <AppProvider>
                         <ScoreBoard />
-                        <WordsFound />
+                        {/* <WordsFound /> */}
                         <GameBoard />
-                        <MessageBoard />
+                        {/* <MessageBoard /> */}
                     </AppProvider>
                 </section>
             )}

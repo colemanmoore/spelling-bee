@@ -1,6 +1,6 @@
 import { useReducer } from 'react'
 
-export const inputActions = {
+const inputActions = {
     ADD: 'add',
     DELETE: 'del',
     CLEAR: 'clear',
@@ -8,33 +8,35 @@ export const inputActions = {
     UNPRESS: 'unpress'
 }
 
-export const inputInitialState = {
+const inputInitialState = {
     content: '',
     keyPressed: null
 }
 
+const inputReducer = (state, action) => {
+    switch (action.type) {
+
+        case inputActions.ADD:
+            return { ...state, content: state.content + action.payload }
+
+        case inputActions.DELETE:
+            if (state.content.length <= 0) return { ...state }
+            return { ...state, content: state.content.slice(0, -1) }
+
+        case inputActions.CLEAR:
+            return { ...state, content: '' }
+
+        case inputActions.PRESS:
+            return { ...state, keyPressed: action.payload }
+
+        case inputActions.UNPRESS:
+            return { ...state, keyPressed: null }
+    }
+}
+
 export function useInput() {
 
-    const [state, dispatch] = useReducer((state, action) => {
-        switch (action.type) {
-
-            case inputActions.ADD:
-                return { ...state, content: state.content + action.payload }
-
-            case inputActions.DELETE:
-                if (state.content.length <= 0) return { ...state }
-                return { ...state, content: state.content.slice(0, -1) }
-
-            case inputActions.CLEAR:
-                return { ...state, content: '' }
-
-            case inputActions.PRESS:
-                return { ...state, keyPressed: action.payload }
-
-            case inputActions.UNPRESS:
-                return { ...state, keyPressed: null }
-        }
-    }, inputInitialState)
+    const [state, dispatch] = useReducer(inputReducer, inputInitialState)
 
     function addLetter(letter) {
         dispatch({ type: inputActions.ADD, payload: letter })

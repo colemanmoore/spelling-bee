@@ -6,12 +6,15 @@ import useKeyboard from 'hooks/useKeyboard'
 import Letter from './Letter'
 import WordInput from './WordInput'
 import styles from './GameBoard.module.css'
+import ShuffleButton from './ShuffleButton'
+import { SHUFFLE_LABEL } from 'constants/constants'
+import Arrow from './Arrow'
 
 export default function GameBoard() {
 
     const { hasLetter, keyLetter, nonKeyLetters } = useGameContext()
     const { input, keyPressed, addLetterToInput, deleteLetterFromInput, submitWord } = useAppContext()
-    
+
     const [orderedLetters, setOrderedLetters] = useState([])
     const { addKeyboardListeners, removeKeyboardListeners } = useKeyboard(handleSubmit, hasLetter)
 
@@ -61,9 +64,15 @@ export default function GameBoard() {
             </div>
             <WordInput word={input} />
             <section className={styles.buttonArea}>
-                <button onClick={deleteLetterFromInput}>{'<'}</button>
-                <button onClick={handleShuffle}>@</button>
-                <button onClick={handleSubmit}>{'>'}</button>
+                <div className={styles.controlLeft} onClick={deleteLetterFromInput}>
+                    <Arrow direction={-1} />
+                    <div className={styles.arrowLabel}>Delete</div>
+                </div>
+                {/* <ShuffleButton buttonLabel={SHUFFLE_LABEL} handler={handleShuffle} /> */}
+                <div className={styles.controlRight} onClick={handleSubmit}>
+                    <Arrow direction={1} />
+                    <div className={styles.arrowLabel}>Enter</div>
+                </div>
             </section>
         </div>
     )

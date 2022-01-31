@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import classnames from 'classnames'
 import { useGameContext } from 'context/GameState'
 import { usePlayerContext } from 'context/PlayerState'
 import styles from './ScoreBoard.module.css'
@@ -8,28 +7,37 @@ import { PERCENTAGES, TITLES } from 'constants/constants'
 export default function ScoreBoard() {
 
     const { possibleScore } = useGameContext()
-    const { score } = usePlayerContext()
+    const { score, wordsFoundAlpha } = usePlayerContext()
 
-    const geniusPoints = useMemo(() =>
+    const winningPoints = useMemo(() =>
         Math.floor(possibleScore * PERCENTAGES[PERCENTAGES.length - 1]),
         [possibleScore]
     )
 
-    const percentToGenius = useMemo(() => Math.floor(100 * score / geniusPoints), [score, geniusPoints])
+    const widthStyle = useMemo(() => {
+        const percent = Math.floor(100 * score / winningPoints)
+        return percent >= 1 ? { 
+            display: 'block', 
+            width: `${percent}%` 
+        } : {}
+    }, [score, winningPoints])
 
-    const percentWidth = useMemo(() => {
-        return percentToGenius >= 1 ? { display: 'block', width: `${percentToGenius}%` } : {}
-    }, [percentToGenius])
+    function numberFormat(number) {
+        let num = number.toString()
+        while (num.length < 3) num = '0' + num
+        return num
+    }
 
-    const classes = classnames('topSection', styles.outerContainer)
+    return <section className={styles.outerContainer}>
 
-    return <section className={classes}>
-        <div className={styles.colorContainer} style={percentWidth}> </div>
-        <div className={styles.container}>
-            <span className={styles.leftSide}>{score ? `${score}` : ''}</span>
-            <span className={styles.rightSide}>
-                {possibleScore ? `${geniusPoints} ${TITLES[TITLES.length - 1]}` : ''}
-            </span>
+        <div className={styles.textContainer}>
+            <span>{numberFormat(score)}</span>
+            <span>{numberFormat(wordsFoundAlpha.length)} word{wordsFoundAlpha.length != 1 ? 's' : ''}</span>
+            <span>{TITLES[0]}</span>
+        </div>
+
+        <div className={styles.pillContainer}>
+            <div className={styles.colorContainer} style={widthStyle}> </div>
         </div>
     </section>
 }

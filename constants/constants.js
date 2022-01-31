@@ -19,7 +19,7 @@ export const TITLES = [
     'It\'s Giving',
     'Incred',
     'Sexy Hot',
-    'Savant'
+    'Savant!'
 ]
 
 export const MESSAGE_DURATION = 1500
@@ -33,6 +33,8 @@ export const MSG_PANGRAM = 'Pangram!'
 export const MSG_TOO_SHORT = 'Word is too short'
 
 export const MSG_NO_KEY_LETTER = 'Does not use center letter'
+
+export const SHUFFLE_LABEL = 'Spin \'Em'
 
 export const filterType = {
     LIMIT: 'maxResults',

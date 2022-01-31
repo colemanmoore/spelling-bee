@@ -2,25 +2,25 @@
     padding: 10px 7px;
     box-sizing: unset;
     cursor: pointer;
+    font-family: var(--font-family-heavy);
 }
 
 .letterShape {
-    border: 1px solid #FFFFFF;
     border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    line-height: 70px;
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
     text-align: center;
 }
 
 .letterContent {
-    font-size: 25px;
+    font-size: 2.5rem;
     text-transform: uppercase;
 }
 
 .keyLetter {
-    background-color: yellow;
-    color: #000000;
+    border: 1px solid var(--foreground-color-1);
+    background-color: var(--background-color);
 }
 
 .activeLetter {
