@@ -8,7 +8,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    /* font-size: 1.5rem; */
     line-height: 2.5rem;
     padding: 0 0.5em;
     font-size: calc(var(--font-size-base) * 1);
@@ -37,6 +36,10 @@
 .pillContainer {
     border: 1px solid;
     border-radius: 30px;
-    height: 3em;
+    height: 3rem;
     overflow: hidden;
+}
+
+.wordsFoundLink {
+    text-decoration: underline;
 }

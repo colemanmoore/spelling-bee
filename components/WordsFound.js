@@ -1,63 +1,90 @@
-import { useEffect, useRef, useState } from 'react'
-import { isMobile } from 'react-device-detect'
+import styled from 'styled-components'
 import { usePlayerContext } from 'context/PlayerState'
 import { useAppContext } from 'context/AppState'
-import classnames from 'classnames'
-import styles from './WordsFound.module.css'
+import { threeDigitNumberFormat } from 'lib/format'
 
 export default function WordsFound() {
 
-    const { wordsFoundAlpha, wordsFoundStack } = usePlayerContext()
-    const { isWordsListShowing, showWordsList, hideWordsList } = useAppContext()
-    const wrapperRef = useRef()
-    const [allWordsOpen, setAllWordsOpen] = useState(false)
-
-    const onTouchStart = e => {
-        if (isMobile) handleClick(e)
-    }
-
-    const onMouseDown = e => {
-        if (!isMobile) handleClick(e)
-    }
-
-    const handleClick = e => {
-        if (e.target === wrapperRef.current || wrapperRef.current.contains(e.target)) {
-            showWordsList()
-        } else {
-            hideWordsList()
-        }
-    }
-
-    useEffect(() => {
-        document.addEventListener('touchstart', onTouchStart)
-        document.addEventListener('mousedown', onMouseDown)
-        return () => {
-            document.removeEventListener('touchstart', onTouchStart)
-            document.removeEventListener('mousedown', onMouseDown)
-        }
-    }, [])
-
-    function alphabeticalModal() {
-        const wordStyle = classnames(styles.word, styles.listWord)
-        return (
-            <div className={styles.allWordsContainer}>
-                {wordsFoundAlpha.map(w => <div key={w} className={wordStyle}>{w}</div>)}
-            </div>
-        )
-    }
-
-    function showAllWords() {
-        return allWordsOpen && wordsFoundAlpha.length > 2
-    }
+    const { wordsFoundAlpha } = usePlayerContext()
+    const { isWordsListShowing, setIsWordsListShowing } = useAppContext()
 
     return (
-        <section className='topSection'>
-            {isWordsListShowing && alphabeticalModal()}
-            <div className={styles.container} ref={wrapperRef}>
-                {!isWordsListShowing && wordsFoundStack.map(w =>
-                    <span key={w} className={styles.word}>{w}</span>
-                )}
-            </div>
-        </section>
+        <Container active={isWordsListShowing}>
+            <div className="close icon" onClick={() => setIsWordsListShowing(false) }></div>
+            <h2>{threeDigitNumberFormat(wordsFoundAlpha.length)} words</h2>
+            <ul>
+                {wordsFoundAlpha.map(w => <li key={w}>{w}</li>)}
+            </ul>
+        </Container>
     )
 }
+
+const Container = styled.section`
+position: absolute;
+left: ${props => props.active ? '-15px' : 'calc(-35px - 50%)'};
+top: -10px;
+z-index: 100;
+width: calc(50% + 15px);
+height: calc(100% + 10px);
+background-color: var(--background-color);
+transition: left 0.5s;
+
+color: var(--foreground-color-2);
+padding: 2em;
+
+ul {
+    padding-left: 0;
+}
+
+li {
+    font-family: var(--font-family-paragraph);
+    font-size: 1.5rem;
+    font-weight: 600;
+    list-style: none;
+    text-transform: uppercase;
+    border-top: 1px solid;
+    padding: 0.5em 0;
+}
+
+li:last-child {
+    border-bottom: 1px solid;
+}
+
+&.drawer-open {
+    left: -10px;
+    top: -10px;
+}
+
+.close.icon {
+    color: #000;
+    position: absolute;
+    right: 2em;
+    margin-top: 0;
+    margin-left: 0;
+    width: 21px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.close.icon:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    width: 21px;
+    height: 1px;
+    background-color: currentColor;
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+}
+
+.close.icon:after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    width: 21px;
+    height: 1px;
+    background-color: currentColor;
+    -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+}
+`

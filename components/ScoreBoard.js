@@ -3,11 +3,14 @@ import { useGameContext } from 'context/GameState'
 import { usePlayerContext } from 'context/PlayerState'
 import styles from './ScoreBoard.module.css'
 import { PERCENTAGES, TITLES } from 'constants/constants'
+import { useAppContext } from 'context/AppState'
+import { threeDigitNumberFormat } from 'lib/format'
 
 export default function ScoreBoard() {
 
     const { possibleScore } = useGameContext()
     const { score, wordsFoundAlpha } = usePlayerContext()
+    const { setIsWordsListShowing } = useAppContext()
 
     const winningPoints = useMemo(() =>
         Math.floor(possibleScore * PERCENTAGES[PERCENTAGES.length - 1]),
@@ -16,23 +19,19 @@ export default function ScoreBoard() {
 
     const widthStyle = useMemo(() => {
         const percent = Math.floor(100 * score / winningPoints)
-        return percent >= 1 ? { 
-            display: 'block', 
-            width: `${percent}%` 
+        return percent >= 1 ? {
+            display: 'block',
+            width: `${percent}%`
         } : {}
     }, [score, winningPoints])
 
-    function numberFormat(number) {
-        let num = number.toString()
-        while (num.length < 3) num = '0' + num
-        return num
-    }
-
     return <section className={styles.outerContainer}>
 
-        <div className={styles.textContainer}>
-            <span>{numberFormat(score)}</span>
-            <span>{numberFormat(wordsFoundAlpha.length)} word{wordsFoundAlpha.length != 1 ? 's' : ''}</span>
+        <div className={styles.textContainer} onClick={() => setIsWordsListShowing(true) }>
+            <span>{threeDigitNumberFormat(score)}</span>
+            <a className={styles.wordsFoundLink}>
+                {threeDigitNumberFormat(wordsFoundAlpha.length)} word{wordsFoundAlpha.length != 1 ? 's' : ''}
+            </a>
             <span>{TITLES[0]}</span>
         </div>
 

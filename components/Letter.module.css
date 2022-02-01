@@ -19,11 +19,9 @@
 }
 
 .keyLetter {
-    border: 1px solid var(--foreground-color-1);
-    background-color: var(--background-color);
+    border: 1px solid;
 }
 
 .activeLetter {
-    background-color: #FFFFFF;
-    color: #000000;
+    background-color: var(--background-color);
 }

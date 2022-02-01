@@ -3,18 +3,6 @@
     flex-direction: column;
 }
 
-.wordPad {
-    margin: 2.5em 0;
-    /* height: 290px; */
-}
-
-.honeycomb {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-}
-
 .buttonArea {
     text-align: center;
     display: flex;
@@ -22,6 +10,7 @@
     font-size: 1.5rem;
     cursor: pointer;
 }
+
 .controlLeft {
     display: flex;
     flex-direction: column;

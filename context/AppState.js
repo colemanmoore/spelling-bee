@@ -62,7 +62,8 @@ export const AppProvider = ({ children }) => {
         }
 
         showMessage(message, null, MESSAGE_DURATION)
-        setTimeout(clear, MESSAGE_DURATION)
+        // setTimeout(clear, MESSAGE_DURATION)
+        clear()
     }
 
 
@@ -78,6 +79,7 @@ export const AppProvider = ({ children }) => {
         isMessageShowing,
         showMessage,
         isWordsListShowing,
+        setIsWordsListShowing,
         showWordsList,
         hideWordsList
     }}>
