@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useGameContext } from 'context/GameState'
 import { usePlayerContext } from 'context/PlayerState'
@@ -11,6 +11,7 @@ export default function ScoreBoard() {
     const { possibleScore } = useGameContext()
     const { score, wordsFoundAlpha } = usePlayerContext()
     const { setIsWordsListShowing } = useAppContext()
+    const [ title, setTitle ] = useState(TITLES[0])
 
     const winningPoints = useMemo(() =>
         Math.floor(possibleScore * PERCENTAGES[PERCENTAGES.length - 1]),
@@ -18,12 +19,25 @@ export default function ScoreBoard() {
     )
 
     const widthStyle = useMemo(() => {
-        const percent = Math.floor(100 * score / winningPoints)
+        const percent = Math.floor(100 * score / possibleScore / PERCENTAGES[PERCENTAGES.length - 1])
         return percent >= 1 ? {
             display: 'block',
             width: `${percent}%`
         } : {}
-    }, [score, winningPoints])
+    }, [score, possibleScore, PERCENTAGES])
+
+    useEffect(() => {
+        const currentPercentage = score / winningPoints
+        let tempTitle = TITLES[0]
+        for (const [idx, p] of PERCENTAGES.entries()) {
+            if (currentPercentage > p) {
+                tempTitle = TITLES[idx]
+            } else {
+                break
+            }
+        }
+        setTitle(tempTitle)
+    }, [score, winningPoints, PERCENTAGES])
 
     return (
         <SectionContainer>
@@ -33,7 +47,7 @@ export default function ScoreBoard() {
                 <a>
                     {threeDigitNumberFormat(wordsFoundAlpha.length)} word{wordsFoundAlpha.length != 1 ? 's' : ''}
                 </a>
-                <span>{TITLES[0]}</span>
+                <span>{title}</span>
             </TextContainer>
 
             <PillContainer>
