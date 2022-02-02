@@ -1,9 +1,9 @@
-import styles from './ShuffleButton.module.css'
+import styled from 'styled-components'
 
 export default function ShuffleButton({ buttonLabel, handler, color = "#FFFFFF" }) {
 
     return (
-        <div className={styles.container} onClick={handler}>
+        <Container onClick={handler}>
             <svg viewBox="0 0 500 500">
                 <path id="curve" d="M125,85 a60,60 0 1,0 -115,0" />
                 <text width="500" fill={color}>
@@ -12,6 +12,16 @@ export default function ShuffleButton({ buttonLabel, handler, color = "#FFFFFF" 
                     </textPath>
                 </text>
             </svg>
-        </div>
+        </Container>
     )
 }
+
+const Container = styled.div`
+font-family: var(--font-family-notification);
+text-transform: uppercase;
+/* font-size: 5rem; */
+color: var(--foreground-color-1);
+cursor: pointer;
+width: 100px;
+border: 1px solid red;
+`

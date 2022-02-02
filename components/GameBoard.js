@@ -6,9 +6,7 @@ import useKeyboard from 'hooks/useKeyboard'
 import Arrow from 'components/Arrow'
 import Flower from 'components/Flower'
 import WordInput from 'components/WordInput'
-import styles from './GameBoard.module.css'
-import ShuffleButton from './ShuffleButton'
-import { SHUFFLE_LABEL } from 'constants/constants'
+import styled from 'styled-components'
 
 export default function GameBoard() {
 
@@ -41,20 +39,43 @@ export default function GameBoard() {
     }
 
     return (
-        <div className={styles.container}>
+        <Container>
             <Flower letters={orderedLetters} />
             <WordInput word={input} />
-            <section className={styles.buttonArea}>
-                <div className={styles.controlLeft} onClick={deleteLetterFromInput}>
+            <ControlArea>
+                <Control align="left" onClick={deleteLetterFromInput}>
                     <Arrow direction={-1} />
-                    <div className={styles.arrowLabel}>Delete</div>
-                </div>
-                {/* <ShuffleButton buttonLabel={SHUFFLE_LABEL} handler={handleShuffle} /> */}
-                <div className={styles.controlRight} onClick={handleSubmit}>
+                    <ControlLabel>Delete</ControlLabel>
+                </Control>
+                <Control align="right" onClick={handleSubmit}>
                     <Arrow direction={1} />
-                    <div className={styles.arrowLabel}>Enter</div>
-                </div>
-            </section>
-        </div>
+                    <ControlLabel>Enter</ControlLabel>
+                </Control>
+            </ControlArea>
+        </Container>
     )
 }
+
+const Container = styled.div`
+display: flex;
+flex-direction: column;
+`
+
+const ControlArea = styled.section`
+text-align: center;
+display: flex;
+justify-content: space-between;
+font-size: 1.5rem;
+` 
+
+const Control = styled.div`
+display: flex;
+flex-direction: column;
+align-items: ${props => 
+    props.align=='left' ? 'flex-start' : (props.align==='right' ? 'flex-end' : 'center')
+};
+`
+
+const ControlLabel = styled.div`
+margin-top: 1.5em;
+`

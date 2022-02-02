@@ -1,60 +1,71 @@
-import { useState, useCallback } from 'react'
-import classnames from 'classnames'
+import { useCallback } from 'react'
 import { isMobile } from 'react-device-detect'
-import styles from './Letter.module.css'
+import styled from 'styled-components'
+import { useAppContext } from 'context/AppState'
 
-export default function Letter({ letter, isKeyPressed, handlePress }) {
+export default function Letter({ letter }) {
 
-    const [isActive, setIsActive] = useState(false)
-
-    const shapeClass = classnames(styles.letterShape, {
-        [styles.keyLetter]: letter.isKey,
-        [styles.activeLetter]: isActive || isKeyPressed
-    })
+    const { keyPressed, pressLetter, unpressLetter, addLetterToInput } = useAppContext()
 
     const handleTouchStart = useCallback(e => {
+        console.log('touch start')
         e.stopPropagation()
         if (isMobile) {
-            setIsActive(true)
-            handlePress(letter.text)
+            pressLetter(letter.text)
+            addLetterToInput(letter.text)
         }
-    }, [setIsActive, handlePress])
+    }, [addLetterToInput])
 
-    const handleTouchEnd = useCallback(() => {
+    const handleTouchEnd = () => {
         if (isMobile) {
-            setIsActive(false)
+            unpressLetter(letter.text)
         }
-    }, [letter])
+    }
 
-    const handleMouseEnter = useCallback(() => {
-        if (!isMobile) {
-            setIsActive(true)
+    const handleMouseDown = () => {
+        if(!isMobile) {
+            pressLetter(letter.text)
+            addLetterToInput(letter.text)
         }
-    }, [setIsActive])
+    }
 
-    const handleMouseLeave = useCallback(() => {
+    const handleMouseUp = () => {
         if (!isMobile) {
-            setIsActive(false)
+            unpressLetter(letter.text)
         }
-    }, [setIsActive])
-
-    const handleClick = useCallback(() => {
-        if (!isMobile) {
-            handlePress(letter.text)
-        }
-    }, [letter, handlePress])
+    }
 
     return (
-        <div className={styles.letterTouchBox}
+        <Container
+            keyLetter={letter.isKey}
+            active={keyPressed === letter.text}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onMouseDown={handleClick}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
         >
-            <div className={shapeClass}>
-                <span className={styles.letterContent}>{letter.text}</span>
+            <div className="shape">
+                <span>{letter.text}</span>
             </div>
-        </div>
+        </Container>
     )
 }
+
+const Container = styled.div`
+padding: 10px 7px;
+box-sizing: unset;
+cursor: pointer;
+font-family: var(--font-family-heavy);
+
+.shape {
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    text-align: center;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    ${props => props.active ? 'background-color: var(--background-color);' : ''};
+    ${props => props.keyLetter ? 'border: 1px solid;' : ''};
+}
+`

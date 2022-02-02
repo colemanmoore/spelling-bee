@@ -5,7 +5,8 @@ import { AppProvider } from 'context/AppState'
 import GameBoard from 'components/GameBoard'
 import ScoreBoard from 'components/ScoreBoard'
 import WordsFound from 'components/WordsFound'
-import MessageBoard from 'components/MessageBoard'
+import RulesAbout from 'components/RulesAbout'
+import Loading from 'components/Loading'
 
 export default function Home() {
 
@@ -18,17 +19,15 @@ export default function Home() {
             <Head>
                 <title>Bee</title>
             </Head>
-            {isWaiting ? (
-                <section className="loading-screen">
-                    <p>Please wait while we grab today's game...</p>
-                </section>
-            ) : (
+            {isWaiting ? <Loading /> : (
                 <section className="home-screen">
                     <AppProvider>
-                        <ScoreBoard />
+                        <div className="home-container">
+                            <ScoreBoard />
+                            <GameBoard />
+                        </div>
                         <WordsFound />
-                        <GameBoard />
-                        {/* <MessageBoard /> */}
+                        <RulesAbout />
                     </AppProvider>
                 </section>
             )}

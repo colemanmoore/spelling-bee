@@ -62,22 +62,26 @@ button {
 }
 
 .home-screen {
+    height: 100vh;
+}
+
+.home-container {
     position: relative;
-    margin: 0 auto;
     padding: 0 0.5em;
     max-width: 680px;
-    height: 100vh;
+    height: 100%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 @media screen and (min-width: 376px) {
-    .home-screen {
+    .home-container {
         padding: 0 2em;
     }
 }
 
-.home-screen > * {
+.home-container > * {
     flex-grow: 1;
 }

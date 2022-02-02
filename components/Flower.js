@@ -1,10 +1,8 @@
 import styled from 'styled-components'
-import { useAppContext } from 'context/AppState'
 import Letter from 'components/Letter'
 
 export default function Flower({ letters }) {
 
-    const { keyPressed, addLetterToInput } = useAppContext()
 
     function letterColumn(range) {
         return <div>
@@ -12,8 +10,6 @@ export default function Flower({ letters }) {
                 <Letter
                     key={l.text}
                     letter={l}
-                    isKeyPressed={keyPressed === l.text}
-                    handlePress={addLetterToInput}
                 />
             ))}
         </div>
@@ -37,5 +33,6 @@ margin: 2.5em 0;
 img {
     position: absolute;
     width: 300px;
+    z-index: -10;
 }
 `

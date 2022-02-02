@@ -6,14 +6,14 @@ export default function Arrow({ direction }) {
 }
 
 const LeftArrow = styled.div`
-  position: absolute;
-  margin-left: 3px;
-  margin-top: 10px;
-  width: 36px;
-  height: 1px;
-  background-color: currentColor;
+position: absolute;
+margin-left: 3px;
+margin-top: 10px;
+width: 36px;
+height: 1px;
+background-color: currentColor;
 
-  &:before {
+&:before {
   content: '';
   position: absolute;
   left: 1px;
@@ -28,12 +28,12 @@ const LeftArrow = styled.div`
 `
 
 const RightArrow = styled.div`
-  position: absolute;
-  margin-right: 2px;
-  margin-top: 10px;
-  width: 36px;
-  height: 1px;
-  background-color: currentColor;
+position: absolute;
+margin-right: 2px;
+margin-top: 10px;
+width: 36px;
+height: 1px;
+background-color: currentColor;
 
 &:before {
   content: '';
