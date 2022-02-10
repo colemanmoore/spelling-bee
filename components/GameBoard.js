@@ -7,6 +7,7 @@ import Arrow from 'components/Arrow'
 import Flower from 'components/Flower'
 import WordInput from 'components/WordInput'
 import styled from 'styled-components'
+import RulesAboutLink from './RulesAboutLink'
 
 export default function GameBoard() {
 
@@ -40,6 +41,7 @@ export default function GameBoard() {
 
     return (
         <Container>
+            <RulesAboutLink />
             <Flower letters={orderedLetters} />
             <WordInput word={input} />
             <ControlArea>
@@ -57,6 +59,7 @@ export default function GameBoard() {
 }
 
 const Container = styled.div`
+flex-grow: 3;
 display: flex;
 flex-direction: column;
 `

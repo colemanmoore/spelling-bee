@@ -28,7 +28,7 @@ display: flex;
 flex-flow: row wrap;
 justify-content: center;
 align-items: center;
-margin: 2.5em 0;
+margin: 2em 0 1em;
 
 img {
     position: absolute;

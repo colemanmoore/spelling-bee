@@ -59,6 +59,10 @@ export default function ScoreBoard() {
 }
 
 const SectionContainer = styled.section`
+flex-grow: 0;
+@media screen and (min-width: 475px) {
+    flex-grow: 1;
+}
 display: flex;
 flex-direction: column;
 justify-content: flex-end;

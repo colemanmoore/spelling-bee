@@ -24,7 +24,6 @@ padding-left: 0;
 
 li {
     font-family: var(--font-family-paragraph);
-    font-size: 1.5rem;
     font-weight: 600;
     list-style: none;
     text-transform: uppercase;

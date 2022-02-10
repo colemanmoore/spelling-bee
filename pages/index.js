@@ -7,6 +7,7 @@ import ScoreBoard from 'components/ScoreBoard'
 import WordsFound from 'components/WordsFound'
 import RulesAbout from 'components/RulesAbout'
 import Loading from 'components/Loading'
+import RulesAboutLink from 'components/RulesAboutLink'
 
 export default function Home() {
 
@@ -20,16 +21,15 @@ export default function Home() {
                 <title>Bee</title>
             </Head>
             {isWaiting ? <Loading /> : (
-                <section className="home-screen">
-                    <AppProvider>
-                        <div className="home-container">
-                            <ScoreBoard />
-                            <GameBoard />
-                        </div>
-                        <WordsFound />
-                        <RulesAbout />
-                    </AppProvider>
-                </section>
+                <AppProvider>
+                    <section className="home-screen">
+                        <ScoreBoard />
+                        <GameBoard />
+                        {/** Messages */}
+                    </section>
+                    <WordsFound />
+                    <RulesAbout />
+                </AppProvider>
             )}
         </Fragment>
     )

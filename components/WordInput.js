@@ -16,7 +16,8 @@ text-align: center;
 font-weight: 400;
 text-transform: uppercase;
 letter-spacing: 0.2em;
-font-size: 2em;
+font-size: 2rem;
+letter-spacing: 0.25rem;
 font-family: var(--font-family-heavy);
 border-bottom: 1px solid;
 

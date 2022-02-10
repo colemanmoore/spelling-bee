@@ -17,13 +17,16 @@ export default function Sidebar({ children, percentWidth, active, handleClose })
 
 const Container = styled.aside`
 position: absolute;
-height: calc(100% + 10px);
+height: calc(100% + 2em);
 width: calc(${props => props.width} + 15px);
+max-width: 450px;
 left: ${props => props.left};
 top: -10px;
 z-index: 100;
 background-color: var(--background-color);
-transition: left 0.5s;
+transition: left 0.25s;
+overflow: scroll;
+font-size: 1rem;
 
 color: var(--foreground-color-2);
 padding: 2em;
