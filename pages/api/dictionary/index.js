@@ -1,14 +1,5 @@
-import { getAllWordsFromDictionary, removeWordsFromDictionaryById } from 'bin/database.mjs'
-
-const filterType = {
-    LIMIT: 'maxResults',
-    UNIQUE_EQ : 'uniqueEq',
-    LENGTH_EQ : 'lengthEq',
-    LENGTH_LT : 'lengthLt',
-    LENGTH_GT : 'lengthGt',
-    FREQ_LT : 'frequencyLt',
-    FREQ_GT : 'frequencyGt',
-}
+import { getAllWordsFromDictionary, removeWordsFromDictionaryById } from 'lib/database.mjs'
+import { filterType } from 'constants/constants'
 
 export default async (req, res) => {
 

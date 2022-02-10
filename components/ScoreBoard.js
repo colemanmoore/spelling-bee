@@ -1,29 +1,104 @@
-import { useMemo } from 'react'
-import classnames from 'classnames'
-import { useGame } from '../hooks/useGame'
-import styles from './ScoreBoard.module.css'
+import { useMemo, useState, useEffect } from 'react'
+import styled from 'styled-components'
+import { useGameContext } from 'context/GameState'
+import { usePlayerContext } from 'context/PlayerState'
+import { PERCENTAGES, TITLES } from 'constants/constants'
+import { useAppContext } from 'context/AppState'
+import { threeDigitNumberFormat } from 'lib/format'
 
-export default function ScoreBoard({ score }) {
+export default function ScoreBoard() {
 
-    const game = useGame()
+    const { possibleScore } = useGameContext()
+    const { score, wordsFoundAlpha } = usePlayerContext()
+    const { setIsWordsListShowing } = useAppContext()
+    const [ title, setTitle ] = useState(TITLES[0])
 
-    const geniusPoints = useMemo(() => Math.floor(game.possibleScore * 0.7), [game.possibleScore])
+    const winningPoints = useMemo(() =>
+        Math.floor(possibleScore * PERCENTAGES[PERCENTAGES.length - 1]),
+        [possibleScore]
+    )
 
-    const percentToGenius = useMemo(() => Math.floor(100 * score / geniusPoints), [score, geniusPoints])
+    const widthStyle = useMemo(() => {
+        const percent = Math.floor(100 * score / possibleScore / PERCENTAGES[PERCENTAGES.length - 1])
+        return percent >= 1 ? {
+            display: 'block',
+            width: `${percent}%`
+        } : {}
+    }, [score, possibleScore, PERCENTAGES])
 
-    const percentWidth = useMemo(() => {
-        return percentToGenius >= 1 ? {display:'block', width:`${percentToGenius}%`} : {}
-    }, [percentToGenius])
+    useEffect(() => {
+        const currentPercentage = score / winningPoints
+        let tempTitle = TITLES[0]
+        for (const [idx, p] of PERCENTAGES.entries()) {
+            if (currentPercentage > p) {
+                tempTitle = TITLES[idx]
+            } else {
+                break
+            }
+        }
+        setTitle(tempTitle)
+    }, [score, winningPoints, PERCENTAGES])
 
-    const classes = classnames('topSection', styles.outerContainer)
+    return (
+        <SectionContainer>
 
-    return <section className={classes}>
-        <div className={styles.colorContainer} style={percentWidth}> </div>
-        <div className={styles.container}>
-            <span className={styles.leftSide}>{score ? `${score}` : ''}</span>
-            <span className={styles.rightSide}>
-                {game.possibleScore ? `${geniusPoints} genius` : ''}
-            </span>
-        </div>
-    </section>
+            <TextContainer onClick={() => setIsWordsListShowing(true)}>
+                <span>{threeDigitNumberFormat(score)}</span>
+                <a>
+                    {threeDigitNumberFormat(wordsFoundAlpha.length)} word{wordsFoundAlpha.length != 1 ? 's' : ''}
+                </a>
+                <span>{title}</span>
+            </TextContainer>
+
+            <PillContainer>
+                <div className="color-fill" style={widthStyle}></div>
+            </PillContainer>
+
+        </SectionContainer>
+    )
 }
+
+const SectionContainer = styled.section`
+flex-grow: 0;
+@media screen and (min-width: 475px) {
+    flex-grow: 1;
+}
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+`
+
+const TextContainer = styled.div`
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+line-height: 2.5rem;
+padding: 0 0.5em;
+font-size: calc(var(--font-size-base) * 1);
+
+a { text-decoration: underline; }
+
+span {
+    width: 33%;
+    height: 2.5em;
+    &:nth-child(2) {
+        text-align: center;
+    }
+    &:nth-child(3) {
+        text-align: right;
+    }
+}
+`
+
+const PillContainer = styled.div`
+border: 1px solid;
+border-radius: 30px;
+height: 3rem;
+overflow: hidden;
+
+.color-fill {
+    height: 100%;
+    display: none;
+    background-color: var(--background-color);
+}
+`

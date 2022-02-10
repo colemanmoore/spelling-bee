@@ -1,24 +1,32 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { shuffle } from 'underscore'
-import useInput from '../hooks/useInput'
-import { useGame } from '../hooks/useGame'
-import Letter from './Letter'
-import WordInput from './WordInput'
-import Loading from './Loading'
-import styles from './GameBoard.module.css'
+import { useGameContext } from 'context/GameState'
+import { useAppContext } from 'context/AppState'
+import useKeyboard from 'hooks/useKeyboard'
+import Arrow from 'components/Arrow'
+import Flower from 'components/Flower'
+import WordInput from 'components/WordInput'
+import styled from 'styled-components'
+import RulesAboutLink from './RulesAboutLink'
 
-export default function GameBoard({ handleSubmission, loading, error }) {
+export default function GameBoard() {
 
-    const game = useGame()
-    const input = useInput({ submitCallback: handleSubmission })
+    const { hasLetter, keyLetter, nonKeyLetters } = useGameContext()
+    const { input, deleteLetterFromInput, submitWord } = useAppContext()
+
     const [orderedLetters, setOrderedLetters] = useState([])
+    const { addKeyboardListeners, removeKeyboardListeners } = useKeyboard(handleSubmit, hasLetter)
+
+    useEffect(() => {
+        addKeyboardListeners()
+        return () => removeKeyboardListeners()
+    }, [addKeyboardListeners, removeKeyboardListeners])
 
     useEffect(() => {
         handleShuffle()
-    }, [game.letters])
+    }, [nonKeyLetters])
 
     const handleShuffle = () => {
-        const { nonKeyLetters, keyLetter } = game.letters
         if (nonKeyLetters.length && keyLetter) {
             const characters = shuffle(nonKeyLetters)
             characters.splice(3, 0, keyLetter)
@@ -26,43 +34,51 @@ export default function GameBoard({ handleSubmission, loading, error }) {
         }
     }
 
-    const submit = useCallback(() => {
-        handleSubmission(input.content)
-        input.clearInput()
-    }, [input.content, input.clearInput, handleSubmission])
-
-    function letterColumn(range) {
-        return <div>
-            {range.map(l => (
-                <Letter
-                    key={l.text}
-                    letter={l}
-                    isKeyPressed={input.keyPressed === l.text}
-                    handlePress={input.addLetterToInput}
-                />
-            ))}
-        </div>
+    async function handleSubmit() {
+        const submission = input.toLowerCase()
+        submitWord(submission, keyLetter.text)
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.wordPad}>
-                {error && <div>{error}</div>}
-                {loading ?
-                    <Loading /> :
-                    <section className={styles.honeycomb}>
-                        {letterColumn(orderedLetters.slice(0, 2))}
-                        {letterColumn(orderedLetters.slice(2, 5))}
-                        {letterColumn(orderedLetters.slice(5, 7))}
-                    </section>
-                }
-            </div>
-            <WordInput word={input.content} />
-            <section className={styles.buttonArea}>
-                <button onClick={input.deleteLetterFromInput}>{'<'}</button>
-                <button onClick={handleShuffle}>@</button>
-                <button onClick={submit}>{'>'}</button>
-            </section>
-        </div>
+        <Container>
+            <RulesAboutLink />
+            <Flower letters={orderedLetters} />
+            <WordInput word={input} />
+            <ControlArea>
+                <Control align="left" onClick={deleteLetterFromInput}>
+                    <Arrow direction={-1} />
+                    <ControlLabel>Delete</ControlLabel>
+                </Control>
+                <Control align="right" onClick={handleSubmit}>
+                    <Arrow direction={1} />
+                    <ControlLabel>Enter</ControlLabel>
+                </Control>
+            </ControlArea>
+        </Container>
     )
 }
+
+const Container = styled.div`
+flex-grow: 3;
+display: flex;
+flex-direction: column;
+`
+
+const ControlArea = styled.section`
+text-align: center;
+display: flex;
+justify-content: space-between;
+font-size: 1.5rem;
+` 
+
+const Control = styled.div`
+display: flex;
+flex-direction: column;
+align-items: ${props => 
+    props.align=='left' ? 'flex-start' : (props.align==='right' ? 'flex-end' : 'center')
+};
+`
+
+const ControlLabel = styled.div`
+margin-top: 1.5em;
+`

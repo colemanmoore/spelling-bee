@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import http from 'axios'
+import styled from 'styled-components'
 
-const MAX_RESULTS = 100
+const MAX_RESULTS = 300
 
 const initialCheckedState = (new Array(MAX_RESULTS)).fill(false)
 
@@ -24,29 +25,36 @@ export default function EditPage() {
             maxResults: MAX_RESULTS
         }
 
-        if (uniqRef.current.value) {
+        if (uniqRef.current.value > 0) {
             filters.uniqueEq = uniqRef.current.value
+        } else {
+            delete filters.uniqueEq
         }
 
-        if (lengthRef.current.value) {
+        if (lengthRef.current.value > 0) {
             filters.lengthEq = lengthRef.current.value
 
             if (lengthLowerRef.current.value === true) {
                 filters.lengthLt = lengthRef.current.value
             }
+        } else {
+            delete filters.lengthEq
         }
 
-        if (!freqHighRef.current.value && !freqLowRef.current.value) {
+        if (freqHighRef.current.value==0 && freqLowRef.current.value==0) {
             filters.frequencyLt = 1
+            delete filters.frequencyGt
         } else {
             filters.frequencyLt = freqHighRef.current.value || Number.MAX_SAFE_INTEGER
             filters.frequencyGt = freqLowRef.current.value || 0
         }
 
-        const resp = await http.post('api/dictionary', filters)
-        const results = resp.data
-        if (results.length) {
+        try {
+            const resp = await http.post('/api/dictionary', filters)
+            const results = resp.data
             setWords(results)
+        } catch (error) {
+            console.error(error.toJSON().message)
         }
     }
 
@@ -71,7 +79,7 @@ export default function EditPage() {
         const confirmed = confirm(`Are you sure you want to remove "${words}"?`)
         if (confirmed) {
             const ids = wordsToDelete.map(w => w.id)
-            http.delete('/api/dictionary', { data: { ids } }).then(handleSearch)
+            http.delete('/api/dictionary', { data: { ids } }).then(() => handleSearch())
         }
     }
 
@@ -84,36 +92,52 @@ export default function EditPage() {
         <section>
             <h2>Dictionary</h2>
 
-            <div style={controlPanelStyle}>
-                <input ref={uniqRef} id="uniqueLetters" type="number" style={inputStyle} />
-                <label htmlFor="uniqueLetters">Unique</label>
+            <ControlPanel>
+                <NumberInput>
+                    <input ref={uniqRef} id="uniqueLetters" type="number"
+                        min="3" max="14"
+                    />
+                    <label htmlFor="uniqueLetters">Unique</label>
+                </NumberInput>
 
-                <input ref={lengthRef} id="length" type="number" style={inputStyle} />
-                <label htmlFor="length">Length</label>
+                <NumberInput>
+                    <input ref={lengthRef} id="length" type="number"
+                        min="4"
+                    />
+                    <label htmlFor="length">Length</label>
 
-                <input ref={lengthLowerRef} type="checkbox" id="lengthLower" />
-                <label htmlFor="lengthLower">below</label>
+                    <input ref={lengthLowerRef} type="checkbox" id="lengthLower" />
+                    <label htmlFor="lengthLower">below</label>
+                </NumberInput>
 
-                <input ref={freqLowRef} id="freqLow" type="number" step={100} style={inputStyle} />
-                <label htmlFor="freqLow">Freq Low</label>
+                <NumberInput>
+                    <input ref={freqLowRef} id="freqLow" type="number"
+                        step="500" min="0"
+                    />
+                    <label htmlFor="freqLow">Freq Low</label>
+                </NumberInput>
+                
+                <NumberInput>
+                    <input ref={freqHighRef} id="freqHigh" type="number"
+                        step="500" min="0"
+                    />
+                    <label htmlFor="freqHigh">Freq High</label>
+                </NumberInput>
 
-                <input ref={freqHighRef} id="freqHigh" type="number" step={100} style={inputStyle} />
-                <label htmlFor="freqHigh">Freq High</label>
-            </div>
+                <Button onClick={handleSearch}>Go</Button>
+            </ControlPanel>
 
-            <button style={buttonStyle} onClick={handleSearch}>Go</button>
-
-            <div style={container}>
-                <div style={leftPane}>
-                    <textarea style={displayStyle} readOnly value={deleteDisplay}></textarea>
-                    <button style={buttonStyle} onClick={deleteSelected}>
+            <div style={{display:'flex'}}>
+                <LeftPane>
+                    <textarea readOnly value={deleteDisplay}></textarea>
+                    <Button onClick={deleteSelected}>
                         Delete words
-                    </button>
-                </div>
-                <div style={rightPane}>
-                    <ul style={wordListStyle}>
+                    </Button>
+                </LeftPane>
+                <RightPane>
+                    <ul>
                         {words.map(({ word, id }, index) => (
-                            <li key={id} style={wordRowStyle}>
+                            <li key={id}>
                                 <input
                                     type="checkbox"
                                     id={`del-chkbox-${index}`}
@@ -130,53 +154,65 @@ export default function EditPage() {
                             </li>
                         ))}
                     </ul>
-                </div>
+                </RightPane>
             </div>
         </section>
     )
 }
 
-const container = {
-    display: 'flex',
+const LeftPane = styled.div`
+width: 25%;
+flex-basis: 10em;
+textarea {
+    min-height: 40em;
+}
+`
+
+const ControlPanel = styled.div`
+font-size: 0.8em;
+display: flex;'
+`
+
+const RightPane = styled.div`
+> ul {
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    list-style-type: none;
+    grid-column-gap: 10px;
+
+    li {
+        line-height: 2em;
+    }
+}
+`
+
+const Button = styled.button`
+margin: 0.6em 1.2em;
+border-radius: 10px;
+padding: 5px;
+font-size: 0.8em;
+`
+
+const NumberInput = styled.div`
+display: flex;
+flex-direction: column;
+text-align: center;
+
+> label {
+    order: 0;
 }
 
-const leftPane = {
-    width: '25%',
-    flexBasis: '10em'
+> input {
+    order: 1;
+    width: 4em;
 }
 
-const rightPane = {
-
+label[for="lengthLower"] {
+    order: 2;
 }
 
-const controlPanelStyle = {
-    fontSize: '0.7em'
+input#freqHigh, > input#freqLow {
+    width: 10em;
 }
-
-const inputStyle = {
-    width: '4em',
-    margin: '0 0.5em'
-}
-
-const buttonStyle = {
-    margin: ' 0.6em 1.2em',
-    borderRadius: '10px',
-    padding: '5px',
-    fontSize: '0.8em'
-}
-
-const wordRowStyle = {
-    lineHeight: '2em'
-}
-
-const wordListStyle = {
-    margin: '30px auto',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 25%)',
-    listStyleType: 'none',
-    gridColumnGap: '10px'
-}
-
-const displayStyle = {
-    minHeight: '40em'
-}
+`
