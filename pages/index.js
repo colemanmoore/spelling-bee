@@ -7,7 +7,6 @@ import ScoreBoard from 'components/ScoreBoard'
 import WordsFound from 'components/WordsFound'
 import RulesAbout from 'components/RulesAbout'
 import Loading from 'components/Loading'
-import RulesAboutLink from 'components/RulesAboutLink'
 
 export default function Home() {
 

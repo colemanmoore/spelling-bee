@@ -4,8 +4,7 @@ import { uniqueChars } from '../lib/util.mjs'
 
 const
     CHUNK = process.argv[2],
-    DICT = process.argv[3],
-    UNIG = process.argv[4]
+    DICT = process.argv[3]
 
 if (!DICT) {
     console.log(`Usage:\n[command] [chunk size] [path to dictionary txt]`)
@@ -19,19 +18,6 @@ if (wordsList[0].indexOf(',') >= 0) {
 wordsList = wordsList.filter(w => w.length !== 0)
 console.log('Done reading dictionary')
 
-// const frequencies = {}
-// if (UNIG) {
-//     const unigramFreqList = fs.readFileSync(UNIG).toString().split('\n')
-//     unigramFreqList.forEach(l => {
-//         const [word, numb] = l.split(',')
-//         const freq = parseInt(numb)
-//         if (!isNaN(freq) && word.length > 3) {
-//             frequencies[word] = freq
-//         }
-//     })
-//     console.log('Done reading frequency data')
-// }
-
 wordsList.length < CHUNK ? insertSingles() : await insertInChunks()
 process.exit(0)
 
@@ -42,9 +28,7 @@ async function insertInChunks() {
         temporary = wordsList.slice(i, i + CHUNK)
         let data = temporary.map(word => ({
             word,
-            unique_letters: uniqueChars(word).length,
-            // length: word.length,
-            // frequency: frequencies[word] ? frequencies[word] : 0
+            unique_letters: uniqueChars(word).length
         }))
         console.log(`Adding ${data.map(d => d.word)}`)
         await addWordsToDictionary(data)
