@@ -1,5 +1,5 @@
 import { Game } from '../lib/game.mjs'
-import { clearOldestGame, updateGame } from '../lib/database.mjs'
+import { clearOldestGame } from '../lib/database.mjs'
 
 console.log(`Begin finding pangram... (${(new Date()).toLocaleTimeString()})`)
 
