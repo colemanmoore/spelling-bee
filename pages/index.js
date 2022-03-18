@@ -7,6 +7,7 @@ import ScoreBoard from 'components/ScoreBoard'
 import WordsFound from 'components/WordsFound'
 import RulesAbout from 'components/RulesAbout'
 import Loading from 'components/Loading'
+import MessageDisplay from 'components/MessageDisplay'
 
 export default function Home() {
 
@@ -24,7 +25,7 @@ export default function Home() {
                     <section className="home-screen">
                         <ScoreBoard />
                         <GameBoard />
-                        {/** Messages */}
+                        <MessageDisplay />
                     </section>
                     <WordsFound />
                     {/* <RulesAbout /> */}
