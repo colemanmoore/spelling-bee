@@ -27,7 +27,7 @@ export default function Home() {
                         {/** Messages */}
                     </section>
                     <WordsFound />
-                    <RulesAbout />
+                    {/* <RulesAbout /> */}
                 </AppProvider>
             )}
         </Fragment>

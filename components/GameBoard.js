@@ -41,7 +41,7 @@ export default function GameBoard() {
 
     return (
         <Container>
-            <RulesAboutLink />
+            {/* <RulesAboutLink /> */}
             <Flower letters={orderedLetters} />
             <WordInput word={input} />
             <ControlArea>
