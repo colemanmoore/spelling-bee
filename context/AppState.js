@@ -23,8 +23,7 @@ export const AppProvider = ({ children }) => {
         setIsMessageShowing(false)
     }
 
-    function showMessage(message, location, duration) {
-        console.log(`showMessage(${message})`)
+    function showMessage(message, duration) {
         setIsMessageShowing(message)
         setTimeout(() => {
             setIsMessageShowing(false)
@@ -61,8 +60,7 @@ export const AppProvider = ({ children }) => {
             }
         }
 
-        showMessage(message, null, MESSAGE_DURATION)
-        // setTimeout(clear, MESSAGE_DURATION)
+        showMessage(message, MESSAGE_DURATION)
         clear()
     }
 

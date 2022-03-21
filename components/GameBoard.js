@@ -7,6 +7,7 @@ import Arrow from 'components/Arrow'
 import Flower from 'components/Flower'
 import WordInput from 'components/WordInput'
 import styled from 'styled-components'
+import ShuffleButton from './ShuffleButton'
 
 export default function GameBoard() {
 
@@ -46,6 +47,9 @@ export default function GameBoard() {
                 <Control align="left" onClick={deleteLetterFromInput}>
                     <Arrow direction={-1} />
                     <ControlLabel>Delete</ControlLabel>
+                </Control>
+                <Control>
+                    <ShuffleButton handler={handleShuffle} />
                 </Control>
                 <Control align="right" onClick={handleSubmit}>
                     <Arrow direction={1} />

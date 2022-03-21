@@ -3,7 +3,6 @@ import Letter from 'components/Letter'
 
 export default function Flower({ letters }) {
 
-
     function letterColumn(range) {
         return <div>
             {range.map(l => (
