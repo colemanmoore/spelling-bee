@@ -4,7 +4,7 @@ import { useGameContext } from 'context/GameState'
 import { usePlayerContext } from 'context/PlayerState'
 import { PERCENTAGES, TITLES } from 'constants/constants'
 import { useAppContext } from 'context/AppState'
-import { threeDigitNumberFormat } from 'lib/format'
+import { threeDigitNumberFormat } from 'services/util'
 
 export default function ScoreBoard() {
 

@@ -1,5 +1,8 @@
-import { Game } from 'lib/game.mjs'
+import { Database, SpellingBee } from '@colemanmoore/spelling-bee-core'
 import { MSG_NOT_IN_LIST, MSG_PANGRAM } from 'constants/constants'
+
+const db = new Database()
+const Game = new SpellingBee(db)
 
 let game
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { usePlayerContext } from 'context/PlayerState'
 import { useAppContext } from 'context/AppState'
-import { threeDigitNumberFormat } from 'lib/format'
+import { threeDigitNumberFormat } from 'services/util'
 import Sidebar from 'components/Sidebar'
 
 export default function WordsFound() {

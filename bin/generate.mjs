@@ -1,5 +1,7 @@
-import { Game } from '../lib/game.mjs'
-import { clearOldestGame } from '../lib/database.mjs'
+import { Database, SpellingBee } from '@colemanmoore/spelling-bee-core'
+
+const db = new Database()
+const Game = new SpellingBee(db)
 
 console.log(`Begin finding pangram... (${(new Date()).toLocaleTimeString()})`)
 
@@ -16,7 +18,7 @@ try {
 }
 
 try {
-    await clearOldestGame()
+    await db.clearOldestGame()
 } catch (e) {
     console.log(e)
     console.log('Error clearing old game')
