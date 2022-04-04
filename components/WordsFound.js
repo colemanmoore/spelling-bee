@@ -1,67 +1,37 @@
-import { useEffect, useRef, useState } from 'react'
-import { isMobile } from 'react-device-detect'
-import { useGame } from '../hooks/useGame'
-import classnames from 'classnames'
-import styles from './WordsFound.module.css'
+import styled from 'styled-components'
+import { usePlayerContext } from 'context/PlayerState'
+import { useAppContext } from 'context/AppState'
+import { threeDigitNumberFormat } from 'lib/format'
+import Sidebar from 'components/Sidebar'
 
 export default function WordsFound() {
 
-    const game = useGame()
-    const wrapperRef = useRef()
-    const [allWordsOpen, setAllWordsOpen] = useState(false)
-
-    const onTouchStart = e => {
-        if (isMobile) handleClick(e)
-    }
-
-    const onMouseDown = e => {
-        if (!isMobile) handleClick(e)
-    }
-
-    const handleClick = e => {
-        if (e.target === wrapperRef.current || wrapperRef.current.contains(e.target)) {
-            setAllWordsOpen(true)
-        } else {
-            setAllWordsOpen(false)
-        }
-    }
-
-    useEffect(() => {
-        document.addEventListener('touchstart', onTouchStart)
-        document.addEventListener('mousedown', onMouseDown)
-        return () => {
-            document.removeEventListener('touchstart', onTouchStart)
-            document.removeEventListener('mousedown', onMouseDown)
-        }
-    }, [])
-
-    function latestWords() {
-        return game.wordsFoundStack.map(w =>
-            <span key={w} className={styles.word}>{w}</span>
-        )
-    }
-
-    function alphabeticalModal() {
-        const wordStyle = classnames(styles.word, styles.listWord)
-        return (
-            <div className={styles.allWordsContainer}>
-                {game.wordsFoundAlpha.map(w => <div key={w} className={wordStyle}>{w}</div>)}
-            </div>
-        )
-    }
-
-    function showAllWords() {
-        return allWordsOpen && game.wordsFoundAlpha.length > 2
-    }
+    const { wordsFoundAlpha } = usePlayerContext()
+    const { isWordsListShowing, setIsWordsListShowing } = useAppContext()
 
     return (
-        <section className='topSection'>
-            {showAllWords() && alphabeticalModal()}
-            <div className={styles.container} ref={wrapperRef}>
-                {!showAllWords() && game.wordsFoundStack.map(w =>
-                    <span key={w} className={styles.word}>{w}</span>
-                )}
-            </div>
-        </section>
+        <Sidebar active={isWordsListShowing} percentWidth={50} handleClose={() => setIsWordsListShowing(false)}>
+            <h2>{threeDigitNumberFormat(wordsFoundAlpha.length)} words</h2>
+            <List>
+                {wordsFoundAlpha.map((w, i) => <li key={i}>{w}</li>)}
+            </List>
+        </Sidebar>
     )
 }
+
+const List = styled.ul`
+padding-left: 0;
+
+li {
+    font-family: var(--font-family-paragraph);
+    font-weight: 600;
+    list-style: none;
+    text-transform: uppercase;
+    border-top: 1px solid;
+    padding: 0.5em 0;
+}
+
+li:last-child {
+    border-bottom: 1px solid;
+}
+`

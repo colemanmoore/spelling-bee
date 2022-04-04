@@ -10,6 +10,6 @@ export default function Loading() {
     }
 
     return (
-        <div style={styles}>Fetching today's game...</div>
+        <section style={styles}>Please wait while we grab today's game...</section>
     )
 }

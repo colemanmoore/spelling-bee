@@ -11,7 +11,3 @@ Production: `npm run start`
 ## CLI
 
 `npm run cli`
-
-## Dictionary
-
-All possible words in `dictionary_long.txt`

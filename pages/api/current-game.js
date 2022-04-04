@@ -1,4 +1,5 @@
-import { createCurrentGameObject } from '../../bin/game.mjs'
+import { Game } from 'lib/game.mjs'
+import { MSG_NOT_IN_LIST, MSG_PANGRAM } from 'constants/constants'
 
 let game
 
@@ -7,7 +8,8 @@ export default async (req, res) => {
     try {
         await fetchGame()
     } catch (e) {
-        res.status(404).send({error: e.message})
+        console.error(e)
+        res.status(404).send({ error: e.message })
         return
     }
 
@@ -15,39 +17,36 @@ export default async (req, res) => {
 
         case 'GET':
 
-            res.status(200).json({
+            return res.status(200).json({
                 id: game.id,
                 letters: game.getAllLetters(),
                 maxScore: game.maximumScore
             })
 
-            return
-
         case 'POST':
 
-            const body = JSON.parse(req.body)
+            const { submission } = req.body
 
             const response = {
-                grade: game.submit(body.submission),
+                grade: game.submit(submission),
                 message: null
             }
 
             if (response.grade < 1) {
-                response.message = 'Not in word list'
+                response.message = MSG_NOT_IN_LIST
 
-            } else if (game.pangrams.includes(body.submission.toLowerCase())) {
-                response.message = 'Pangram!'
+            } else if (game.pangrams.includes(submission.toLowerCase())) {
+                response.message = MSG_PANGRAM
             }
 
-            res.status(200).json(response)
-            return
+            return res.status(200).json(response)
     }
 }
 
 async function fetchGame() {
     if (game) return game
     try {
-        game = await createCurrentGameObject()
+        game = await Game.createCurrentGameObject()
         return game
     } catch (e) {
         throw new Error(e)

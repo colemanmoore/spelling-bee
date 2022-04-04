@@ -1,30 +1,28 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { usePlayerContext } from 'context/PlayerState'
+import { MESSAGE_DURATION } from 'constants/constants'
 
-export default function useMessageFlash(timeoutLength = 1000) {
+export default function useMessageFlash() {
 
-    const [currentMessage, setCurrentMessage] = useState(null)
+    const { isShowingMessage, showMessage, hideMessage } = usePlayerContext()
     
     const setTimeoutRef = useRef()
 
     useEffect(() => {
 
-        if (currentMessage) {
+        if (isShowingMessage) {
             const timeoutId = setTimeout(() => {
-                setCurrentMessage(null)
-            }, timeoutLength)
+                hideMessage()
+            }, MESSAGE_DURATION)
             setTimeoutRef.current = timeoutId
         }
 
         return () => clearTimeout(setTimeoutRef.current)
 
-    }, [currentMessage])
-
-    function setMessage(message) {
-        setCurrentMessage(message)
-    }
+    }, [isShowingMessage])
 
     return {
-        currentMessage,
-        setMessage
+        isShowingMessage,
+        setMessage: message => showMessage(message)
     }
 }
