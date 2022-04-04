@@ -42,7 +42,7 @@ export default function ScoreBoard() {
     return (
         <SectionContainer>
 
-            <TextContainer onClick={() => setIsWordsListShowing(true)}>
+            <TextContainer onClick={() => setIsWordsListShowing(prev => !prev)}>
                 <span>{threeDigitNumberFormat(score)}</span>
                 <a>
                     {threeDigitNumberFormat(wordsFoundAlpha.length)} word{wordsFoundAlpha.length != 1 ? 's' : ''}
