@@ -1,54 +1,57 @@
-import { Game } from 'lib/game.mjs'
-import { MSG_NOT_IN_LIST, MSG_PANGRAM } from 'constants/constants'
+import {Database, SpellingBee} from '@colemanmoore/spelling-bee-core';
+import {MSG_NOT_IN_LIST, MSG_PANGRAM} from 'constants/settings';
 
-let game
+const db = new Database();
+const Game = new SpellingBee(db);
+
+let game;
 
 export default async (req, res) => {
 
-    try {
-        await fetchGame()
-    } catch (e) {
-        console.error(e)
-        res.status(404).send({ error: e.message })
-        return
-    }
+  try {
+    await fetchGame();
+  } catch (e) {
+    console.error(e);
+    res.status(404).send({error: e.message});
+    return;
+  }
 
-    switch (req.method) {
+  switch (req.method) {
 
-        case 'GET':
+    case 'GET':
 
-            return res.status(200).json({
-                id: game.id,
-                letters: game.getAllLetters(),
-                maxScore: game.maximumScore
-            })
+      return res.status(200).json({
+        id: game.id,
+        letters: game.getAllLetters(),
+        maxScore: game.maximumScore,
+      });
 
-        case 'POST':
+    case 'POST':
 
-            const { submission } = req.body
+      const {submission} = req.body;
 
-            const response = {
-                grade: game.submit(submission),
-                message: null
-            }
+      const response = {
+        grade: game.submit(submission),
+        message: null,
+      };
 
-            if (response.grade < 1) {
-                response.message = MSG_NOT_IN_LIST
+      if (response.grade < 1) {
+        response.message = MSG_NOT_IN_LIST;
 
-            } else if (game.pangrams.includes(submission.toLowerCase())) {
-                response.message = MSG_PANGRAM
-            }
+      } else if (game.pangrams.includes(submission.toLowerCase())) {
+        response.message = MSG_PANGRAM;
+      }
 
-            return res.status(200).json(response)
-    }
+      return res.status(200).json(response);
+  }
 }
 
 async function fetchGame() {
-    if (game) return game
-    try {
-        game = await Game.createCurrentGameObject()
-        return game
-    } catch (e) {
-        throw new Error(e)
-    }
+  if (game) return game;
+  try {
+    game = await Game.createCurrentGameObject();
+    return game;
+  } catch (e) {
+    throw new Error(e);
+  }
 }

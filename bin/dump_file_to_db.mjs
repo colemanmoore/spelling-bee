@@ -1,6 +1,5 @@
 import fs from 'fs'
-import { addWordsToDictionary, addWordToDictionary } from '../lib/database.mjs'
-import { uniqueChars } from '../lib/util.mjs'
+import { Database, Util } from '@colemanmoore/spelling-bee-core'
 
 const
     CHUNK = process.argv[2],
@@ -18,6 +17,8 @@ if (wordsList[0].indexOf(',') >= 0) {
 wordsList = wordsList.filter(w => w.length !== 0)
 console.log('Done reading dictionary')
 
+const db = new Database()
+await db.initialize()
 wordsList.length < CHUNK ? insertSingles() : await insertInChunks()
 process.exit(0)
 
@@ -28,19 +29,19 @@ async function insertInChunks() {
         temporary = wordsList.slice(i, i + CHUNK)
         let data = temporary.map(word => ({
             word,
-            unique_letters: uniqueChars(word).length
+            unique_letters: Util.uniqueChars(word).length
         }))
         console.log(`Adding ${data.map(d => d.word)}`)
-        await addWordsToDictionary(data)
+        await db.addWordsToDictionary(data)
     }
 }
 
 async function insertSingles() {
     console.log(`Inserting one by one: ${wordsList}`)
     wordsList.forEach(word => {
-        addWordToDictionary({
+        db.addWordToDictionary({
             word,
-            unique_letters: uniqueChars(word).length,
+            unique_letters: Util.uniqueChars(word).length,
             // length: word.length,
             // frequency: frequencies[word] ? frequencies[word] : 0
         })

@@ -1,4 +1,7 @@
-import { Game } from 'lib/game.mjs'
+import { Database, SpellingBee } from '@colemanmoore/spelling-bee-core'
+
+const db = new Database()
+const Game = new SpellingBee(db)
 
 export default function Answers({ answers }) {
     return <ul>

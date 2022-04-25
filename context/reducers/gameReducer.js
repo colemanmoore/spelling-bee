@@ -1,33 +1,41 @@
 export const initialState = {
-    keyLetter: null,
-    nonKeyLetters: [],
-    hasLetter: {},
-    possibleScore: null
-}
+  keyLetter: null,
+  nonKeyLetters: [],
+  hasLetter: {},
+  possibleScore: null,
+  hasError: false,
+};
 
 export const actions = {
-    UPDATE_GAME: 1
-}
+  UPDATE_GAME: 1,
+  SET_HAS_ERROR: 2,
+};
 
 export function GameReducer(state, action) {
 
-    switch (action.type) {
+  switch (action.type) {
 
-        case actions.UPDATE_GAME:
-            const { letters, possibleScore } = action.payload
-            const hasLetter = {}, nonKeyLetters = []
-            let keyLetter
-            letters.forEach(l => {
-                if (l.isKey) keyLetter = l
-                else nonKeyLetters.push(l)
-                hasLetter[l.text] = true
-            })
-            return {
-                ...state,
-                keyLetter,
-                nonKeyLetters,
-                hasLetter,
-                possibleScore
-            }
-    }
+    case actions.UPDATE_GAME:
+      const {letters, possibleScore} = action.payload;
+      const hasLetter = {}, nonKeyLetters = [];
+      let keyLetter;
+      letters.forEach(l => {
+        if (l.isKey) keyLetter = l;
+        else nonKeyLetters.push(l);
+        hasLetter[l.text] = true;
+      });
+      return {
+        ...state,
+        keyLetter,
+        nonKeyLetters,
+        hasLetter,
+        possibleScore,
+      };
+
+    case actions.SET_HAS_ERROR:
+      return {
+        ...state,
+        hasError: action.payload
+      }
+  }
 }
