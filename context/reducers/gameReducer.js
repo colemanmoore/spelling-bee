@@ -3,12 +3,10 @@ export const initialState = {
   nonKeyLetters: [],
   hasLetter: {},
   possibleScore: null,
-  hasError: false,
 };
 
 export const actions = {
   UPDATE_GAME: 1,
-  SET_HAS_ERROR: 2,
 };
 
 export function GameReducer(state, action) {
@@ -31,11 +29,5 @@ export function GameReducer(state, action) {
         hasLetter,
         possibleScore,
       };
-
-    case actions.SET_HAS_ERROR:
-      return {
-        ...state,
-        hasError: action.payload
-      }
   }
 }

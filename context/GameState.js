@@ -9,10 +9,11 @@ export const useGameContext = () => useContext(GameContext);
 export const GameProvider = ({children}) => {
 
   const [state, dispatch] = useReducer(GameReducer, initialState);
-  const [isWaiting, setIsWaiting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   async function loadGame(id) {
-    setIsWaiting(true);
+    setIsLoading(true);
 
     try {
       let data;
@@ -22,11 +23,11 @@ export const GameProvider = ({children}) => {
         data = await gameService.getCurrent();
       }
       const {letters, maxScore} = data;
-      dispatch(
-        {
-          type: actions.UPDATE_GAME,
-          payload: {letters, possibleScore: maxScore},
-        });
+      dispatch({
+        type: actions.UPDATE_GAME,
+        payload: {letters, possibleScore: maxScore},
+      });
+      setHasError(false);
 
       // response should indicate if game id in request **cookie matched the game id in response
       // and if so, provide the player data sent in request cookie on response cookie
@@ -34,12 +35,10 @@ export const GameProvider = ({children}) => {
       // otherwise player is at initial state
 
     } catch (error) {
-      dispatch({
-        type: actions.SET_HAS_ERROR, payload: true,
-      });
+      setHasError(true);
     }
 
-    setIsWaiting(false);
+    setIsLoading(false);
   }
 
   return (
@@ -49,7 +48,8 @@ export const GameProvider = ({children}) => {
       hasLetter: state.hasLetter,
       possibleScore: state.possibleScore,
       loadGame,
-      isWaiting,
+      loadingGame: isLoading,
+      errorLoadingGame: hasError
     }}>
       {children}
     </GameContext.Provider>

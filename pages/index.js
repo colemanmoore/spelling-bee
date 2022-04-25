@@ -7,24 +7,25 @@ import ScoreBoard from 'components/ScoreBoard';
 import WordsFound from 'components/WordsFound';
 import Loading from 'components/Loading';
 import MessageDisplay from 'components/MessageDisplay';
+import Error from 'components/Error';
 
 export default function Home() {
 
-  const {loadGame, isWaiting} = useGameContext();
+  const {loadGame, loadingGame, errorLoadingGame} = useGameContext();
 
   useEffect(loadGame, []);
 
   return (
     <Fragment>
       <Head>
-        <title>Bee</title>
+        <title>SG Bee</title>
       </Head>
       <AppProvider>
         <main className="app">
-          {isWaiting ? <Loading/> : (
+          {loadingGame ? <Loading/> : (
             <section className="home-screen">
               <ScoreBoard/>
-              <GameBoard/>
+              {errorLoadingGame ? <Error /> : <GameBoard />}
               <MessageDisplay/>
             </section>
           )}

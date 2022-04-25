@@ -66,7 +66,7 @@ export const AppProvider = ({children}) => {
       }
 
       if (response.grade > 0) {
-        message = `+${response.grade}${response.message ? '' + message : ''}`;
+        message = `+${response.grade}${response.message ? ' ' + response.message : ''}`;
         foundNewWord(word, response.grade);
       } else {
         message = response.message;
