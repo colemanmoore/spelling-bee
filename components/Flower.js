@@ -4,13 +4,15 @@ import Image from 'next/image';
 import Letter from 'components/Letter';
 import {paths} from '/constants';
 
+const imagePath = 'images/Flower.svg'
+
 const Flower = memo( ({letters}) => {
 
   return <Container>
     <div>{letters.slice(0, 2).map(l => <Letter key={l.text} letter={l} />)}</div>
     <div>{letters.slice(2, 5).map(l => <Letter key={l.text} letter={l} />)}</div>
     <div>{letters.slice(5, 7).map(l => <Letter key={l.text} letter={l} />)}</div>
-    <Image src={paths.FLOWER_PATH} layout="fill" priority />
+    <Image src="images/Flower.svg" layout="fill" priority />
   </Container>;
 });
 
