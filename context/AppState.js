@@ -43,14 +43,6 @@ export const AppProvider = ({children}) => {
     }, duration); // validate duration
   }
 
-  function showWordsList() {
-    setIsWordsListShowing(true);
-  }
-
-  function hideWordsList() {
-    setIsWordsListShowing(false);
-  }
-
   async function submitWord(word) {
     let message, response;
 
@@ -89,9 +81,7 @@ export const AppProvider = ({children}) => {
     isMessageShowing,
     showMessage,
     isWordsListShowing,
-    setIsWordsListShowing,
-    showWordsList,
-    hideWordsList,
+    setIsWordsListShowing
   }}>
     {children}
   </AppContext.Provider>;

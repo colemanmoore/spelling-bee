@@ -1,12 +1,15 @@
+import {memo} from 'react';
 import styled from 'styled-components';
 
-export default function WordInput({word}) {
+const WordInput = memo(({word}) => {
   return (
     <Container>
       {word}
     </Container>
   );
-}
+});
+
+export default WordInput;
 
 const Container = styled.div`
   height: 2em;

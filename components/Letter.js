@@ -1,9 +1,9 @@
-import {useCallback} from 'react';
+import {memo, useCallback} from 'react';
 import {isMobile} from 'react-device-detect';
 import styled from 'styled-components';
 import {useAppContext} from 'context/AppState';
 
-export default function Letter({letter}) {
+const Letter = memo(({letter}) => {
 
   const {
     keyPressed,
@@ -53,7 +53,9 @@ export default function Letter({letter}) {
       </div>
     </Container>
   );
-}
+});
+
+export default Letter;
 
 const Container = styled.div`
   padding: 0.5em 0.38em;

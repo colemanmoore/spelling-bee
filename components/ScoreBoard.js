@@ -1,16 +1,12 @@
-import {useMemo, useState, useEffect} from 'react';
+import {memo, useMemo, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useGameContext} from 'context/GameState';
-import {usePlayerContext} from 'context/PlayerState';
 import {PERCENTAGES, TITLES} from 'constants/settings';
-import {useAppContext} from 'context/AppState';
 import {threeDigitNumberFormat} from 'services/util';
 
-export default function ScoreBoard() {
+const ScoreBoard = memo(({score, wordsFound, handleWordsListToggle}) => {
 
   const {possibleScore} = useGameContext();
-  const {score, wordsFoundAlpha} = usePlayerContext();
-  const {setIsWordsListShowing} = useAppContext();
   const [title, setTitle] = useState(TITLES[0]);
 
   const winningPoints = useMemo(() =>
@@ -43,13 +39,10 @@ export default function ScoreBoard() {
   return (
     <SectionContainer>
 
-      <TextContainer onClick={() => setIsWordsListShowing(prev => !prev)}>
+      <TextContainer onClick={handleWordsListToggle}>
         <span>{threeDigitNumberFormat(score)}</span>
         <a>
-          {threeDigitNumberFormat(
-            wordsFoundAlpha.length)} word{wordsFoundAlpha.length != 1 ?
-          's' :
-          ''}
+          {threeDigitNumberFormat(wordsFound)} word{wordsFound != 1 ? 's' : ''}
         </a>
         <span>{title}</span>
       </TextContainer>
@@ -60,7 +53,9 @@ export default function ScoreBoard() {
 
     </SectionContainer>
   );
-}
+});
+
+export default ScoreBoard;
 
 const SectionContainer = styled.section`
   flex-grow: 0;

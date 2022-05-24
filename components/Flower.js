@@ -1,27 +1,20 @@
+import {memo} from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
 import Letter from 'components/Letter';
 import {paths} from '/constants';
 
-export default function Flower({letters}) {
-
-  function letterColumn(range) {
-    return <div>
-      {range.map(l => (
-        <Letter
-          key={l.text}
-          letter={l}
-        />
-      ))}
-    </div>;
-  }
+const Flower = memo( ({letters}) => {
 
   return <Container>
-    {letterColumn(letters.slice(0, 2))}
-    {letterColumn(letters.slice(2, 5))}
-    {letterColumn(letters.slice(5, 7))}
-    <img src={paths.FLOWER_PATH}/>
+    <div>{letters.slice(0, 2).map(l => <Letter key={l.text} letter={l} />)}</div>
+    <div>{letters.slice(2, 5).map(l => <Letter key={l.text} letter={l} />)}</div>
+    <div>{letters.slice(5, 7).map(l => <Letter key={l.text} letter={l} />)}</div>
+    <Image src={paths.FLOWER_PATH} layout="fill" priority />
   </Container>;
-}
+});
+
+export default Flower;
 
 const Container = styled.section`
   display: flex;
@@ -30,6 +23,7 @@ const Container = styled.section`
   align-items: center;
   margin: 2em 0 1em;
   height: 100%;
+  position: relative;
 
   img {
     position: absolute;
