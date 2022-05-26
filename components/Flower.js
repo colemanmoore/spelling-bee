@@ -2,9 +2,7 @@ import {memo} from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Letter from 'components/Letter';
-import {paths} from '/constants';
-
-const imagePath = 'images/Flower.svg'
+import {images} from '/constants';
 
 const Flower = memo( ({letters}) => {
 
@@ -12,7 +10,7 @@ const Flower = memo( ({letters}) => {
     <div>{letters.slice(0, 2).map(l => <Letter key={l.text} letter={l} />)}</div>
     <div>{letters.slice(2, 5).map(l => <Letter key={l.text} letter={l} />)}</div>
     <div>{letters.slice(5, 7).map(l => <Letter key={l.text} letter={l} />)}</div>
-    <Image src="images/Flower.svg" layout="fill" priority />
+    <Image src={images.FLOWER} layout="fill" priority />
   </Container>;
 });
 

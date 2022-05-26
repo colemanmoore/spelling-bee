@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import {paths} from '/constants';
+import Image from 'next/image';
+import {images} from '/constants';
 
 export default function ShuffleButton({handler}) {
 
   return (
     <Container onClick={handler}>
-      <img src={paths.SHUFFLE_PATH}/>
+      <Image src={images.SHUFFLE}/>
     </Container>
   );
 }

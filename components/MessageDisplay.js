@@ -1,9 +1,10 @@
 import {useMemo} from 'react';
 import styled from 'styled-components';
 import {useAppContext} from 'context/AppState';
-import {paths} from '/constants';
+import {images} from '/constants';
 
 export default function MessageDisplay() {
+  console.log(images.BUBBLE_PATH)
   const {isMessageShowing} = useAppContext();
   const tilt = useMemo(() => Math.sign(Math.random() - 0.5), [isMessageShowing]);
 
@@ -34,7 +35,7 @@ const Container = styled.div`
     margin-left: calc(${props => props.tilt} * 4.5em);
 
     .message-bubble {
-      background-image: url(${paths.BUBBLE_PATH});
+      background-image: url(${images.BUBBLE_PATH});
       background-repeat: no-repeat;
       background-size: contain;
       transform: rotate(${props => (props.tilt * 20)}deg);
