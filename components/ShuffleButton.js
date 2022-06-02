@@ -1,12 +1,15 @@
+import {useMemo} from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import {images} from '/constants';
 
 export default function ShuffleButton({handler}) {
 
+  const image = useMemo(() => <Image src={images.SHUFFLE} />, []);
+
   return (
     <Container onClick={handler}>
-      <Image src={images.SHUFFLE}/>
+      {image}
     </Container>
   );
 }

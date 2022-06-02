@@ -4,7 +4,6 @@ import {useAppContext} from 'context/AppState';
 import {images} from '/constants';
 
 export default function MessageDisplay() {
-  console.log(images.BUBBLE_PATH)
   const {isMessageShowing} = useAppContext();
   const tilt = useMemo(() => Math.sign(Math.random() - 0.5), [isMessageShowing]);
 

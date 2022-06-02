@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react';
 import {shuffle} from 'underscore';
 import {useGameContext} from 'context/GameState';
 import {useAppContext} from 'context/AppState';
-import useKeyboard from 'hooks/useKeyboard';
 import Arrow from 'components/Arrow';
 import Flower from 'components/Flower';
 import WordInput from 'components/WordInput';
@@ -11,17 +10,9 @@ import ShuffleButton from './ShuffleButton';
 
 export default function GameBoard() {
 
-  const {hasLetter, keyLetter, nonKeyLetters} = useGameContext();
-  const {input, deleteLetterFromInput, submitWord} = useAppContext();
-
+  const {keyLetter, nonKeyLetters} = useGameContext();
+  const {input, deleteLetter, submitWord} = useAppContext();
   const [orderedLetters, setOrderedLetters] = useState([]);
-  const {addKeyboardListeners, removeKeyboardListeners} = useKeyboard(
-    handleSubmit, hasLetter);
-
-  useEffect(() => {
-    addKeyboardListeners();
-    return () => removeKeyboardListeners();
-  }, [addKeyboardListeners, removeKeyboardListeners]);
 
   useEffect(() => {
     handleShuffle();
@@ -35,24 +26,19 @@ export default function GameBoard() {
     }
   };
 
-  async function handleSubmit() {
-    const submission = input.toLowerCase();
-    submitWord(submission, keyLetter.text);
-  }
-
   return (
     <Container>
       <Flower letters={orderedLetters}/>
       <WordInput word={input}/>
       <ControlArea>
-        <Control align="left" onClick={deleteLetterFromInput}>
+        <Control align="left" onClick={deleteLetter}>
           <Arrow direction={-1}/>
           <ControlLabel>Delete</ControlLabel>
         </Control>
         <Control>
           <ShuffleButton handler={handleShuffle}/>
         </Control>
-        <Control align="right" onClick={handleSubmit}>
+        <Control align="right" onClick={submitWord}>
           <Arrow direction={1}/>
           <ControlLabel>Enter</ControlLabel>
         </Control>

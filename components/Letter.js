@@ -1,52 +1,42 @@
-import {memo, useCallback} from 'react';
+import {memo} from 'react';
 import {isMobile} from 'react-device-detect';
 import styled from 'styled-components';
-import {useAppContext} from 'context/AppState';
 
-const Letter = memo(({letter}) => {
+const Letter = memo(({letter, isPressed, handlePress, handleUnpress}) => {
 
-  const {
-    keyPressed,
-    pressLetter,
-    unpressLetter,
-    addLetterToInput,
-  } = useAppContext();
-
-  const handleTouchStart = useCallback(e => {
+  const onTouchStart = e => {
     e.stopPropagation();
     if (isMobile) {
-      pressLetter(letter.text);
-      addLetterToInput(letter.text);
+      handlePress(letter.text);
     }
-  }, [addLetterToInput]);
+  }
 
-  const handleTouchEnd = () => {
+  const onTouchEnd = () => {
     if (isMobile) {
-      unpressLetter(letter.text);
+      handleUnpress(letter.text);
     }
   };
 
-  const handleMouseDown = () => {
+  const onMouseDown = () => {
     if (!isMobile) {
-      pressLetter(letter.text);
-      addLetterToInput(letter.text);
+      handlePress(letter.text);
     }
   };
 
-  const handleMouseUp = () => {
+  const onMouseUp = () => {
     if (!isMobile) {
-      unpressLetter(letter.text);
+      handleUnpress(letter.text);
     }
   };
 
   return (
     <Container
       keyLetter={letter.isKey}
-      active={keyPressed === letter.text}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
+      active={isPressed}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
     >
       <div className="shape">
         <span>{letter.text}</span>
