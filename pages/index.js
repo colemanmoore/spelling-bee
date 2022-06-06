@@ -1,6 +1,5 @@
-import {Fragment, useCallback, useEffect, useMemo} from 'react';
+import {Fragment, useEffect, useMemo} from 'react';
 import Head from 'next/head';
-import {useGameContext} from 'context/GameState';
 import {useAppContext} from 'context/AppState';
 import {usePlayerContext} from 'context/PlayerState';
 import GameBoard from 'components/GameBoard';
@@ -12,9 +11,8 @@ import Error from 'components/Error';
 
 export default function Home() {
 
-  const {loadGame, loadingGame, errorLoadingGame} = useGameContext();
   const {score, wordsFoundAlpha} = usePlayerContext();
-  const {setIsWordsListShowing} = useAppContext();
+  const {setIsWordsListShowing, loadGame, loadingGame, errorLoadingGame} = useAppContext();
 
   const numberOfWordsFound = useMemo(() => wordsFoundAlpha.length,
     [wordsFoundAlpha]);

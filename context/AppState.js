@@ -5,7 +5,6 @@ import {
   useEffect,
 } from 'react';
 import {usePlayerContext} from 'context/PlayerState';
-import {useGameContext} from 'context/GameState';
 import {gameService} from 'services/game';
 import {settings, events, keys} from 'constants';
 import {isMobile} from 'react-device-detect';
@@ -17,11 +16,16 @@ export const useAppContext = () => useContext(AppContext);
 export const AppProvider = ({children}) => {
 
   const {foundNewWord, hasFoundWord} = usePlayerContext();
-  const {keyLetter, hasLetter} = useGameContext();
   const [input, setInput] = useState('');
   const [keyPressed, setKeyPressed] = useState(null);
   const [isMessageShowing, setIsMessageShowing] = useState(false);
   const [isWordsListShowing, setIsWordsListShowing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorLoadingGame, setErrorLoadingGame] = useState(false);
+  const [hasLetter, setHasLetter] = useState({});
+  const [keyLetter, setKeyLetter] = useState(null);
+  const [possibleScore, setPossibleScore] = useState(null);
+  const [nonKeyLetters, setNonKeyLetters] = useState([]);
 
   useEffect(() => {
     if (!isMobile) {
@@ -34,7 +38,43 @@ export const AppProvider = ({children}) => {
         document.removeEventListener(events.KEYUP, handleKeyUp);
       }
     };
-  }, []);
+  }, [handleKeyUp, handleKeyDown]);
+
+  async function loadGame(id) {
+    setIsLoading(true);
+
+    try {
+      let data;
+      if (id) {
+        data = await gameService.getById(id);
+      } else {
+        data = await gameService.getCurrent();
+      }
+
+      const {letters, maxScore} = data;
+      const hasLetter = {}, nonKeyLetters = [];
+      let keyLetter;
+      letters.forEach(l => {
+        if (l.isKey) keyLetter = l;
+        else nonKeyLetters.push(l);
+        hasLetter[l.text] = true;
+      });
+      setErrorLoadingGame(false);
+      setHasLetter(hasLetter);
+      setPossibleScore(maxScore);
+      setNonKeyLetters(nonKeyLetters);
+      setKeyLetter(keyLetter);
+
+      // response should indicate if game id in request **cookie matched the game id in response
+      // and if so, provide the player data sent in request cookie on response cookie
+      // if the above holds, call function on player context to load player state from the cookie
+      // otherwise player is at initial state
+
+    } catch (error) {
+      setErrorLoadingGame(true);
+    }
+    setIsLoading(false);
+  }
 
   function handleKeyDown(e) {
     // e.stopPropagation()
@@ -66,7 +106,6 @@ export const AppProvider = ({children}) => {
 
   function pressLetter(key) {
     setIsMessageShowing(false);
-    console.log('has?', hasLetter[key.toLowerCase()]);
     if (hasLetter[key.toLowerCase()]) {
       setKeyPressed(key);
       setInput(prev => prev + key.toLowerCase());
@@ -85,7 +124,6 @@ export const AppProvider = ({children}) => {
   }
 
   async function submitWord() {
-    console.log('submit:', input);
     let message, response;
 
     if (input.length < 4) message = settings.MSG_TOO_SHORT;
@@ -115,8 +153,11 @@ export const AppProvider = ({children}) => {
   }
 
   return <AppContext.Provider value={{
+    keyLetter,
+    nonKeyLetters,
     input,
     keyPressed,
+    hasLetter,
     pressLetter,
     unpressLetter,
     deleteLetter,
@@ -126,6 +167,10 @@ export const AppProvider = ({children}) => {
     showMessage,
     isWordsListShowing,
     setIsWordsListShowing,
+    loadingGame: isLoading,
+    errorLoadingGame,
+    loadGame,
+    possibleScore
   }}>
     {children}
   </AppContext.Provider>;

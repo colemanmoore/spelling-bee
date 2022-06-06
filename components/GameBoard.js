@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react';
 import {shuffle} from 'underscore';
-import {useGameContext} from 'context/GameState';
 import {useAppContext} from 'context/AppState';
 import Arrow from 'components/Arrow';
 import Flower from 'components/Flower';
@@ -10,8 +9,7 @@ import ShuffleButton from './ShuffleButton';
 
 export default function GameBoard() {
 
-  const {keyLetter, nonKeyLetters} = useGameContext();
-  const {input, deleteLetter, submitWord} = useAppContext();
+  const {input, deleteLetter, submitWord, keyLetter, nonKeyLetters} = useAppContext();
   const [orderedLetters, setOrderedLetters] = useState([]);
 
   useEffect(() => {

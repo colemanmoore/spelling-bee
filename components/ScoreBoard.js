@@ -1,12 +1,12 @@
 import {memo, useMemo, useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {useGameContext} from 'context/GameState';
 import {PERCENTAGES, TITLES} from 'constants/settings';
 import {threeDigitNumberFormat} from 'services/util';
+import {useAppContext} from '../context/AppState';
 
 const ScoreBoard = memo(({score, wordsFound, handleWordsListToggle}) => {
 
-  const {possibleScore} = useGameContext();
+  const {possibleScore} = useAppContext();
   const [title, setTitle] = useState(TITLES[0]);
 
   const winningPoints = useMemo(() =>
