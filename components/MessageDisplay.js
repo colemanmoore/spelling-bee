@@ -7,7 +7,7 @@ export default function MessageDisplay() {
   const {isMessageShowing} = useAppContext();
   const tilt = useMemo(() => Math.sign(Math.random() - 0.5), [isMessageShowing]);
 
-  if (!isMessageShowing) return <></>;
+  if (!isMessageShowing) return null;
 
   return (
     <Container tilt={tilt} positioning="bottom:10%">
