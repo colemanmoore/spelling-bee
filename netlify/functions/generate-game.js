@@ -1,7 +1,8 @@
-const {Database, SpellingBee} = require('@colemanmoore/spelling-bee-core');
 
 exports.handler = async function(event, context) {
   console.log('Received event:', event);
+
+  const {Database, SpellingBee} = await import('@colemanmoore/spelling-bee-core')
 
   const db = new Database()
   const Game = new SpellingBee(db)
